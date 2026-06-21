@@ -70,5 +70,7 @@ export type Expense = {
   amount: number;
   currency: string;
   note: string;
+  casino_id: number | null;
+  casino_name?: string;
   created_at: string;
 };

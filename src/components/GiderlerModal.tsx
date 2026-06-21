@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import type { Expense } from '@/lib/supabase';
+import type { Expense, Casino } from '@/lib/supabase';
 import { useTheme } from '@/components/ThemeProvider';
 
 const MONTHS = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
@@ -24,6 +24,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
 
   const [year, setYear]           = useState(initialYear);
   const [expenses, setExpenses]   = useState<Expense[]>([]);
+  const [casinos, setCasinos]     = useState<Casino[]>([]);
   const [loading, setLoading]     = useState(true);
   const [activeMonth, setActiveMonth] = useState<number | null>(null);
 
@@ -32,14 +33,20 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
   const [amount, setAmount]     = useState('');
   const [currency, setCurrency] = useState('TRY');
   const [note, setNote]         = useState('');
+  const [casinoId, setCasinoId] = useState<string>('');
   const [saving, setSaving]     = useState(false);
   const [error, setError]       = useState('');
 
   async function load() {
     setLoading(true);
-    const res = await fetch(`/api/expenses?year=${year}`);
-    const data = await res.json();
-    setExpenses(Array.isArray(data) ? data : []);
+    const [expRes, casinoRes] = await Promise.all([
+      fetch(`/api/expenses?year=${year}`),
+      fetch('/api/casinos'),
+    ]);
+    const expData    = await expRes.json();
+    const casinoData = await casinoRes.json();
+    setExpenses(Array.isArray(expData) ? expData : []);
+    setCasinos(Array.isArray(casinoData) ? casinoData : []);
     setLoading(false);
   }
 
@@ -71,13 +78,13 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
     const res = await fetch('/api/expenses', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), amount: parseFloat(amount.replace(',', '.')), currency, year, month: activeMonth, note }),
+      body: JSON.stringify({ name: name.trim(), amount: parseFloat(amount.replace(',', '.')), currency, year, month: activeMonth, note, casino_id: casinoId ? parseInt(casinoId) : null }),
     });
     if (!res.ok) {
       const d = await res.json();
       setError(d.error || 'Hata oluştu');
     } else {
-      setName(''); setAmount(''); setNote('');
+      setName(''); setAmount(''); setNote(''); setCasinoId('');
       await load();
     }
     setSaving(false);
@@ -199,7 +206,14 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
                       style={{ background: i % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{exp.name}</p>
-                        {exp.note && <p className="text-xs truncate" style={{ color: 'var(--text-dim)' }}>{exp.note}</p>}
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {exp.casino_id && (
+                            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
+                              {casinos.find(c => c.id === exp.casino_id)?.name ?? '–'}
+                            </span>
+                          )}
+                          {exp.note && <p className="text-xs truncate" style={{ color: 'var(--text-dim)' }}>{exp.note}</p>}
+                        </div>
                       </div>
                       <p className="text-sm font-bold flex-shrink-0" style={{ color: isLight ? '#991b1b' : '#fca5a5' }}>
                         {exp.currency !== 'TRY' ? `${exp.currency} ` : '₺'}{fmt(exp.amount)}
@@ -230,6 +244,17 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
                 <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-dim)' }}>
                   Yeni Gider Ekle
                 </p>
+
+                <select
+                  value={casinoId}
+                  onChange={e => setCasinoId(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl text-sm outline-none"
+                  style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: casinoId ? 'var(--text-primary)' : 'var(--text-dim)' }}>
+                  <option value="">— Casino seç (opsiyonel) —</option>
+                  {casinos.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
 
                 <input
                   type="text"

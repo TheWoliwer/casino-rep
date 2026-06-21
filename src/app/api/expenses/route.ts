@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const year  = searchParams.get('year');
   const month = searchParams.get('month');
 
-  let query = supabaseAdmin.from('expenses').select('*').order('created_at', { ascending: true });
+  let query = supabaseAdmin.from('expenses').select('*, casinos(name)').order('created_at', { ascending: true });
   if (year)  query = query.eq('year', parseInt(year));
   if (month) query = query.eq('month', parseInt(month));
 
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, amount, currency, year, month, note } = body;
+  const { name, amount, currency, year, month, note, casino_id } = body;
 
   if (!name || !amount || !year || !month) {
     return NextResponse.json({ error: 'Eksik alan' }, { status: 400 });
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from('expenses')
-    .insert({ name, amount, currency: currency || 'TRY', year, month, note: note || '' })
+    .insert({ name, amount, currency: currency || 'TRY', year, month, note: note || '', casino_id: casino_id || null })
     .select()
     .single();
 
