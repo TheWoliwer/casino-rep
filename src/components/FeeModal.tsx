@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Casino, FeeRow, CasinoCol, ColEntry, Transaction, DebtItem } from '@/lib/supabase';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface Props {
   casino: Casino;
@@ -39,6 +40,13 @@ function formatShortDate(d: string) {
 }
 
 export default function FeeModal({ casino, month, year, feeRow, cols, colEntries, onClose, onSaved }: Props) {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const clr = {
+    success: isLight ? '#065f46' : '#86efac',
+    warning: isLight ? '#78350f' : '#fbbf24',
+    danger:  isLight ? '#991b1b' : '#fca5a5',
+  };
   // Debt items — named breakdown stored as JSON
   const [debtItems, setDebtItems] = useState<DebtItem[]>(() => feeRow?.debt_items || []);
   // Manual total — used only when no debt items (backward compat)
@@ -411,7 +419,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                           {tx.note && <p className="text-sm text-slate-300 mt-1 truncate">"{tx.note}"</p>}
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-bold" style={{ color: '#86efac' }}>
+                          <p className="text-sm font-bold" style={{ color: clr.success }}>
                             +{fmt(tx.paid_amount)} ₺
                           </p>
                         </div>
@@ -600,11 +608,11 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                               ✓
                             </button>
                             <span className="flex-1 text-sm truncate font-medium"
-                              style={{ color: isFull ? '#86efac' : isPartial ? '#fbbf24' : 'var(--text-primary)' }}>
+                              style={{ color: isFull ? clr.success : isPartial ? clr.warning : 'var(--text-primary)' }}>
                               {item.name}
                             </span>
                             <div className="text-right flex-shrink-0">
-                              <p className="text-sm font-semibold" style={{ color: isFull ? '#86efac' : 'var(--text-primary)' }}>
+                              <p className="text-sm font-semibold" style={{ color: isFull ? clr.success : 'var(--text-primary)' }}>
                                 {item.currency !== 'TRY' ? `${item.currency} ${fmt(item.amount)}` : `₺${fmt(item.amount)}`}
                               </p>
                               {item.currency !== 'USD' && rates && (
@@ -662,7 +670,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                     <div className="flex justify-between text-xs text-slate-400">
                       <span>Tahsilat</span>
                       <span className="font-bold"
-                        style={{ color: pct >= 100 ? '#86efac' : pct > 0 ? '#fbbf24' : '#fca5a5' }}>
+                        style={{ color: pct >= 100 ? clr.success : pct > 0 ? clr.warning : clr.danger }}>
                         %{pct.toFixed(0)}
                       </span>
                     </div>
@@ -675,8 +683,8 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { label: 'Borç',   usd: toUSD(totalBorc), try: totalBorc, color: '#94a3b8' },
-                      { label: 'Ödenen', usd: toUSD(totalPaid),  try: totalPaid, color: totalPaid > 0 ? '#86efac' : '#475569' },
-                      { label: 'Kalan',  usd: toUSD(remaining),  try: remaining, color: remaining > 0 ? '#fca5a5' : '#86efac' },
+                      { label: 'Ödenen', usd: toUSD(totalPaid),  try: totalPaid, color: totalPaid > 0 ? clr.success : '#475569' },
+                      { label: 'Kalan',  usd: toUSD(remaining),  try: remaining, color: remaining > 0 ? clr.danger : clr.success },
                     ].map(c => (
                       <div key={c.label} className="rounded-lg py-2.5 px-1 text-center" style={{ background: 'var(--bg-surface)' }}>
                         <p className="text-[10px] text-slate-500 mb-1">{c.label}</p>

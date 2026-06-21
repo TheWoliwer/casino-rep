@@ -29,27 +29,21 @@
 }
 
 [data-theme="light"] {
-  --bg-base:       #f0f4f8;
-  --bg-base-alt:   #e8eef5;
-  --bg-surface:    #ffffff;
-  --bg-card:       #f8fafc;
+  --bg-base:       #e4eaf4;
+  --bg-base-alt:   #dce3ef;
+  --bg-surface:    #f2f5fb;
+  --bg-card:       #ffffff;
   --bg-input:      #ffffff;
-  --border-color:  #dde3ec;
-  --border-accent: #c8d2e0;
+  --border-color:  #cdd5e2;
+  --border-accent: #b8c4d6;
   --text-primary:  #1a2535;
   --text-muted:    #4a5568;
   --text-dim:      #7a8fa6;
 
-  /* Hücre renkleri - light tema */
-  --cell-green-bg:     #d1fae5;
-  --cell-green-text:   #065f46;
-  --cell-green-border: #6ee7b7;
-  --cell-yellow-bg:    #fef3c7;
-  --cell-yellow-text:  #78350f;
-  --cell-yellow-border:#fbbf24;
-  --cell-red-bg:       #fee2e2;
-  --cell-red-text:     #991b1b;
-  --cell-red-border:   #fca5a5;
+  /* Durum renkleri - light */
+  --color-success: #065f46;
+  --color-warning: #78350f;
+  --color-danger:  #991b1b;
 }
 
 /* ── Light tema metin override'ları ── */
