@@ -61,3 +61,14 @@ export type ColEntry = {
   note: string;
   updated_at?: string;
 };
+
+export type Expense = {
+  id: number;
+  year: number;
+  month: number;
+  name: string;
+  amount: number;
+  currency: string;
+  note: string;
+  created_at: string;
+};

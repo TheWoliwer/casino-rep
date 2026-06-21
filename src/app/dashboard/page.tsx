@@ -5,6 +5,7 @@ import type { Casino, CasinoCol, FeeRow, ColEntry } from '@/lib/supabase';
 import FeeModal from '@/components/FeeModal';
 import AddCasinoModal from '@/components/AddCasinoModal';
 import CasinoModal from '@/components/CasinoModal';
+import GiderlerModal from '@/components/GiderlerModal';
 import { useTheme } from '@/components/ThemeProvider';
 
 const MONTHS = ['','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
@@ -61,6 +62,7 @@ export default function DashboardPage() {
   const [feeModal, setFeeModal] = useState<FeeCell | null>(null);
   const [addModal, setAddModal] = useState(false);
   const [casinoModal, setCasinoModal] = useState<CasinoManage | null>(null);
+  const [giderlerModal, setGiderlerModal] = useState(false);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
@@ -201,6 +203,11 @@ export default function DashboardPage() {
               style={{ borderColor: 'var(--border-accent)' }}>
               Raporlar
             </a>
+            <button onClick={() => setGiderlerModal(true)}
+              className="hidden sm:block px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
+              style={{ borderColor: 'var(--border-accent)' }}>
+              Giderler
+            </button>
             <a href="/settings"
               className="hidden sm:block px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
               style={{ borderColor: 'var(--border-accent)' }}>
@@ -217,6 +224,11 @@ export default function DashboardPage() {
               style={{ borderColor: 'var(--border-accent)' }}>
               <span className="text-sm">📊</span>
             </a>
+            <button onClick={() => setGiderlerModal(true)} title="Giderler"
+              className="sm:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white border transition-colors flex-shrink-0"
+              style={{ borderColor: 'var(--border-accent)' }}>
+              <span className="text-sm">💸</span>
+            </button>
             <a href="/settings" title="Ayarlar"
               className="sm:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white border transition-colors flex-shrink-0"
               style={{ borderColor: 'var(--border-accent)' }}>
@@ -489,6 +501,7 @@ export default function DashboardPage() {
         />
       )}
       {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}
+      {giderlerModal && <GiderlerModal year={year} onClose={() => setGiderlerModal(false)} />}
       {casinoModal && (
         <CasinoModal
           casino={casinoModal.casino}
