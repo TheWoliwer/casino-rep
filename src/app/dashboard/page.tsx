@@ -6,6 +6,7 @@ import FeeModal from '@/components/FeeModal';
 import AddCasinoModal from '@/components/AddCasinoModal';
 import CasinoModal from '@/components/CasinoModal';
 import GiderlerModal from '@/components/GiderlerModal';
+import AylikFeeModal from '@/components/AylikFeeModal';
 import { useTheme } from '@/components/ThemeProvider';
 
 const MONTHS = ['','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
@@ -63,6 +64,8 @@ export default function DashboardPage() {
   const [addModal, setAddModal] = useState(false);
   const [casinoModal, setCasinoModal] = useState<CasinoManage | null>(null);
   const [giderlerModal, setGiderlerModal] = useState(false);
+  const [feeReportModal, setFeeReportModal] = useState(false);
+  const [raporlarOpen, setRaporlarOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
@@ -197,12 +200,34 @@ export default function DashboardPage() {
               <span className="hidden sm:inline">Casino Ekle</span>
             </button>
 
-            {/* Masaüstü butonları */}
-            <a href="/reports"
-              className="hidden sm:block px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
-              style={{ borderColor: 'var(--border-accent)' }}>
-              Raporlar
-            </a>
+            {/* Masaüstü Raporlar dropdown */}
+            <div className="hidden sm:block relative">
+              <button onClick={() => setRaporlarOpen(o => !o)}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
+                style={{ borderColor: 'var(--border-accent)' }}>
+                Raporlar <span className="text-[10px]">▾</span>
+              </button>
+              {raporlarOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setRaporlarOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border shadow-xl z-50 overflow-hidden"
+                    style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-accent)' }}>
+                    <a href="/reports"
+                      onClick={() => setRaporlarOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      style={{ color: 'var(--text-muted)' }}>
+                      📊 Casino Raporları
+                    </a>
+                    <button
+                      onClick={() => { setRaporlarOpen(false); setFeeReportModal(true); }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      style={{ color: 'var(--text-muted)' }}>
+                      📄 Aylık Fee Rapor
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
             <button onClick={() => setGiderlerModal(true)}
               className="hidden sm:block px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
               style={{ borderColor: 'var(--border-accent)' }}>
@@ -219,11 +244,16 @@ export default function DashboardPage() {
             </button>
 
             {/* Mobil ikonlar */}
-            <a href="/reports" title="Raporlar"
+            <a href="/reports" title="Casino Raporları"
               className="sm:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white border transition-colors flex-shrink-0"
               style={{ borderColor: 'var(--border-accent)' }}>
               <span className="text-sm">📊</span>
             </a>
+            <button onClick={() => setFeeReportModal(true)} title="Aylık Fee Rapor"
+              className="sm:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white border transition-colors flex-shrink-0"
+              style={{ borderColor: 'var(--border-accent)' }}>
+              <span className="text-sm">📄</span>
+            </button>
             <button onClick={() => setGiderlerModal(true)} title="Giderler"
               className="sm:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white border transition-colors flex-shrink-0"
               style={{ borderColor: 'var(--border-accent)' }}>
@@ -502,6 +532,7 @@ export default function DashboardPage() {
       )}
       {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}
       {giderlerModal && <GiderlerModal year={year} onClose={() => setGiderlerModal(false)} />}
+      {feeReportModal && <AylikFeeModal onClose={() => setFeeReportModal(false)} />}
       {casinoModal && (
         <CasinoModal
           casino={casinoModal.casino}
