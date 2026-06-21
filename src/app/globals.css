@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
+/* ── Tema değişkenleri ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Koyu (varsayılan) */
+  --bg-base:       #0f0f17;
+  --bg-base-alt:   #111120;
+  --bg-surface:    #16161f;
+  --bg-card:       #13131e;
+  --bg-input:      #0a0a12;
+  --border-color:  #1e1e2e;
+  --border-accent: #2a2a3e;
+  --text-primary:  #f1f5f9;
+  --text-muted:    #94a3b8;
+  --text-dim:      #64748b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="navy"] {
+  --bg-base:       #0f172a;
+  --bg-base-alt:   #132040;
+  --bg-surface:    #1e293b;
+  --bg-card:       #162032;
+  --bg-input:      #0d1526;
+  --border-color:  #293a52;
+  --border-accent: #364a66;
+  --text-primary:  #e2e8f0;
+  --text-muted:    #94a3b8;
+  --text-dim:      #64748b;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="light"] {
+  --bg-base:       #f0f4f8;
+  --bg-base-alt:   #e8eef5;
+  --bg-surface:    #ffffff;
+  --bg-card:       #f8fafc;
+  --bg-input:      #ffffff;
+  --border-color:  #dde3ec;
+  --border-accent: #c8d2e0;
+  --text-primary:  #1a2535;
+  --text-muted:    #4a5568;
+  --text-dim:      #7a8fa6;
+
+  /* Hücre renkleri - light tema */
+  --cell-green-bg:     #d1fae5;
+  --cell-green-text:   #065f46;
+  --cell-green-border: #6ee7b7;
+  --cell-yellow-bg:    #fef3c7;
+  --cell-yellow-text:  #78350f;
+  --cell-yellow-border:#fbbf24;
+  --cell-red-bg:       #fee2e2;
+  --cell-red-text:     #991b1b;
+  --cell-red-border:   #fca5a5;
 }
 
+/* ── Light tema metin override'ları ── */
+[data-theme="light"] .text-white        { color: #1a2535 !important; }
+[data-theme="light"] .text-slate-100    { color: #1e293b !important; }
+[data-theme="light"] .text-slate-200    { color: #1e293b !important; }
+[data-theme="light"] .text-slate-300    { color: #334155 !important; }
+[data-theme="light"] .text-slate-400    { color: #4a5568 !important; }
+[data-theme="light"] .text-slate-500    { color: #64748b !important; }
+[data-theme="light"] .text-slate-600    { color: #94a3b8 !important; }
+[data-theme="light"] .hover\:text-white:hover { color: #1a2535 !important; }
+[data-theme="light"] .hover\:bg-white\/5:hover  { background: rgba(0,0,0,0.04) !important; }
+[data-theme="light"] .hover\:bg-white\/10:hover { background: rgba(0,0,0,0.06) !important; }
+
+/* ── Global ── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+* { box-sizing: border-box; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
