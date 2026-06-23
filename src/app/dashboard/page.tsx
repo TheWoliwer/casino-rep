@@ -114,8 +114,8 @@ export default function DashboardPage() {
 
   const router = useRouter();
 
-  const fetchData = useCallback(async (showSpinner = false) => {
-    if (showSpinner) setLoading(true);
+  const load = useCallback(async () => {
+    setLoading(true);
     const [c, f, cc, ce] = await Promise.all([
       fetch('/api/casinos').then(r => r.json()),
       fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
@@ -126,11 +126,21 @@ export default function DashboardPage() {
     setFeeRows(Array.isArray(f) ? f : []);
     setCasinoCols(Array.isArray(cc) ? cc : []);
     setColEntries(Array.isArray(ce) ? ce : []);
-    if (showSpinner) setLoading(false);
+    setLoading(false);
   }, [year]);
 
-  // İlk yükleme spinner ile, sonraki refresh'ler sessiz
-  const load = useCallback(() => fetchData(true), [fetchData]);
+  const silentRefresh = useCallback(async () => {
+    const [c, f, cc, ce] = await Promise.all([
+      fetch('/api/casinos').then(r => r.json()),
+      fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
+      fetch('/api/casino-cols').then(r => r.json()),
+      fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
+    ]);
+    setCasinos(Array.isArray(c) ? c : []);
+    setFeeRows(Array.isArray(f) ? f : []);
+    setCasinoCols(Array.isArray(cc) ? cc : []);
+    setColEntries(Array.isArray(ce) ? ce : []);
+  }, [year]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -530,7 +540,7 @@ export default function DashboardPage() {
             .filter(c => c.monthly === 1)
             .flatMap(c => getColEntries(c.id).filter(e => e.year === year && e.month === feeModal.month))}
           onClose={() => setFeeModal(null)}
-          onSaved={() => fetchData(false)}
+          onSaved={silentRefresh}
         />
       )}
       {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}
@@ -541,7 +551,7 @@ export default function DashboardPage() {
           casino={casinoModal.casino}
           cols={getCasinoCols(casinoModal.casino.id)}
           onClose={() => setCasinoModal(null)}
-          onSaved={() => fetchData(false)}
+          onSaved={silentRefresh}
         />
       )}
 
