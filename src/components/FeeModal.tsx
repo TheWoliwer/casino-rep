@@ -120,7 +120,9 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
 
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
-      if (d.usd) setRates({ usd: parseFloat(d.usd), eur: parseFloat(d.eur) });
+      const usd = parseFloat(d.usd);
+      const eur = parseFloat(d.eur);
+      if (usd > 0 && eur > 0) setRates({ usd, eur });
     });
   }, []);
 
@@ -436,6 +438,20 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
 
               {/* ── BORÇ KALEMLERİ ── */}
               <div className="space-y-3">
+                {/* Kur uyarısı */}
+                {!rates && (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
+                    style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' }}>
+                    ⚠ Döviz kurları yükleniyor... USD/EUR girişleri şu an TRY olarak işlem görür.
+                  </div>
+                )}
+                {rates && (
+                  <div className="flex items-center gap-3 text-[10px]" style={{ color: 'var(--text-dim)' }}>
+                    <span>1 USD = ₺{rates.usd.toFixed(2)}</span>
+                    <span>·</span>
+                    <span>1 EUR = ₺{rates.eur.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Borç Kalemleri</p>
                   <button
