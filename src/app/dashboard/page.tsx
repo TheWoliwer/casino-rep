@@ -114,8 +114,8 @@ export default function DashboardPage() {
 
   const router = useRouter();
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (showSpinner = false) => {
+    if (showSpinner) setLoading(true);
     const [c, f, cc, ce] = await Promise.all([
       fetch('/api/casinos').then(r => r.json()),
       fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
@@ -126,8 +126,11 @@ export default function DashboardPage() {
     setFeeRows(Array.isArray(f) ? f : []);
     setCasinoCols(Array.isArray(cc) ? cc : []);
     setColEntries(Array.isArray(ce) ? ce : []);
-    setLoading(false);
+    if (showSpinner) setLoading(false);
   }, [year]);
+
+  // İlk yükleme spinner ile, sonraki refresh'ler sessiz
+  const load = useCallback(() => fetchData(true), [fetchData]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -527,7 +530,7 @@ export default function DashboardPage() {
             .filter(c => c.monthly === 1)
             .flatMap(c => getColEntries(c.id).filter(e => e.year === year && e.month === feeModal.month))}
           onClose={() => setFeeModal(null)}
-          onSaved={load}
+          onSaved={() => fetchData(false)}
         />
       )}
       {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}
@@ -538,7 +541,7 @@ export default function DashboardPage() {
           casino={casinoModal.casino}
           cols={getCasinoCols(casinoModal.casino.id)}
           onClose={() => setCasinoModal(null)}
-          onSaved={load}
+          onSaved={() => fetchData(false)}
         />
       )}
 

@@ -298,6 +298,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
     setSaving(true);
     setSaveError('');
 
+    // 1. Ana kayıt
     const res = await fetch('/api/fee-rows', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -321,28 +322,24 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
 
     const savedRow = await res.json();
 
+    // 2. Modal hemen kapat — arka plan kayıtları paralel çalışır
+    onClose();
+
+    // 3. Transaction + col-entries paralel, arka planda
+    const bgTasks: Promise<unknown>[] = [];
+
     if (addedPayment > 0 && savedRow?.id) {
-      const txRes = await fetch('/api/transactions', {
+      bgTasks.push(fetch('/api/transactions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fee_row_id: savedRow.id,
-          paid_amount: addedPayment,
-          note,
-        }),
-      });
-      if (!txRes.ok) {
-        const txErr = await txRes.json();
-        setSaveError(`İşlem kaydı hatası: ${txErr.error || 'Bilinmeyen hata'}`);
-        setSaving(false);
-        return;
-      }
+        body: JSON.stringify({ fee_row_id: savedRow.id, paid_amount: addedPayment, note }),
+      }));
     }
 
     for (const col of cols) {
       const cs = colState[col.id];
       if (cs) {
-        await fetch('/api/col-entries', {
+        bgTasks.push(fetch('/api/col-entries', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -353,13 +350,12 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
             status: cs.status,
             note: cs.note,
           }),
-        });
+        }));
       }
     }
 
-    setSaving(false);
+    await Promise.all(bgTasks);
     onSaved();
-    onClose();
   }
 
   async function deleteFee() {
