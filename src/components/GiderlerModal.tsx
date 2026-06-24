@@ -187,7 +187,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
                 {[
                   { label: 'Toplam Gider', value: `₺${fmtShort(yearTotalTRY)}`, sub: `${expenses.length} kalem`, color: danger },
                   { label: 'Aktif Ay', value: String(MONTHS.slice(1).filter((_, i) => monthTotalTRY(i+1) > 0).length), sub: 'ay gider var', color: warning },
-                  { label: 'Aylık Ort.', value: `₺${fmtShort(yearTotalTRY / 12)}`, sub: 'ortalama', color: 'var(--text-muted)' },
+                  { label: 'Dolar / TL', value: rates ? `₺${rates.usd.toFixed(2)}` : '—', sub: rates ? `1 EUR = ₺${rates.eur.toFixed(2)}` : 'kur yükleniyor', color: 'var(--text-muted)' },
                 ].map(c => (
                   <div key={c.label} className="rounded-xl p-3 border"
                     style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
