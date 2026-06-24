@@ -35,6 +35,8 @@ export default function CasinoReportPage() {
   const [sortKey, setSortKey]   = useState<SortKey>('month');
   const [sortDir, setSortDir]   = useState<SortDir>('asc');
   const [usdRate, setUsdRate]   = useState<number | null>(null);
+  const [pdfOpen, setPdfOpen]   = useState(false);
+  const [monthPicker, setMonthPicker] = useState(false);
 
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
@@ -217,12 +219,34 @@ export default function CasinoReportPage() {
               style={{ borderColor: 'var(--border-accent)', color: '#86efac' }}>
               Excel
             </button>
-            <button
-              onClick={() => window.open(`/reports/${id}/print?year=${year}`, '_blank')}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
-              style={{ background: '#fbbf24', color: '#0f0f17' }}>
-              PDF
-            </button>
+            {/* PDF Dropdown */}
+            <div className="relative">
+              <button onClick={() => setPdfOpen(o => !o)}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
+                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                PDF <span className="text-[10px]">▾</span>
+              </button>
+              {pdfOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setPdfOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-44 rounded-xl border shadow-xl z-50 overflow-hidden"
+                    style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-accent)' }}>
+                    <button
+                      onClick={() => { setPdfOpen(false); window.open(`/reports/${id}/print?year=${year}`, '_blank'); }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: 'var(--text-muted)' }}>
+                      📄 12 Aylık Rapor
+                    </button>
+                    <button
+                      onClick={() => { setPdfOpen(false); setMonthPicker(true); }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: 'var(--text-muted)' }}>
+                      📅 Aylık Detay
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
             <button onClick={() => router.push('/dashboard')}
               className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
               style={{ borderColor: 'var(--border-accent)' }}>
@@ -377,6 +401,40 @@ export default function CasinoReportPage() {
               </div>
             </div>
           )}
+        </div>
+      )}
+      {/* Ay Seçici Modal */}
+      {monthPicker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-sm rounded-2xl overflow-hidden" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
+            <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: 'var(--border-color)' }}>
+              <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Hangi ay?</p>
+              <button onClick={() => setMonthPicker(false)}
+                className="w-7 h-7 flex items-center justify-center rounded-full text-xl"
+                style={{ color: 'var(--text-dim)' }}>×</button>
+            </div>
+            <div className="p-4 grid grid-cols-3 gap-2">
+              {MONTHS.slice(1).map((m, i) => {
+                const monthNum = i + 1;
+                const hasData  = feeRows.some(r => r.month === monthNum);
+                return (
+                  <button key={monthNum}
+                    onClick={() => { setMonthPicker(false); window.open(`/reports/${id}/print?year=${year}&month=${monthNum}`, '_blank'); }}
+                    className="py-3 rounded-xl text-sm font-medium transition-all hover:scale-[1.03] active:scale-[0.97]"
+                    style={{
+                      background: hasData ? 'rgba(251,191,36,0.12)' : 'var(--bg-card)',
+                      border: `1px solid ${hasData ? 'rgba(251,191,36,0.35)' : 'var(--border-accent)'}`,
+                      color: hasData ? '#fbbf24' : 'var(--text-dim)',
+                    }}>
+                    {m}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="px-5 pb-4 text-[10px]" style={{ color: 'var(--text-dim)' }}>
+              Sarı = veri mevcut
+            </p>
+          </div>
         </div>
       )}
     </div>

@@ -18,7 +18,8 @@ function today() {
 export default function PrintPage() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
-  const year = parseInt(searchParams.get('year') || String(new Date().getFullYear()));
+  const year  = parseInt(searchParams.get('year')  || String(new Date().getFullYear()));
+  const month = searchParams.get('month') ? parseInt(searchParams.get('month')!) : null;
 
   const [casino, setCasino]       = useState<Casino | null>(null);
   const [feeRows, setFeeRows]     = useState<FeeRow[]>([]);
@@ -48,13 +49,15 @@ export default function PrintPage() {
 
   const toUSD = (n: number) => usdRate ? n / usdRate : n;
 
-  const total       = feeRows.reduce((s, r) => s + (r.turnover ?? 0), 0);
-  const collected   = feeRows.reduce((s, r) => s + (r.paid_amount ?? 0), 0);
+  // Aylık modda sadece o ayın satırını, değilse tümünü kullan
+  const summaryRows = month ? feeRows.filter(r => r.month === month) : feeRows;
+  const total       = summaryRows.reduce((s, r) => s + (r.turnover ?? 0), 0);
+  const collected   = summaryRows.reduce((s, r) => s + (r.paid_amount ?? 0), 0);
   const outstanding = Math.max(0, total - collected);
   const rate        = total > 0 ? (collected / total) * 100 : 0;
 
-  const tableRows = MONTHS.slice(1).map((_, i) => {
-    const m   = i + 1;
+  // Aylık mod: sadece seçili ay; 12 aylık mod: tüm aylar
+  const tableRows = (month ? [month] : MONTHS.slice(1).map((_, i) => i + 1)).map(m => {
     const row = feeRows.find(r => r.month === m);
     const os  = row ? Math.max(0, (row.turnover ?? 0) - (row.paid_amount ?? 0)) : 0;
     return { month: m, row, os };
@@ -79,7 +82,9 @@ export default function PrintPage() {
         style={{ background: '#1e1e2e', borderColor: '#2a2a3e' }}>
         <div className="flex items-center gap-3">
           <span className="text-amber-400 font-bold">♠</span>
-          <span className="text-white text-sm font-semibold">{casino.name} — {year} Raporu</span>
+          <span className="text-white text-sm font-semibold">
+            {casino.name} — {month ? `${MONTHS[month]} ${year}` : `${year} Yıllık`} Raporu
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => window.close()}
@@ -105,7 +110,9 @@ export default function PrintPage() {
               <div className="logo-badge">♠</div>
               <div>
                 <h1 className="casino-name">{casino.name}</h1>
-                <p className="report-subtitle">Ödeme Takip Raporu · {year}</p>
+                <p className="report-subtitle">
+                  {month ? `${MONTHS[month]} ${year} · Aylık Detay` : `Ödeme Takip Raporu · ${year}`}
+                </p>
               </div>
             </div>
             <div className="header-right">
@@ -150,18 +157,19 @@ export default function PrintPage() {
             <span className="progress-label">%{rate.toFixed(1)} tahsil edildi</span>
           </div>
 
-          <div className="section-title">Aylık Detay</div>
+          <div className="section-title">{month ? `${MONTHS[month]} Detayı` : 'Aylık Detay'}</div>
 
           {/* Monthly Table */}
           <table className="report-table">
             <thead>
               <tr>
-                <th className="text-left">Ay</th>
+                {!month && <th className="text-left">Ay</th>}
                 <th className="text-right">Borç (USD)</th>
                 <th className="text-right">Borç (TRY)</th>
                 <th className="text-right">Ödenen (USD)</th>
                 <th className="text-right">Kalan (USD)</th>
                 <th className="text-center">Durum</th>
+                {month && <th className="text-left">Not</th>}
               </tr>
             </thead>
             <tbody>
@@ -172,7 +180,7 @@ export default function PrintPage() {
                 const statusColor = !row ? '#94a3b8' : statusLabel === 'ALINDI' ? '#16a34a' : statusLabel === 'KISMİ' ? '#d97706' : '#dc2626';
                 return (
                   <tr key={m} className={m % 2 === 0 ? 'row-alt' : ''}>
-                    <td className="font-medium">{MONTHS[m]}</td>
+                    {!month && <td className="font-medium">{MONTHS[m]}</td>}
                     <td className="text-right">{row ? `$${fmtUSD(toUSD(turnover))}` : '—'}</td>
                     <td className="text-right text-muted">{row ? `₺${fmt(turnover)}` : '—'}</td>
                     <td className="text-right" style={{ color: paid > 0 ? '#16a34a' : undefined }}>
@@ -186,18 +194,20 @@ export default function PrintPage() {
                         {statusLabel}
                       </span>
                     </td>
+                    {month && <td className="text-muted">{row?.note || '—'}</td>}
                   </tr>
                 );
               })}
             </tbody>
             <tfoot>
               <tr>
-                <td className="font-bold">TOPLAM</td>
+                {!month && <td className="font-bold">TOPLAM</td>}
                 <td className="text-right font-bold">${fmtUSD(toUSD(total))}</td>
                 <td className="text-right font-bold text-muted">₺{fmt(total)}</td>
                 <td className="text-right font-bold" style={{ color: '#16a34a' }}>${fmtUSD(toUSD(collected))}</td>
                 <td className="text-right font-bold" style={{ color: outstanding > 0 ? '#dc2626' : '#16a34a' }}>${fmtUSD(toUSD(outstanding))}</td>
                 <td className="text-center font-bold" style={{ color: rate >= 100 ? '#16a34a' : '#d97706' }}>%{rate.toFixed(1)}</td>
+                {month && <td />}
               </tr>
             </tfoot>
           </table>
@@ -244,8 +254,42 @@ export default function PrintPage() {
             </>
           )}
 
+          {/* Aylık modda borç kalemleri */}
+          {month && (() => {
+            const monthRow = feeRows.find(r => r.month === month);
+            const items = monthRow?.debt_items ?? [];
+            if (!items.length) return null;
+            return (
+              <>
+                <div className="section-title" style={{ marginTop: 24 }}>Borç Kalemleri</div>
+                <table className="report-table">
+                  <thead>
+                    <tr>
+                      <th className="text-left">Kalem</th>
+                      <th className="text-right">Tutar</th>
+                      <th className="text-center">Durum</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.map((item, i) => (
+                      <tr key={i} className={i % 2 === 0 ? 'row-alt' : ''}>
+                        <td className="font-medium">{item.name}</td>
+                        <td className="text-right">{item.currency !== 'TRY' ? item.currency + ' ' : '₺'}{fmt(item.amount)}</td>
+                        <td className="text-center">
+                          {item.paid
+                            ? <span className="status-badge" style={{ color: '#16a34a', borderColor: '#16a34a40', background: '#16a34a15' }}>ALINDI</span>
+                            : <span className="status-badge" style={{ color: '#dc2626', borderColor: '#dc262640', background: '#dc262615' }}>BEKLIYOR</span>}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            );
+          })()}
+
           {/* Notes for unpaid months */}
-          {feeRows.some(r => r.note) && (
+          {!month && feeRows.some(r => r.note) && (
             <>
               <div className="section-title" style={{ marginTop: 24 }}>Notlar</div>
               <div className="notes-section">
