@@ -65,10 +65,10 @@ export default function FeeReportPage() {
   useEffect(() => { load(); }, [load]);
 
   function startEdit(data: FeeReportData) {
-    setEditUsdRate(String(data.usdRate ?? ''));
-    setEditEurRate(String(data.eurRate ?? ''));
+    setEditUsdRate(data.usdRate ? fmt(data.usdRate) : '');
+    setEditEurRate(data.eurRate ? fmt(data.eurRate) : '');
     setEditFeeFixed(data.feeFixed ? fmt(data.feeFixed) : '');
-    setEditFeeRate(String(data.feeRate ?? ''));
+    setEditFeeRate(data.feeRate ? fmt(data.feeRate) : '');
     setEditRows(data.rows.map(r => ({ kategori: r.kategori, saglayici: r.saglayici, bet: r.bet ? fmt(r.bet) : '', win: r.win ? fmt(r.win) : '' })));
     setEditExtras(data.extras.map(e => ({ name: e.name, amount: e.amount ? fmt(e.amount) : '', currency: e.currency })));
     setError('');
