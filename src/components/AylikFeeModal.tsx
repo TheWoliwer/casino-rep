@@ -374,6 +374,12 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                 📄 Raporu Tekrar Aç
               </button>
 
+              <a href="/reports/fee"
+                className="block w-full py-2.5 rounded-xl text-xs font-medium text-center transition-all"
+                style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: 'var(--text-dim)' }}>
+                🗂️ Tüm Fee Raporları
+              </a>
+
               <button onClick={() => { setStep(1); setCasinoId(''); setRows(PROVIDERS.map(() => ({ bet: '', win: '' }))); setExtras([]); setReportId(''); }}
                 className="w-full py-2 rounded-xl text-xs transition-all"
                 style={{ color: 'var(--text-dim)' }}>

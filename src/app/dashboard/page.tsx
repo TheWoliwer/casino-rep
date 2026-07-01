@@ -237,6 +237,12 @@ export default function DashboardPage() {
                       style={{ color: 'var(--text-muted)' }}>
                       📄 Aylık Fee Rapor
                     </button>
+                    <a href="/reports/fee"
+                      onClick={() => setRaporlarOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      style={{ color: 'var(--text-muted)' }}>
+                      🗂️ Fee Rapor Geçmişi
+                    </a>
                   </div>
                 </>
               )}

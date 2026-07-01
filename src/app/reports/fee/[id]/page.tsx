@@ -13,6 +13,7 @@ function fmtUSD(n: number) {
 function today() {
   return new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
+function parseNum(s: string) { return parseFloat(s.replace(/\./g, '').replace(',', '.')) || 0; }
 
 type ReportRow = { kategori: string; saglayici: string; bet: number; win: number };
 type ExtraItem = { name: string; amount: number; currency: 'TRY' | 'USD' | 'EUR' };
@@ -30,21 +31,82 @@ type FeeReportData = {
   extras: ExtraItem[];
 };
 
+type RowInput = { kategori: string; saglayici: string; bet: string; win: string };
+type ExtraInput = { name: string; amount: string; currency: 'TRY' | 'USD' | 'EUR' };
+
 export default function FeeReportPage() {
   const { id } = useParams<{ id: string }>();
+  const [casinoId, setCasinoId] = useState<number | null>(null);
   const [report, setReport] = useState<FeeReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const [editUsdRate, setEditUsdRate] = useState('');
+  const [editEurRate, setEditEurRate] = useState('');
+  const [editFeeFixed, setEditFeeFixed] = useState('');
+  const [editFeeRate, setEditFeeRate] = useState('');
+  const [editRows, setEditRows] = useState<RowInput[]>([]);
+  const [editExtras, setEditExtras] = useState<ExtraInput[]>([]);
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/fee-reports?id=${id}`);
     if (!res.ok) { setLoading(false); return; }
     const raw = await res.json();
-    setReport(raw.data as FeeReportData);
+    const data = raw.data as FeeReportData;
+    setReport(data);
+    setCasinoId(raw.casino_id);
     setLoading(false);
+    return data;
   }, [id]);
 
   useEffect(() => { load(); }, [load]);
+
+  function startEdit(data: FeeReportData) {
+    setEditUsdRate(String(data.usdRate ?? ''));
+    setEditEurRate(String(data.eurRate ?? ''));
+    setEditFeeFixed(data.feeFixed ? fmt(data.feeFixed) : '');
+    setEditFeeRate(String(data.feeRate ?? ''));
+    setEditRows(data.rows.map(r => ({ kategori: r.kategori, saglayici: r.saglayici, bet: r.bet ? fmt(r.bet) : '', win: r.win ? fmt(r.win) : '' })));
+    setEditExtras(data.extras.map(e => ({ name: e.name, amount: e.amount ? fmt(e.amount) : '', currency: e.currency })));
+    setError('');
+    setEditMode(true);
+  }
+
+  function addExtra() { setEditExtras(e => [...e, { name: '', amount: '', currency: 'TRY' }]); }
+  function removeExtra(i: number) { setEditExtras(e => e.filter((_, idx) => idx !== i)); }
+  function updateExtra(i: number, field: keyof ExtraInput, val: string) {
+    setEditExtras(e => e.map((item, idx) => idx === i ? { ...item, [field]: val } : item));
+  }
+
+  async function handleSave() {
+    if (!report) return;
+    setSaving(true);
+    setError('');
+    try {
+      const newData: FeeReportData = {
+        ...report,
+        usdRate: parseNum(editUsdRate) || report.usdRate,
+        eurRate: parseNum(editEurRate) || report.eurRate,
+        feeFixed: report.feeType === 'fixed' ? parseNum(editFeeFixed) : report.feeFixed,
+        feeRate: report.feeType === 'percent' ? parseNum(editFeeRate) : report.feeRate,
+        rows: editRows.map(r => ({ kategori: r.kategori, saglayici: r.saglayici, bet: parseNum(r.bet), win: parseNum(r.win) })),
+        extras: editExtras.map(e => ({ name: e.name, amount: parseNum(e.amount), currency: e.currency })),
+      };
+      const res = await fetch('/api/fee-reports', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, casino_id: casinoId, year: newData.year, month: newData.month, data: newData }),
+      });
+      if (!res.ok) { const d = await res.json(); setError(d.error || 'Kaydetme hatası'); return; }
+      setReport(newData);
+      setEditMode(false);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   function share() {
     navigator.clipboard.writeText(window.location.href);
@@ -63,14 +125,15 @@ export default function FeeReportPage() {
     </div>
   );
 
-  const { rows, extras, feeType, feeRate, feeFixed, usdRate, eurRate, casinoName } = report;
+  const { extras, feeType, feeFixed, usdRate, eurRate, casinoName } = report;
+  const rows = report.rows;
 
   const totalBet = rows.reduce((s, r) => s + r.bet, 0);
   const totalWin = rows.reduce((s, r) => s + r.win, 0);
   const totalNet = totalWin - totalBet;
 
   const komisyonTRY = feeType === 'percent'
-    ? Math.abs(totalNet) * feeRate / 100
+    ? Math.abs(totalNet) * report.feeRate / 100
     : feeType === 'fixed' ? feeFixed : 0;
   const komisyonUSD = komisyonTRY / usdRate;
 
@@ -84,8 +147,14 @@ export default function FeeReportPage() {
   const totalUSD = komisyonUSD + extrasUSD.reduce((s, v) => s + v, 0);
 
   const komisyonLabel = feeType === 'percent'
-    ? `Komisyon %${feeRate}`
+    ? `Komisyon %${report.feeRate}`
     : feeType === 'fixed' ? 'Komisyon (Sabit)' : null;
+
+  const inputStyle = {
+    background: '#161622',
+    border: '1px solid #2a2a3e',
+    color: '#e2e8f0',
+  } as React.CSSProperties;
 
   return (
     <>
@@ -97,25 +166,148 @@ export default function FeeReportPage() {
           <span className="text-white text-sm font-semibold">{casinoName} — {MONTHS[report.month]} {report.year} Fee Raporu</span>
         </div>
         <div className="flex items-center gap-2">
+          <a href="/reports/fee"
+            className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
+            style={{ borderColor: '#2a2a3e' }}>
+            🗂️ Geçmiş
+          </a>
           <button onClick={() => window.close()}
             className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
             style={{ borderColor: '#2a2a3e' }}>
             ← Geri
           </button>
-          <button onClick={share}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors"
-            style={{ borderColor: '#fbbf24', color: '#fbbf24' }}>
-            {copied ? '✓ Kopyalandı' : '🔗 Paylaş'}
-          </button>
-          <button onClick={() => window.print()}
-            className="px-4 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
-            style={{ background: '#fbbf24', color: '#0f0f17' }}>
-            🖨️ İndir / Yazdır
-          </button>
+          {!editMode && (
+            <>
+              <button onClick={share}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors"
+                style={{ borderColor: '#fbbf24', color: '#fbbf24' }}>
+                {copied ? '✓ Kopyalandı' : '🔗 Paylaş'}
+              </button>
+              <button onClick={() => startEdit(report)}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors"
+                style={{ borderColor: '#60a5fa', color: '#60a5fa' }}>
+                ✏️ Düzenle
+              </button>
+              <button onClick={() => window.print()}
+                className="px-4 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
+                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                🖨️ İndir / Yazdır
+              </button>
+            </>
+          )}
+          {editMode && (
+            <>
+              <button onClick={() => setEditMode(false)} disabled={saving}
+                className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors disabled:opacity-40"
+                style={{ borderColor: '#2a2a3e' }}>
+                İptal
+              </button>
+              <button onClick={handleSave} disabled={saving}
+                className="px-4 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 disabled:opacity-40"
+                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                {saving ? 'Kaydediliyor...' : '💾 Kaydet ve PDF Oluştur'}
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      {/* A4 Page */}
+      {editMode ? (
+        <div className="no-print" style={{ paddingTop: 72, minHeight: '100vh', background: '#0f0f17' }}>
+          <div className="max-w-2xl mx-auto px-4 pb-16 space-y-4">
+
+            {error && <p className="text-xs text-red-400">{error}</p>}
+
+            <div className="rounded-xl p-4 space-y-3" style={{ background: '#1e1e2e', border: '1px solid #2a2a3e' }}>
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Kurlar</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-500">USD/TRY</label>
+                  <input type="text" inputMode="decimal" value={editUsdRate} onChange={e => setEditUsdRate(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg text-sm outline-none" style={inputStyle} />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-500">EUR/TRY</label>
+                  <input type="text" inputMode="decimal" value={editEurRate} onChange={e => setEditEurRate(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg text-sm outline-none" style={inputStyle} />
+                </div>
+              </div>
+            </div>
+
+            {feeType === 'fixed' && (
+              <div className="rounded-xl p-4 space-y-2" style={{ background: '#1e1e2e', border: '1px solid #2a2a3e' }}>
+                <label className="text-[10px] uppercase tracking-wider text-slate-500">Sabit Komisyon Tutarı (TRY)</label>
+                <input type="text" inputMode="decimal" value={editFeeFixed} onChange={e => setEditFeeFixed(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg text-sm outline-none" style={inputStyle} />
+              </div>
+            )}
+            {feeType === 'percent' && (
+              <div className="rounded-xl p-4 space-y-2" style={{ background: '#1e1e2e', border: '1px solid #2a2a3e' }}>
+                <label className="text-[10px] uppercase tracking-wider text-slate-500">Komisyon Oranı (%)</label>
+                <input type="text" inputMode="decimal" value={editFeeRate} onChange={e => setEditFeeRate(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg text-sm outline-none" style={inputStyle} />
+              </div>
+            )}
+
+            <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #2a2a3e' }}>
+              <div className="px-3 py-2 border-b" style={{ background: '#1e1e2e', borderColor: '#2a2a3e' }}>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Sağlayıcı Verileri</p>
+              </div>
+              <div className="divide-y" style={{ borderColor: '#2a2a3e' }}>
+                {editRows.map((r, i) => (
+                  <div key={i} className="p-3 space-y-2" style={{ background: '#161622' }}>
+                    <p className="text-xs font-bold text-white">
+                      {r.kategori} — <span style={{ color: '#fbbf24' }}>{r.saglayici}</span>
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-[10px] uppercase tracking-wider mb-1 block text-slate-500">Toplam Bet (TRY)</label>
+                        <input type="text" inputMode="decimal" value={r.bet}
+                          onChange={e => setEditRows(rr => rr.map((row, idx) => idx === i ? { ...row, bet: e.target.value } : row))}
+                          className="w-full px-2.5 py-2 rounded-lg text-sm outline-none" style={inputStyle} placeholder="0,00" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] uppercase tracking-wider mb-1 block text-slate-500">Toplam Win (TRY)</label>
+                        <input type="text" inputMode="decimal" value={r.win}
+                          onChange={e => setEditRows(rr => rr.map((row, idx) => idx === i ? { ...row, win: e.target.value } : row))}
+                          className="w-full px-2.5 py-2 rounded-lg text-sm outline-none" style={inputStyle} placeholder="0,00" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Ekstra Kalemler</p>
+                <button onClick={addExtra}
+                  className="px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
+                  style={{ background: '#1e1e2e', border: '1px solid #2a2a3e', color: '#fbbf24' }}>
+                  + Ekle
+                </button>
+              </div>
+              {editExtras.map((ex, i) => (
+                <div key={i} className="flex gap-2 items-center">
+                  <input type="text" value={ex.name} onChange={e => updateExtra(i, 'name', e.target.value)}
+                    className="flex-1 px-2.5 py-2 rounded-lg text-sm outline-none" style={inputStyle} placeholder="Kalem adı" />
+                  <input type="text" inputMode="decimal" value={ex.amount} onChange={e => updateExtra(i, 'amount', e.target.value)}
+                    className="w-28 px-2.5 py-2 rounded-lg text-sm outline-none" style={inputStyle} placeholder="Tutar" />
+                  <select value={ex.currency} onChange={e => updateExtra(i, 'currency', e.target.value)}
+                    className="px-2 py-2 rounded-lg text-sm outline-none" style={inputStyle}>
+                    <option>TRY</option>
+                    <option>USD</option>
+                    <option>EUR</option>
+                  </select>
+                  <button onClick={() => removeExtra(i)} className="text-base" style={{ color: '#ef4444' }}>×</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+
+      /* A4 Page */
       <div className="print-page" style={{ paddingTop: 56 }}>
         <div className="a4">
 
@@ -232,6 +424,7 @@ export default function FeeReportPage() {
           </div>
         </div>
       </div>
+      )}
 
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
