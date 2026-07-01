@@ -66,6 +66,7 @@ export default function DashboardPage() {
   const [giderlerModal, setGiderlerModal] = useState(false);
   const [feeReportModal, setFeeReportModal] = useState(false);
   const [raporlarOpen, setRaporlarOpen] = useState(false);
+  const [feeSubOpen, setFeeSubOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
@@ -222,7 +223,7 @@ export default function DashboardPage() {
               </button>
               {raporlarOpen && (
                 <>
-                  <div className="fixed inset-0 z-40" onClick={() => setRaporlarOpen(false)} />
+                  <div className="fixed inset-0 z-40" onClick={() => { setRaporlarOpen(false); setFeeSubOpen(false); }} />
                   <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border shadow-xl z-50 overflow-hidden"
                     style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-accent)' }}>
                     <a href="/reports"
@@ -232,17 +233,28 @@ export default function DashboardPage() {
                       📊 Casino Raporları
                     </a>
                     <button
-                      onClick={() => { setRaporlarOpen(false); setFeeReportModal(true); }}
-                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      onClick={() => setFeeSubOpen(o => !o)}
+                      className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
                       style={{ color: 'var(--text-muted)' }}>
-                      📄 Aylık Fee Rapor
+                      <span className="flex items-center gap-2">📄 Aylık Fee Rapor</span>
+                      <span className="text-[9px]">{feeSubOpen ? '▾' : '▸'}</span>
                     </button>
-                    <a href="/reports/fee"
-                      onClick={() => setRaporlarOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
-                      style={{ color: 'var(--text-muted)' }}>
-                      🗂️ Fee Rapor Geçmişi
-                    </a>
+                    {feeSubOpen && (
+                      <div style={{ background: 'var(--bg-card)' }}>
+                        <button
+                          onClick={() => { setRaporlarOpen(false); setFeeSubOpen(false); setFeeReportModal(true); }}
+                          className="w-full flex items-center gap-2 pl-7 pr-3 py-2 text-xs hover:bg-white/5 transition-colors"
+                          style={{ color: 'var(--text-muted)' }}>
+                          ✏️ Yeni Rapor Oluştur
+                        </button>
+                        <a href="/reports/fee"
+                          onClick={() => { setRaporlarOpen(false); setFeeSubOpen(false); }}
+                          className="flex items-center gap-2 pl-7 pr-3 py-2 text-xs hover:bg-white/5 transition-colors"
+                          style={{ color: 'var(--text-muted)' }}>
+                          🗂️ Geçmiş
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
