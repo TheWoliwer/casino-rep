@@ -11,12 +11,14 @@ export default function LoginPage() {
   const router   = useRouter();
 
   useEffect(() => {
+    // Ana sayfayı önceden yükle — giriş sonrası bekletmeden açılsın
+    router.prefetch('/reports');
     const t = setTimeout(() => {
       setVisible(true);
       setTimeout(() => inputRef.current?.focus(), 300);
     }, 80);
     return () => clearTimeout(t);
-  }, []);
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -27,10 +29,11 @@ export default function LoginPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password }),
     });
-    setLoading(false);
     if (res.ok) {
-      router.push('/reports');
+      // loading açık kalsın — yönlendirme bitene kadar spinner dönsün
+      router.replace('/reports');
     } else {
+      setLoading(false);
       const data = await res.json();
       setError(data.error || 'Hata oluştu');
       setPassword('');
