@@ -35,6 +35,8 @@ type HistoryEvent = {
   note: string;
   month: number;
   year: number;
+  rowId: number | null; // ilgili fee satırı
+  txId: number | null;  // ödeme işlemi
 };
 
 export default function CasinoProfileModal({ casino, onClose }: Props) {
@@ -53,6 +55,7 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   const [typeFilter, setTypeFilter] = useState<'all' | 'payment' | 'entry'>('all');
   const [yearFilter, setYearFilter] = useState(0); // 0 = tümü
   const [searchQ, setSearchQ] = useState('');
+  const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
   // Aylık detay
   const [detailYear, setDetailYear] = useState(new Date().getFullYear());
@@ -123,6 +126,7 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
         amount: r.turnover ?? 0,
         note: r.note || '',
         month: r.month, year: r.year,
+        rowId: r.id, txId: null,
       })),
     ...transactions.map((t): HistoryEvent => {
       const row = rowById.get(t.fee_row_id);
@@ -132,6 +136,7 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
         amount: t.paid_amount ?? 0,
         note: t.note || '',
         month: row?.month ?? 0, year: row?.year ?? 0,
+        rowId: row?.id ?? null, txId: t.id,
       };
     }),
   ].sort((a, b) => {
@@ -430,36 +435,156 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
                           <div className="space-y-2">
                             {g.events.map(ev => {
                               const isPayment = ev.kind === 'payment';
+                              const isOpen = expandedEvent === ev.key;
+                              const evRow = ev.rowId != null ? rowById.get(ev.rowId) : undefined;
                               return (
-                                <div key={ev.key} className="rounded-xl p-3 border"
-                                  style={{ background: 'var(--bg-base)', borderColor: 'var(--border-accent)' }}>
-                                  <div className="flex items-start justify-between gap-3">
-                                    <div className="flex items-start gap-2.5 flex-1 min-w-0">
-                                      <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0"
-                                        style={isPayment
-                                          ? { background: 'rgba(34,197,94,0.12)', color: '#86efac' }
-                                          : { background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
-                                        {isPayment ? '💰' : '📝'}
-                                      </span>
-                                      <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-semibold" style={{ color: isPayment ? '#86efac' : 'var(--text-primary)' }}>
-                                          {isPayment ? 'Ödeme alındı' : 'Borç girişi yapıldı'}
-                                        </p>
-                                        <p className="text-xs text-slate-500 mt-0.5">
-                                          {ev.month > 0 && <>{MONTHS[ev.month]} {ev.year} dönemi</>}
-                                          {ev.month > 0 && ev.date && <span className="text-slate-600"> · </span>}
-                                          {ev.date && formatDate(ev.date)}
-                                        </p>
-                                        {ev.note && <p className="text-xs text-slate-400 mt-1 truncate">&quot;{ev.note}&quot;</p>}
+                                <div key={ev.key} className="rounded-xl border overflow-hidden"
+                                  style={{ background: 'var(--bg-base)', borderColor: isOpen ? 'rgba(251,191,36,0.35)' : 'var(--border-accent)' }}>
+                                  <button
+                                    onClick={() => setExpandedEvent(isOpen ? null : ev.key)}
+                                    className="w-full p-3 text-left transition-colors hover:bg-white/5">
+                                    <div className="flex items-start justify-between gap-3">
+                                      <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                                        <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0"
+                                          style={isPayment
+                                            ? { background: 'rgba(34,197,94,0.12)', color: '#86efac' }
+                                            : { background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
+                                          {isPayment ? '💰' : '📝'}
+                                        </span>
+                                        <div className="flex-1 min-w-0">
+                                          <p className="text-sm font-semibold" style={{ color: isPayment ? '#86efac' : 'var(--text-primary)' }}>
+                                            {isPayment ? 'Ödeme alındı' : 'Borç girişi yapıldı'}
+                                          </p>
+                                          <p className="text-xs text-slate-500 mt-0.5">
+                                            {ev.month > 0 && <>{MONTHS[ev.month]} {ev.year} dönemi</>}
+                                            {ev.month > 0 && ev.date && <span className="text-slate-600"> · </span>}
+                                            {ev.date && formatDate(ev.date)}
+                                          </p>
+                                          {ev.note && !isOpen && <p className="text-xs text-slate-400 mt-1 truncate">&quot;{ev.note}&quot;</p>}
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center gap-2.5 flex-shrink-0">
+                                        <div className="text-right">
+                                          <p className="text-sm font-bold" style={{ color: isPayment ? '#86efac' : 'var(--text-primary)' }}>
+                                            {isPayment ? '+' : ''}₺{fmt(ev.amount)}
+                                          </p>
+                                          {rates && <p className="text-[10px] text-slate-500">${fmtUSD(toUSD(ev.amount))}</p>}
+                                        </div>
+                                        <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] flex-shrink-0 transition-transform"
+                                          style={{
+                                            background: isOpen ? 'rgba(251,191,36,0.15)' : 'rgba(100,116,139,0.12)',
+                                            color: isOpen ? '#fbbf24' : '#64748b',
+                                            transform: isOpen ? 'rotate(90deg)' : 'none',
+                                          }}>
+                                          ▶
+                                        </span>
                                       </div>
                                     </div>
-                                    <div className="text-right flex-shrink-0">
-                                      <p className="text-sm font-bold" style={{ color: isPayment ? '#86efac' : 'var(--text-primary)' }}>
-                                        {isPayment ? '+' : ''}₺{fmt(ev.amount)}
-                                      </p>
-                                      {rates && <p className="text-[10px] text-slate-500">${fmtUSD(toUSD(ev.amount))}</p>}
+                                  </button>
+
+                                  {/* ── Hareket detayı ── */}
+                                  {isOpen && (
+                                    <div className="px-3 pb-3 pt-2.5 border-t space-y-2.5"
+                                      style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
+                                      {!evRow ? (
+                                        <p className="text-xs text-slate-600">Bu hareketin dönem kaydı bulunamadı (silinmiş olabilir).</p>
+                                      ) : isPayment ? (
+                                        (() => {
+                                          const tx = transactions.find(t => t.id === ev.txId);
+                                          const debt = evRow.turnover ?? 0;
+                                          const rowTxs = transactions
+                                            .filter(t => t.fee_row_id === evRow.id)
+                                            .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+                                          const idx = tx ? rowTxs.findIndex(t => t.id === tx.id) : -1;
+                                          const cumBefore = idx > 0 ? rowTxs.slice(0, idx).reduce((s, t) => s + (t.paid_amount ?? 0), 0) : 0;
+                                          const remainAfter = Math.max(0, debt - (cumBefore + ev.amount));
+                                          const currentRemain = Math.max(0, debt - (evRow.paid_amount ?? 0));
+                                          const st = statusInfo(evRow);
+                                          return (
+                                            <>
+                                              <div className="space-y-1.5">
+                                                {[
+                                                  { label: 'Dönem borcu', val: `₺${fmt(debt)}`, sub: rates ? `$${fmtUSD(toUSD(debt))}` : '', color: '#94a3b8' },
+                                                  ...(cumBefore > 0 ? [{ label: 'Bu ödemeden önceki ödemeler', val: `₺${fmt(cumBefore)}`, sub: '', color: '#94a3b8' }] : []),
+                                                  { label: 'Bu ödeme', val: `+₺${fmt(ev.amount)}`, sub: rates ? `$${fmtUSD(toUSD(ev.amount))}` : '', color: '#86efac' },
+                                                  { label: 'Bu ödemeden sonra kalan', val: `₺${fmt(remainAfter)}`, sub: '', color: remainAfter > 0 ? '#fca5a5' : '#86efac' },
+                                                ].map(l => (
+                                                  <div key={l.label} className="flex items-center justify-between gap-2 text-xs">
+                                                    <span className="text-slate-500">{l.label}</span>
+                                                    <span className="font-semibold" style={{ color: l.color }}>
+                                                      {l.val}{l.sub && <span className="text-slate-600 font-normal ml-1.5">{l.sub}</span>}
+                                                    </span>
+                                                  </div>
+                                                ))}
+                                              </div>
+                                              <div className="flex items-center justify-between gap-2 pt-2 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                                                <span className="text-xs text-slate-500">Dönemin güncel durumu</span>
+                                                <span className="flex items-center gap-2">
+                                                  <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold ${st.cls}`}>{st.label}</span>
+                                                  {currentRemain > 0 && <span className="text-xs font-semibold text-red-300">Kalan ₺{fmt(currentRemain)}</span>}
+                                                </span>
+                                              </div>
+                                              {ev.note && <p className="text-xs text-slate-400">Not: &quot;{ev.note}&quot;</p>}
+                                            </>
+                                          );
+                                        })()
+                                      ) : (
+                                        (() => {
+                                          const debt = evRow.turnover ?? 0;
+                                          const paid = evRow.paid_amount ?? 0;
+                                          const remain = Math.max(0, debt - paid);
+                                          const items = evRow.debt_items ?? [];
+                                          const st = statusInfo(evRow);
+                                          return (
+                                            <>
+                                              <div className="grid grid-cols-3 gap-2">
+                                                {[
+                                                  { label: 'Borç', try: debt, color: '#94a3b8' },
+                                                  { label: 'Ödenen', try: paid, color: paid > 0 ? '#86efac' : '#475569' },
+                                                  { label: 'Kalan', try: remain, color: remain > 0 ? '#fca5a5' : '#86efac' },
+                                                ].map(c => (
+                                                  <div key={c.label} className="rounded-lg py-2 px-1.5 text-center" style={{ background: 'var(--bg-base)' }}>
+                                                    <p className="text-[9px] text-slate-600 mb-0.5">{c.label}</p>
+                                                    <p className="text-xs font-bold leading-tight" style={{ color: c.color }}>₺{fmt(c.try)}</p>
+                                                    {rates && <p className="text-[9px] text-slate-600 leading-tight">${fmtUSD(toUSD(c.try))}</p>}
+                                                  </div>
+                                                ))}
+                                              </div>
+                                              {items.length > 0 && (
+                                                <div>
+                                                  <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Borç Kalemleri</p>
+                                                  <div className="space-y-1">
+                                                    {items.map((item, ii) => {
+                                                      const paidAmt = item.paid_amount ?? (item.paid ? item.amount : 0);
+                                                      const isFull = paidAmt >= item.amount;
+                                                      const isPart = paidAmt > 0 && !isFull;
+                                                      return (
+                                                        <div key={ii} className="flex items-center gap-2 text-xs">
+                                                          <span style={{ color: isFull ? '#86efac' : isPart ? '#fbbf24' : '#64748b' }}>
+                                                            {isFull ? '✓' : isPart ? '≈' : '○'}
+                                                          </span>
+                                                          <span className="flex-1 truncate text-slate-300">{item.name}</span>
+                                                          <span className="text-slate-400 font-medium">
+                                                            {item.currency !== 'TRY' ? `${item.currency} ` : '₺'}{fmt(item.amount)}
+                                                          </span>
+                                                          {isPart && <span className="text-[10px] text-amber-400">(₺{fmt(paidAmt)} ödendi)</span>}
+                                                        </div>
+                                                      );
+                                                    })}
+                                                  </div>
+                                                </div>
+                                              )}
+                                              <div className="flex items-center justify-between gap-2 pt-2 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                                                <span className="text-xs text-slate-500">Dönemin güncel durumu</span>
+                                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold ${st.cls}`}>{st.label}</span>
+                                              </div>
+                                              {ev.note && <p className="text-xs text-slate-400">Not: &quot;{ev.note}&quot;</p>}
+                                            </>
+                                          );
+                                        })()
+                                      )}
                                     </div>
-                                  </div>
+                                  )}
                                 </div>
                               );
                             })}
