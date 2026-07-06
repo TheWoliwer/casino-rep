@@ -401,8 +401,8 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={onClose} style={{ background: 'rgba(0,0,0,0.75)' }}>
-      <div className="w-full sm:max-w-4xl rounded-t-2xl sm:rounded-xl border overflow-hidden flex flex-col"
-        style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', maxHeight: '92vh' }}
+      <div className="w-full rounded-t-2xl sm:rounded-xl border overflow-hidden flex flex-col"
+        style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', maxHeight: '94vh', maxWidth: 'min(96vw, 1400px)' }}
         onClick={e => e.stopPropagation()}>
 
         {/* Header */}
@@ -495,21 +495,21 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                     <span className="text-[10px] text-slate-600 ml-auto hidden sm:block">Satıra tıklayarak o ayı düzenleyebilirsin</span>
                   </div>
 
-                  <div className="rounded-xl border overflow-x-auto" style={{ borderColor: 'var(--border-accent)' }}>
-                    <table className="w-full text-xs border-collapse" style={{ minWidth: 300 + (itemColumns.length + 1) * 130 }}>
-                      <thead>
+                  <div className="rounded-xl border" style={{ borderColor: 'var(--border-accent)', overflow: 'auto', maxHeight: '58vh' }}>
+                    <table className="w-full text-xs border-collapse" style={{ minWidth: 200 + (itemColumns.length + 1) * 130 }}>
+                      <thead className="sticky top-0 z-20">
                         <tr style={{ background: 'var(--bg-card)' }}>
-                          <th className="px-3 py-2.5 text-left text-[10px] font-bold text-amber-400 uppercase tracking-wider sticky left-0 z-10 border-r border-b"
-                            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
-                            {casino.name} · {detailYear}
+                          <th className="px-2 py-2.5 text-left text-[10px] font-bold text-amber-400 uppercase tracking-wider sticky left-0 z-30"
+                            style={{ background: 'var(--bg-card)', borderRight: '2px solid var(--border-accent)', boxShadow: '0 1px 0 var(--border-accent)', width: 76, minWidth: 76 }}>
+                            {detailYear}
                           </th>
-                          <th className="px-3 py-2.5 text-right text-[10px] font-bold text-slate-300 uppercase tracking-wider border-r border-b"
-                            style={{ borderColor: 'var(--border-color)' }}>
+                          <th className="px-3 py-2.5 text-right text-[10px] font-bold text-slate-300 uppercase tracking-wider border-r"
+                            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', boxShadow: '0 1px 0 var(--border-accent)' }}>
                             {feeLabel}
                           </th>
                           {itemColumns.map(name => (
-                            <th key={name} className="px-3 py-2.5 text-right text-[10px] font-bold text-slate-300 uppercase tracking-wider border-r border-b"
-                              style={{ borderColor: 'var(--border-color)' }}>
+                            <th key={name} className="px-3 py-2.5 text-right text-[10px] font-bold text-slate-300 uppercase tracking-wider border-r"
+                              style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', boxShadow: '0 1px 0 var(--border-accent)' }}>
                               {name}
                             </th>
                           ))}
@@ -523,8 +523,8 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                               onClick={() => setEditMonth(m)}
                               className="cursor-pointer transition-colors hover:bg-white/5"
                               style={{ background: rowBg, borderTop: '1px solid var(--border-color)' }}>
-                              <td className="px-3 py-2.5 font-semibold text-white uppercase sticky left-0 z-10 border-r"
-                                style={{ background: rowBg, borderColor: 'var(--border-color)' }}>
+                              <td className="px-2 py-2.5 font-semibold text-white uppercase sticky left-0 z-10 whitespace-nowrap"
+                                style={{ background: rowBg, borderRight: '2px solid var(--border-accent)', width: 76, minWidth: 76 }}>
                                 {MONTHS[m]}
                               </td>
                               <td className="px-3 py-2 text-right border-r" style={{ borderColor: 'var(--border-color)' }}>
@@ -539,14 +539,15 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                           );
                         })}
                       </tbody>
-                      <tfoot>
-                        <tr style={{ background: 'var(--bg-card)', borderTop: '2px solid var(--border-accent)' }}>
-                          <td className="px-3 py-2.5 text-[10px] font-bold text-white uppercase tracking-wider sticky left-0 z-10 border-r"
-                            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
+                      <tfoot className="sticky bottom-0 z-20">
+                        <tr style={{ background: 'var(--bg-card)' }}>
+                          <td className="px-2 py-2.5 text-[10px] font-bold text-white uppercase tracking-wider sticky left-0 z-30 whitespace-nowrap"
+                            style={{ background: 'var(--bg-card)', borderRight: '2px solid var(--border-accent)', boxShadow: '0 -2px 0 var(--border-accent)', width: 76, minWidth: 76 }}>
                             TOPLAM (₺)
                           </td>
                           {[feeColTotal, ...itemColTotals].map((t, ti) => (
-                            <td key={ti} className="px-3 py-2 text-right border-r" style={{ borderColor: 'var(--border-color)' }}>
+                            <td key={ti} className="px-3 py-2 text-right border-r"
+                              style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', boxShadow: '0 -2px 0 var(--border-accent)' }}>
                               {t.amt > 0 ? (
                                 <div>
                                   <p className="font-bold text-white whitespace-nowrap">₺{fmt(t.amt)}</p>

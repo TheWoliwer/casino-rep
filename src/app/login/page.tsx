@@ -29,7 +29,7 @@ export default function LoginPage() {
     });
     setLoading(false);
     if (res.ok) {
-      router.push('/dashboard');
+      router.push('/reports');
     } else {
       const data = await res.json();
       setError(data.error || 'Hata oluştu');

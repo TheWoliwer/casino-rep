@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Casino, FeeRow, CasinoCol, ColEntry } from '@/lib/supabase';
 import FeeModal from '@/components/FeeModal';
+import AddCasinoModal from '@/components/AddCasinoModal';
+import CasinoProfileModal from '@/components/CasinoProfileModal';
 
 const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 
@@ -28,6 +30,8 @@ export default function ReportsPage() {
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [usdRate, setUsdRate] = useState<number | null>(null);
   const [feeModal, setFeeModal] = useState<{ casino: Casino; month: number } | null>(null);
+  const [profileCasino, setProfileCasino] = useState<Casino | null>(null);
+  const [addModal, setAddModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -124,7 +128,13 @@ export default function ReportsPage() {
             ))}
           </div>
 
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <button onClick={() => setAddModal(true)}
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
+              style={{ background: '#fbbf24', color: '#0f0f17' }}>
+              <span>+</span>
+              <span className="hidden sm:inline">Casino Ekle</span>
+            </button>
             <button onClick={() => router.push('/dashboard')}
               className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
               style={{ borderColor: 'var(--border-accent)' }}>
@@ -214,7 +224,18 @@ export default function ReportsPage() {
                       onClick={() => router.push(`/reports/${row.casino.id}?year=${year}`)}
                       className="cursor-pointer transition-colors hover:bg-white/5"
                       style={{ borderTop: '1px solid #1e1e2e', background: i % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-base-alt)' }}>
-                      <td className="px-4 py-3 font-semibold text-white">{row.casino.name}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-white">{row.casino.name}</span>
+                          <button
+                            onClick={e => { e.stopPropagation(); setProfileCasino(row.casino); }}
+                            title="Profil · Hareket Geçmişi"
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold border transition-all active:scale-95 flex-shrink-0"
+                            style={{ borderColor: 'rgba(251,191,36,0.4)', color: '#fbbf24', background: 'rgba(251,191,36,0.08)' }}>
+                            👤 Profil
+                          </button>
+                        </div>
+                      </td>
                       <td className="px-4 py-3 text-center text-slate-400">{row.months}</td>
                       <td className="px-4 py-3 text-right text-slate-300">
                         <p>${fmtUSD(toUSD(row.total))}</p>
@@ -299,6 +320,14 @@ export default function ReportsPage() {
           onSaved={silentRefresh}
         />
       )}
+      {profileCasino && (
+        <CasinoProfileModal
+          casino={profileCasino}
+          onClose={() => setProfileCasino(null)}
+          onSaved={silentRefresh}
+        />
+      )}
+      {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}
     </div>
   );
 }
