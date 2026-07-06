@@ -3,8 +3,10 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(req: NextRequest) {
   const year = req.nextUrl.searchParams.get('year');
+  const casinoId = req.nextUrl.searchParams.get('casino_id');
   let q = supabaseAdmin.from('fee_rows').select('*');
   if (year) q = q.eq('year', year);
+  if (casinoId) q = q.eq('casino_id', casinoId);
   const { data, error } = await q;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);

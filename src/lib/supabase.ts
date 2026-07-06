@@ -49,6 +49,7 @@ export type FeeRow = {
   status: number;
   note: string;
   debt_items?: DebtItem[];
+  created_at?: string;
 };
 
 export type ColEntry = {

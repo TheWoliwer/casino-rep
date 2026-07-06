@@ -37,7 +37,7 @@ export default function SettingsPage() {
       <header className="flex items-center gap-3 px-4 py-2.5 border-b"
         style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
-        <span className="font-bold text-white text-sm">Casino Takip</span>
+        <a href="/dashboard" title="Ana Sayfa" className="font-bold text-white text-sm hover:text-amber-400 transition-colors">Casino Takip</a>
         <span className="text-slate-500 text-sm">· Ayarlar</span>
         <div className="ml-auto">
           <button onClick={() => router.push('/dashboard')}

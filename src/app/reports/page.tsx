@@ -110,7 +110,7 @@ export default function ReportsPage() {
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
           <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
-          <span className="font-bold text-white text-sm hidden sm:block">Casino Takip</span>
+          <a href="/dashboard" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
           <span className="text-slate-600 text-sm hidden sm:block">·</span>
           <span className="text-slate-400 text-sm font-medium">Raporlar</span>
 

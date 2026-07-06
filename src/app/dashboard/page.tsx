@@ -5,6 +5,7 @@ import type { Casino, CasinoCol, FeeRow, ColEntry } from '@/lib/supabase';
 import FeeModal from '@/components/FeeModal';
 import AddCasinoModal from '@/components/AddCasinoModal';
 import CasinoModal from '@/components/CasinoModal';
+import CasinoProfileModal from '@/components/CasinoProfileModal';
 import GiderlerModal from '@/components/GiderlerModal';
 import AylikFeeModal from '@/components/AylikFeeModal';
 import CokluFeeModal from '@/components/CokluFeeModal';
@@ -64,6 +65,7 @@ export default function DashboardPage() {
   const [feeModal, setFeeModal] = useState<FeeCell | null>(null);
   const [addModal, setAddModal] = useState(false);
   const [casinoModal, setCasinoModal] = useState<CasinoManage | null>(null);
+  const [profileModal, setProfileModal] = useState<Casino | null>(null);
   const [giderlerModal, setGiderlerModal] = useState(false);
   const [feeReportModal, setFeeReportModal] = useState(false);
   const [cokluFeeModal, setCokluFeeModal] = useState(false);
@@ -179,7 +181,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
           <a href="/dashboard" title="Ana Sayfa" className="text-amber-400 font-bold text-lg flex-shrink-0 hover:opacity-80 transition-opacity">♠</a>
-          <span className="font-bold text-white text-sm hidden sm:block">Casino Takip</span>
+          <a href="/dashboard" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
 
           {/* Year selector */}
           <div className="flex items-center gap-1 ml-1 sm:ml-2">
@@ -371,6 +373,12 @@ export default function DashboardPage() {
                       </div>
                     </button>
 
+                    <button onClick={() => setProfileModal(casino)}
+                      className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-white transition-colors"
+                      style={{ border: '1px solid var(--border-accent)' }}>
+                      <span className="text-sm">👤</span>
+                    </button>
+
                     <button onClick={() => setCasinoModal({ casino })}
                       className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-white transition-colors"
                       style={{ border: '1px solid var(--border-accent)' }}>
@@ -483,6 +491,13 @@ export default function DashboardPage() {
                               </p>
                             </div>
                             <button
+                              onClick={() => setProfileModal(casino)}
+                              title="Profil · Hareket Geçmişi"
+                              className="flex-shrink-0 flex items-center px-2 py-1 rounded-lg text-xs font-medium transition-all hover:bg-white/10"
+                              style={{ color: 'var(--text-muted)', border: '1px solid var(--border-accent)' }}>
+                              <span>👤</span>
+                            </button>
+                            <button
                               onClick={() => setCasinoModal({ casino })}
                               title="Yönet"
                               className="flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all hover:bg-white/10"
@@ -578,6 +593,12 @@ export default function DashboardPage() {
           cols={getCasinoCols(casinoModal.casino.id)}
           onClose={() => setCasinoModal(null)}
           onSaved={silentRefresh}
+        />
+      )}
+      {profileModal && (
+        <CasinoProfileModal
+          casino={profileModal}
+          onClose={() => setProfileModal(null)}
         />
       )}
 
