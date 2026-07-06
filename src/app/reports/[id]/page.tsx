@@ -205,7 +205,7 @@ export default function CasinoReportPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
+          <a href="/reports" title="Ana Sayfa" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
           <button onClick={() => router.push('/reports')} className="text-slate-400 hover:text-white text-sm transition-colors">
             Raporlar
           </button>
@@ -218,7 +218,7 @@ export default function CasinoReportPage() {
             {years.map(y => (
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-                style={y === year ? { background: '#fbbf24', color: '#0f0f17', fontWeight: 700 } : { color: '#94a3b8' }}>
+                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: '#94a3b8' }}>
                 {y}
               </button>
             ))}
@@ -234,7 +234,7 @@ export default function CasinoReportPage() {
             <div className="relative">
               <button onClick={() => setPdfOpen(o => !o)}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
-                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                 PDF <span className="text-[10px]">▾</span>
               </button>
               {pdfOpen && (
@@ -258,10 +258,10 @@ export default function CasinoReportPage() {
                 </>
               )}
             </div>
-            <button onClick={() => router.push('/dashboard')}
+            <button onClick={() => router.push('/reports')}
               className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
               style={{ borderColor: 'var(--border-accent)' }}>
-              ← Dashboard
+              ← Ana Sayfa
             </button>
           </div>
         </div>
@@ -289,7 +289,7 @@ export default function CasinoReportPage() {
               { label: 'Toplam Beklenen', usd: toUSD(total), try: total, color: '#94a3b8' },
               { label: 'Tahsil Edilen', usd: toUSD(collected), try: collected, color: '#86efac' },
               { label: 'Bekleyen', usd: toUSD(outstanding), try: outstanding, color: outstanding > 0 ? '#fca5a5' : '#86efac' },
-              { label: 'Tahsilat Oranı', usd: null, try: null, pct: `%${rate.toFixed(1)}`, color: rate >= 100 ? '#86efac' : rate > 50 ? '#fbbf24' : '#fca5a5' },
+              { label: 'Tahsilat Oranı', usd: null, try: null, pct: `%${rate.toFixed(1)}`, color: rate >= 100 ? '#86efac' : rate > 50 ? 'var(--accent)' : '#fca5a5' },
             ].map(card => (
               <div key={card.label} className="rounded-xl p-4 border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
                 <p className="text-xs text-slate-500 mb-1">{card.label}</p>
@@ -374,7 +374,7 @@ export default function CasinoReportPage() {
                         <button
                           onClick={e => { e.stopPropagation(); setEditMonth(m); }}
                           className="px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all active:scale-95 whitespace-nowrap"
-                          style={{ borderColor: 'rgba(251,191,36,0.4)', color: '#fbbf24', background: 'rgba(251,191,36,0.08)' }}>
+                          style={{ borderColor: 'color-mix(in srgb, var(--accent) 40%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 8%, transparent)' }}>
                           ✎ Düzenle
                         </button>
                       </td>
@@ -388,7 +388,7 @@ export default function CasinoReportPage() {
                     <td className="px-4 py-3 text-right font-bold text-green-400">${fmtUSD(toUSD(collected))}<br/><span className="text-xs text-slate-500 font-normal">₺{fmt(collected)}</span></td>
                     <td className="px-4 py-3 text-right font-bold text-red-400">${fmtUSD(toUSD(outstanding))}<br/><span className="text-xs text-slate-500 font-normal">₺{fmt(outstanding)}</span></td>
                     <td className="px-4 py-3 text-right">
-                      <span className="text-xs font-bold" style={{ color: rate >= 100 ? '#86efac' : rate > 50 ? '#fbbf24' : '#fca5a5' }}>
+                      <span className="text-xs font-bold" style={{ color: rate >= 100 ? '#86efac' : rate > 50 ? 'var(--accent)' : '#fca5a5' }}>
                         %{rate.toFixed(1)}
                       </span>
                     </td>
@@ -446,9 +446,9 @@ export default function CasinoReportPage() {
                     onClick={() => { setMonthPicker(false); window.open(`/reports/${id}/print?year=${year}&month=${monthNum}`, '_blank'); }}
                     className="py-3 rounded-xl text-sm font-medium transition-all hover:scale-[1.03] active:scale-[0.97]"
                     style={{
-                      background: hasData ? 'rgba(251,191,36,0.12)' : 'var(--bg-card)',
-                      border: `1px solid ${hasData ? 'rgba(251,191,36,0.35)' : 'var(--border-accent)'}`,
-                      color: hasData ? '#fbbf24' : 'var(--text-dim)',
+                      background: hasData ? 'color-mix(in srgb, var(--accent) 12%, transparent)' : 'var(--bg-card)',
+                      border: `1px solid ${hasData ? 'color-mix(in srgb, var(--accent) 35%, transparent)' : 'var(--border-accent)'}`,
+                      color: hasData ? 'var(--accent)' : 'var(--text-dim)',
                     }}>
                     {m}
                   </button>

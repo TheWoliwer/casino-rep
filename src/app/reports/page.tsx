@@ -5,6 +5,16 @@ import type { Casino, FeeRow, CasinoCol, ColEntry } from '@/lib/supabase';
 import FeeModal from '@/components/FeeModal';
 import AddCasinoModal from '@/components/AddCasinoModal';
 import CasinoProfileModal from '@/components/CasinoProfileModal';
+import GiderlerModal from '@/components/GiderlerModal';
+import AylikFeeModal from '@/components/AylikFeeModal';
+import CokluFeeModal from '@/components/CokluFeeModal';
+import { useTheme, type Theme } from '@/components/ThemeProvider';
+
+const THEME_OPTIONS: { id: Theme; label: string; dot: string }[] = [
+  { id: 'dark',  label: 'Sarı',  dot: '#fbbf24' },
+  { id: 'navy',  label: 'Mavi',  dot: '#60a5fa' },
+  { id: 'light', label: 'Beyaz', dot: '#f8fafc' },
+];
 
 const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 
@@ -32,7 +42,18 @@ export default function ReportsPage() {
   const [feeModal, setFeeModal] = useState<{ casino: Casino; month: number } | null>(null);
   const [profileCasino, setProfileCasino] = useState<Casino | null>(null);
   const [addModal, setAddModal] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
+  const [giderlerModal, setGiderlerModal] = useState(false);
+  const [feeReportModal, setFeeReportModal] = useState(false);
+  const [cokluFeeModal, setCokluFeeModal] = useState(false);
+  const { theme, setTheme } = useTheme();
   const router = useRouter();
+
+  async function logout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  }
 
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
@@ -113,8 +134,8 @@ export default function ReportsPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
-          <a href="/dashboard" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
+          <a href="/reports" title="Ana Sayfa" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
+          <a href="/reports" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
           <span className="text-slate-600 text-sm hidden sm:block">·</span>
           <span className="text-slate-400 text-sm font-medium">Raporlar</span>
 
@@ -122,7 +143,7 @@ export default function ReportsPage() {
             {years.map(y => (
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-                style={y === year ? { background: '#fbbf24', color: '#0f0f17', fontWeight: 700 } : { color: '#94a3b8' }}>
+                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: '#94a3b8' }}>
                 {y}
               </button>
             ))}
@@ -131,15 +152,93 @@ export default function ReportsPage() {
           <div className="ml-auto flex items-center gap-2">
             <button onClick={() => setAddModal(true)}
               className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
-              style={{ background: '#fbbf24', color: '#0f0f17' }}>
+              style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               <span>+</span>
               <span className="hidden sm:inline">Casino Ekle</span>
             </button>
-            <button onClick={() => router.push('/dashboard')}
-              className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
-              style={{ borderColor: 'var(--border-accent)' }}>
-              ← Dashboard
-            </button>
+            {/* Menü */}
+            <div className="relative">
+              <button onClick={() => { setMenuOpen(o => !o); setThemeOpen(false); }}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
+                style={{ borderColor: 'var(--border-accent)' }}>
+                ☰ <span className="hidden sm:inline">Menü</span> <span className="text-[10px]">▾</span>
+              </button>
+              {menuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-52 rounded-xl border shadow-xl z-50 overflow-hidden"
+                    style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-accent)' }}>
+                    <a href="/dashboard"
+                      className="flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      style={{ color: 'var(--text-muted)' }}>
+                      📋 Dashboard (Aylık Tablo)
+                    </a>
+                    <div className="border-t" style={{ borderColor: 'var(--border-color)' }} />
+                    <button onClick={() => { setMenuOpen(false); setFeeReportModal(true); }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: 'var(--text-muted)' }}>
+                      ✏️ Yeni Fee Rapor
+                    </button>
+                    <button onClick={() => { setMenuOpen(false); setCokluFeeModal(true); }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: 'var(--text-muted)' }}>
+                      📚 Çoklu Ay Rapor
+                    </button>
+                    <a href="/reports/fee"
+                      className="flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      style={{ color: 'var(--text-muted)' }}>
+                      🗂️ Fee Rapor Geçmişi
+                    </a>
+                    <div className="border-t" style={{ borderColor: 'var(--border-color)' }} />
+                    <button onClick={() => { setMenuOpen(false); setGiderlerModal(true); }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: 'var(--text-muted)' }}>
+                      💸 Giderler
+                    </button>
+                    <a href="/settings"
+                      className="flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors"
+                      style={{ color: 'var(--text-muted)' }}>
+                      ⚙️ Ayarlar
+                    </a>
+                    <div className="border-t" style={{ borderColor: 'var(--border-color)' }} />
+                    <button onClick={logout}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: 'var(--text-muted)' }}>
+                      ↪ Çıkış
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Tema seçici */}
+            <div className="relative">
+              <button onClick={() => { setThemeOpen(o => !o); setMenuOpen(false); }} title="Tema"
+                className="w-8 h-8 flex items-center justify-center rounded-lg border transition-colors hover:bg-white/5"
+                style={{ borderColor: 'var(--border-accent)' }}>
+                <span className="w-3.5 h-3.5 rounded-full border"
+                  style={{ background: 'var(--accent)', borderColor: 'var(--border-color)' }} />
+              </button>
+              {themeOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setThemeOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-36 rounded-xl border shadow-xl z-50 overflow-hidden"
+                    style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-accent)' }}>
+                    {THEME_OPTIONS.map(t => (
+                      <button key={t.id}
+                        onClick={() => { setTheme(t.id); setThemeOpen(false); }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                        style={{ color: theme === t.id ? 'var(--accent)' : 'var(--text-muted)', fontWeight: theme === t.id ? 700 : 400 }}>
+                        <span className="w-3 h-3 rounded-full border flex-shrink-0"
+                          style={{ background: t.dot, borderColor: 'var(--border-accent)' }} />
+                        {t.label}
+                        {theme === t.id && <span className="ml-auto">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -153,7 +252,7 @@ export default function ReportsPage() {
               { label: 'Toplam Beklenen', try: totals.total, color: '#94a3b8' },
               { label: month === 0 ? 'Tahsil Edilen' : `Tahsil Edilen (${MONTHS[month]})`, try: totals.collected, color: '#86efac' },
               { label: month === 0 ? 'Bekleyen' : `Bekleyen (${MONTHS[month]})`,           try: totals.outstanding, color: '#fca5a5' },
-              { label: 'Tahsilat Oranı',  try: null, color: '#fbbf24' },
+              { label: 'Tahsilat Oranı',  try: null, color: 'var(--accent)' },
             ].map(card => (
               <div key={card.label} className="rounded-xl p-4 border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
                 <p className="text-xs text-slate-500 mb-1">{card.label}</p>
@@ -181,7 +280,7 @@ export default function ReportsPage() {
                 value={month}
                 onChange={e => setMonth(parseInt(e.target.value))}
                 className="px-2.5 py-1.5 rounded-lg text-xs font-medium outline-none cursor-pointer"
-                style={{ background: 'var(--bg-base)', border: `1px solid ${month !== 0 ? 'rgba(251,191,36,0.5)' : 'var(--border-accent)'}`, color: month !== 0 ? '#fbbf24' : 'var(--text-primary)' }}>
+                style={{ background: 'var(--bg-base)', border: `1px solid ${month !== 0 ? 'color-mix(in srgb, var(--accent) 50%, transparent)' : 'var(--border-accent)'}`, color: month !== 0 ? 'var(--accent)' : 'var(--text-primary)' }}>
                 <option value={0}>Tüm Yıl</option>
                 {MONTHS.slice(1).map((m, i) => (
                   <option key={i + 1} value={i + 1}>{m}</option>
@@ -231,7 +330,7 @@ export default function ReportsPage() {
                             onClick={e => { e.stopPropagation(); setProfileCasino(row.casino); }}
                             title="Profil · Hareket Geçmişi"
                             className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold border transition-all active:scale-95 flex-shrink-0"
-                            style={{ borderColor: 'rgba(251,191,36,0.4)', color: '#fbbf24', background: 'rgba(251,191,36,0.08)' }}>
+                            style={{ borderColor: 'color-mix(in srgb, var(--accent) 40%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 8%, transparent)' }}>
                             👤 Profil
                           </button>
                         </div>
@@ -255,11 +354,11 @@ export default function ReportsPage() {
                             <div className="h-full rounded-full"
                               style={{
                                 width: `${Math.min(100, row.rate)}%`,
-                                background: row.rate >= 100 ? '#22c55e' : row.rate > 50 ? '#fbbf24' : '#ef4444',
+                                background: row.rate >= 100 ? '#22c55e' : row.rate > 50 ? 'var(--accent)' : '#ef4444',
                               }} />
                           </div>
                           <span className="text-xs font-semibold"
-                            style={{ color: row.rate >= 100 ? '#86efac' : row.rate > 50 ? '#fbbf24' : '#fca5a5' }}>
+                            style={{ color: row.rate >= 100 ? '#86efac' : row.rate > 50 ? 'var(--accent)' : '#fca5a5' }}>
                             %{row.rate.toFixed(0)}
                           </span>
                         </div>
@@ -269,7 +368,7 @@ export default function ReportsPage() {
                           <button
                             onClick={e => { e.stopPropagation(); setFeeModal({ casino: row.casino, month }); }}
                             className="px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all active:scale-95 whitespace-nowrap"
-                            style={{ borderColor: 'rgba(251,191,36,0.4)', color: '#fbbf24', background: 'rgba(251,191,36,0.08)' }}>
+                            style={{ borderColor: 'color-mix(in srgb, var(--accent) 40%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 8%, transparent)' }}>
                             Görüntüle
                           </button>
                         ) : (
@@ -328,6 +427,9 @@ export default function ReportsPage() {
         />
       )}
       {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}
+      {giderlerModal && <GiderlerModal year={year} onClose={() => setGiderlerModal(false)} />}
+      {feeReportModal && <AylikFeeModal onClose={() => setFeeReportModal(false)} />}
+      {cokluFeeModal && <CokluFeeModal onClose={() => setCokluFeeModal(false)} />}
     </div>
   );
 }

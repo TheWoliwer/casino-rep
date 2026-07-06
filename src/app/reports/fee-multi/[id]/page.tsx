@@ -183,7 +183,7 @@ export default function MultiFeeReportPage() {
       <div className="no-print fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3 border-b"
         style={{ background: '#1e1e2e', borderColor: '#2a2a3e' }}>
         <div className="flex items-center gap-3">
-          <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
+          <a href="/reports" title="Ana Sayfa" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
           <span className="text-white text-sm font-semibold">{casinoName} — {total} Aylık Fee Raporu</span>
         </div>
         <div className="flex items-center gap-2">

@@ -44,7 +44,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
   const isLight = theme === 'light';
   const clr = {
     success: isLight ? '#065f46' : '#86efac',
-    warning: isLight ? '#78350f' : '#fbbf24',
+    warning: isLight ? '#78350f' : 'var(--accent)',
     danger:  isLight ? '#991b1b' : '#fca5a5',
   };
   // Debt items — named breakdown stored as JSON
@@ -437,7 +437,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                 {/* Kur uyarısı */}
                 {!rates && (
                   <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
-                    style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' }}>
+                    style={{ background: 'color-mix(in srgb, var(--accent) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)', color: 'var(--accent)' }}>
                     ⚠ Döviz kurları yükleniyor... USD/EUR girişleri şu an TRY olarak işlem görür.
                   </div>
                 )}
@@ -455,7 +455,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                     onClick={() => { setShowPresetPanel(p => !p); setEditingIdx(null); }}
                     title="Etiketleri düzenle"
                     className="w-6 h-6 flex items-center justify-center rounded-md transition-colors text-base"
-                    style={{ color: showPresetPanel ? '#fbbf24' : '#475569', background: showPresetPanel ? 'rgba(251,191,36,0.1)' : 'transparent' }}>
+                    style={{ color: showPresetPanel ? 'var(--accent)' : '#475569', background: showPresetPanel ? 'color-mix(in srgb, var(--accent) 10%, transparent)' : 'transparent' }}>
                     ⚙
                   </button>
                 </div>
@@ -469,7 +469,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                       onClick={() => applyPreset(p)}
                       className="px-2 py-1 rounded-lg text-xs font-medium transition-all active:scale-95 border"
                       style={itemName === p
-                        ? { borderColor: 'rgba(251,191,36,0.5)', color: '#fbbf24', background: 'rgba(251,191,36,0.1)' }
+                        ? { borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
                         : { borderColor: 'var(--border-accent)', color: '#64748b', background: 'transparent' }}>
                       {p}
                     </button>
@@ -478,7 +478,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
 
                 {/* Preset düzenleme paneli */}
                 {showPresetPanel && (
-                  <div className="rounded-xl border p-3 space-y-3" style={{ background: 'var(--bg-base)', borderColor: 'rgba(251,191,36,0.25)' }}>
+                  <div className="rounded-xl border p-3 space-y-3" style={{ background: 'var(--bg-base)', borderColor: 'color-mix(in srgb, var(--accent) 25%, transparent)' }}>
 
                     {/* Varsayılan para birimi */}
                     <div>
@@ -488,7 +488,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                           <button key={c} type="button" onClick={() => changeDefaultCurrency(c)}
                             className="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all border"
                             style={defaultCurrency === c
-                              ? { background: '#fbbf24', color: '#0f0f17', borderColor: '#fbbf24' }
+                              ? { background: 'var(--accent)', color: 'var(--accent-contrast)', borderColor: 'var(--accent)' }
                               : { background: 'transparent', color: '#64748b', borderColor: 'var(--border-accent)' }}>
                             {c}
                           </button>
@@ -513,7 +513,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                                 onChange={e => setEditingVal(e.target.value)}
                                 onKeyDown={e => { if (e.key === 'Enter') commitEdit(idx); if (e.key === 'Escape') setEditingIdx(null); }}
                                 className="flex-1 px-2.5 py-1.5 rounded-lg text-xs outline-none"
-                                style={{ background: 'var(--bg-surface)', border: '1px solid rgba(251,191,36,0.4)', color: 'var(--text-primary)' }}
+                                style={{ background: 'var(--bg-surface)', border: '1px solid color-mix(in srgb, var(--accent) 40%, transparent)', color: 'var(--text-primary)' }}
                               />
                               <button type="button" onClick={() => commitEdit(idx)}
                                 className="px-2 py-1.5 rounded-lg text-xs font-bold text-amber-400 hover:bg-amber-400/10 transition-colors flex-shrink-0">✓</button>
@@ -547,7 +547,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                       <button type="button" onClick={addPreset}
                         disabled={!newPresetName.trim()}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold disabled:opacity-40 transition-all flex-shrink-0"
-                        style={{ background: newPresetName.trim() ? '#fbbf24' : 'var(--border-accent)', color: newPresetName.trim() ? '#0f0f17' : '#475569' }}>
+                        style={{ background: newPresetName.trim() ? 'var(--accent)' : 'var(--border-accent)', color: newPresetName.trim() ? 'var(--accent-contrast)' : '#475569' }}>
                         + Ekle
                       </button>
                     </div>
@@ -591,7 +591,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                   onClick={addItem}
                   disabled={!canAdd}
                   className="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 disabled:opacity-40"
-                  style={{ background: canAdd ? '#fbbf24' : 'var(--border-accent)', color: canAdd ? 'var(--bg-base)' : '#475569' }}>
+                  style={{ background: canAdd ? 'var(--accent)' : 'var(--border-accent)', color: canAdd ? 'var(--bg-base)' : '#475569' }}>
                   + Borç Kalemi Ekle
                 </button>
 
@@ -606,7 +606,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                       const isFull    = paidAmt >= item.amount;
                       return (
                         <div key={i} className="border-b last:border-b-0 transition-colors"
-                          style={{ background: isFull ? 'rgba(34,197,94,0.06)' : isPartial ? 'rgba(251,191,36,0.04)' : 'var(--bg-base)', borderColor: 'var(--border-color)' }}>
+                          style={{ background: isFull ? 'rgba(34,197,94,0.06)' : isPartial ? 'color-mix(in srgb, var(--accent) 4%, transparent)' : 'var(--bg-base)', borderColor: 'var(--border-color)' }}>
                           {/* Üst satır */}
                           <div className="flex items-center gap-2 px-3 py-2.5">
                             {/* Tick butonu */}
@@ -615,7 +615,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                               style={isFull
                                 ? { background: '#22c55e', borderColor: '#22c55e', color: 'white' }
                                 : isPartial
-                                  ? { background: 'rgba(251,191,36,0.15)', borderColor: '#fbbf24', color: '#fbbf24' }
+                                  ? { background: 'color-mix(in srgb, var(--accent) 15%, transparent)', borderColor: 'var(--accent)', color: 'var(--accent)' }
                                   : { background: 'transparent', borderColor: 'var(--border-accent)', color: 'transparent' }}>
                               ✓
                             </button>
@@ -645,7 +645,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                               value={paidAmt > 0 ? paidAmt.toString() : ''}
                               onChange={e => updatePaidAmount(i, e.target.value)}
                               className="w-24 px-2 py-1 rounded-lg text-xs outline-none"
-                              style={{ background: 'var(--bg-surface)', border: `1px solid ${isFull ? 'rgba(34,197,94,0.3)' : isPartial ? 'rgba(251,191,36,0.3)' : 'var(--border-accent)'}`, color: 'var(--text-primary)' }}
+                              style={{ background: 'var(--bg-surface)', border: `1px solid ${isFull ? 'rgba(34,197,94,0.3)' : isPartial ? 'color-mix(in srgb, var(--accent) 30%, transparent)' : 'var(--border-accent)'}`, color: 'var(--text-primary)' }}
                               placeholder="0"
                             />
                             <span className="text-[10px] text-slate-500 flex-shrink-0">{item.currency}</span>
@@ -688,7 +688,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                     </div>
                     <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--border-accent)' }}>
                       <div className="h-full rounded-full transition-all duration-500"
-                        style={{ width: `${pct}%`, background: pct >= 100 ? '#22c55e' : pct > 0 ? '#fbbf24' : '#ef4444' }} />
+                        style={{ width: `${pct}%`, background: pct >= 100 ? '#22c55e' : pct > 0 ? 'var(--accent)' : '#ef4444' }} />
                     </div>
                   </div>
 
@@ -886,7 +886,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
               onClick={save}
               disabled={saving}
               className="px-6 py-2.5 rounded-xl text-sm font-bold disabled:opacity-60 transition-all active:scale-95"
-              style={{ background: '#fbbf24', color: '#0f0f17' }}>
+              style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               {saving ? 'Kaydediliyor...' : 'Kaydet'}
             </button>
           </div>

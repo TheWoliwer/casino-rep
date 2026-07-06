@@ -105,16 +105,16 @@ export default function FeeReportHistoryPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
-          <a href="/dashboard" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
+          <a href="/reports" title="Ana Sayfa" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
+          <a href="/reports" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
           <span className="text-slate-600 text-sm hidden sm:block">·</span>
           <span className="text-slate-400 text-sm font-medium">Aylık Fee Rapor Geçmişi</span>
 
           <div className="ml-auto">
-            <button onClick={() => router.push('/dashboard')}
+            <button onClick={() => router.push('/reports')}
               className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white border transition-colors"
               style={{ borderColor: 'var(--border-accent)' }}>
-              ← Dashboard
+              ← Ana Sayfa
             </button>
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function FeeReportHistoryPage() {
                     <p className="font-semibold text-white text-sm truncate">
                       {r.data.casinoName}
                       {isMulti(r.data) && (
-                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold align-middle" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: '#fbbf24' }}>
+                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold align-middle" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: 'var(--accent)' }}>
                           ÇOKLU AY
                         </span>
                       )}

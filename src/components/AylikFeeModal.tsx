@@ -184,7 +184,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                     <button key={y} onClick={() => setYear(y)}
                       className="flex-1 py-2 rounded-xl text-sm font-medium transition-all"
                       style={y === year
-                        ? { background: '#fbbf24', color: '#0f0f17', fontWeight: 700 }
+                        ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 }
                         : inputStyle}>
                       {y}
                     </button>
@@ -199,7 +199,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                     <button key={i+1} onClick={() => setMonth(i+1)}
                       className="py-2 rounded-lg text-xs font-medium transition-all"
                       style={month === i+1
-                        ? { background: '#fbbf24', color: '#0f0f17', fontWeight: 700 }
+                        ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 }
                         : inputStyle}>
                       {m}
                     </button>
@@ -211,7 +211,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                 disabled={!casinoId}
                 onClick={() => setStep(2)}
                 className="w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                 Devam →
               </button>
             </>
@@ -239,7 +239,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                   {PROVIDERS.map((p, i) => (
                     <div key={i} className="p-3 space-y-2" style={{ background: 'var(--bg-base)' }}>
                       <p className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>
-                        {p.kategori} — <span style={{ color: '#fbbf24' }}>{p.saglayici}</span>
+                        {p.kategori} — <span style={{ color: 'var(--accent)' }}>{p.saglayici}</span>
                       </p>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -291,7 +291,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                         <span style={{ color: 'var(--text-dim)' }}>
                           {feeType === 'percent' ? `Komisyon (%${feeRate})` : 'Komisyon (Sabit)'}
                         </span>
-                        <span style={{ color: '#fbbf24', fontWeight: 700 }}>
+                        <span style={{ color: 'var(--accent)', fontWeight: 700 }}>
                           {fmt(komisyonTRY)} ₺ {usdRate ? `/ ${fmtUSD(komisyonUSD)}$` : ''}
                         </span>
                       </div>
@@ -306,7 +306,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-dim)' }}>Ekstra Kalemler</p>
                   <button onClick={addExtra}
                     className="px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
-                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: '#fbbf24' }}>
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: 'var(--accent)' }}>
                     + Ekle
                   </button>
                 </div>
@@ -334,7 +334,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
 
               <button onClick={handleKontrolEt} disabled={saving}
                 className="w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                 {saving ? 'Hazırlanıyor...' : 'Kontrol Et — Önizle'}
               </button>
             </>
@@ -362,7 +362,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                     style={inputStyle} />
                   <button onClick={copyLink}
                     className="px-3 py-2 rounded-lg text-xs font-bold transition-all"
-                    style={{ background: copied ? '#22c55e' : '#fbbf24', color: '#0f0f17' }}>
+                    style={{ background: copied ? '#22c55e' : 'var(--accent)', color: 'var(--accent-contrast)' }}>
                     {copied ? '✓' : 'Kopyala'}
                   </button>
                 </div>

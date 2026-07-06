@@ -31,7 +31,7 @@ function cellInfo(feeRow: FeeRow | null, isLight: boolean): { bg: string; color:
   if (paid > 0) {
     return isLight
       ? { bg: '#fef3c7', color: '#78350f', label: '≈', border: '#fcd34d' }
-      : { bg: 'rgba(251,191,36,0.1)', color: '#fbbf24', label: '≈', border: 'rgba(251,191,36,0.3)' };
+      : { bg: 'color-mix(in srgb, var(--accent) 10%, transparent)', color: 'var(--accent)', label: '≈', border: 'color-mix(in srgb, var(--accent) 30%, transparent)' };
   }
   return isLight
     ? { bg: '#fee2e2', color: '#991b1b', label: '✗', border: '#fca5a5' }
@@ -180,15 +180,15 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <a href="/dashboard" title="Ana Sayfa" className="text-amber-400 font-bold text-lg flex-shrink-0 hover:opacity-80 transition-opacity">♠</a>
-          <a href="/dashboard" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
+          <a href="/reports" title="Ana Sayfa" className="text-amber-400 font-bold text-lg flex-shrink-0 hover:opacity-80 transition-opacity">♠</a>
+          <a href="/reports" title="Ana Sayfa" className="font-bold text-white text-sm hidden sm:block hover:text-amber-400 transition-colors">Casino Takip</a>
 
           {/* Year selector */}
           <div className="flex items-center gap-1 ml-1 sm:ml-2">
             {years.map(y => (
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 sm:px-3 py-1 rounded-lg text-xs font-medium transition-all"
-                style={y === year ? { background: '#fbbf24', color: '#0f0f17', fontWeight: 700 } : { color: '#94a3b8' }}>
+                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: '#94a3b8' }}>
                 {y}
               </button>
             ))}
@@ -213,7 +213,7 @@ export default function DashboardPage() {
           <div className="ml-auto flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <button onClick={() => setAddModal(true)}
               className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 flex-shrink-0"
-              style={{ background: '#fbbf24', color: '#0f0f17' }}>
+              style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               <span>+</span>
               <span className="hidden sm:inline">Casino Ekle</span>
             </button>
@@ -325,7 +325,7 @@ export default function DashboardPage() {
             <p className="text-slate-500 text-sm">Henüz casino eklenmedi</p>
             <button onClick={() => setAddModal(true)}
               className="px-5 py-2.5 rounded-xl text-sm font-bold"
-              style={{ background: '#fbbf24', color: '#0f0f17' }}>
+              style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               İlk Casinoyu Ekle
             </button>
           </div>
@@ -427,7 +427,7 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-1.5 mb-1.5">
                         <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Casino</span>
                         <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold"
-                          style={{ background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
+                          style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)' }}>
                           {filteredCasinos.length}{filteredCasinos.length !== casinos.length && `/${casinos.length}`}
                         </span>
                       </div>
@@ -466,7 +466,7 @@ export default function DashboardPage() {
                         onDragEnd={() => { setDragId(null); setDragOverId(null); dragIdRef.current = null; }}
                         style={{
                           background: idx % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-base-alt)',
-                          borderTop: isOver ? '2px solid #fbbf24' : '1px solid var(--border-color)',
+                          borderTop: isOver ? '2px solid var(--accent)' : '1px solid var(--border-color)',
                           opacity: isDragging ? 0.4 : 1,
                           cursor: dragId ? 'grabbing' : 'auto',
                           transition: 'opacity 0.15s',
@@ -554,7 +554,7 @@ export default function DashboardPage() {
               ALINDI
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded border inline-block" style={{ background: 'rgba(251,191,36,0.1)', borderColor: 'rgba(251,191,36,0.3)' }} />
+              <span className="w-3 h-3 rounded border inline-block" style={{ background: 'color-mix(in srgb, var(--accent) 10%, transparent)', borderColor: 'color-mix(in srgb, var(--accent) 30%, transparent)' }} />
               KISMİ
             </span>
             <span className="flex items-center gap-1.5">

@@ -174,7 +174,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
                     </span>
                   </p>
                   <p style={{ color: 'var(--text-dim)' }}>Güncel Kur:
-                    <span className="font-semibold ml-1" style={{ color: '#fbbf24' }}>
+                    <span className="font-semibold ml-1" style={{ color: 'var(--accent)' }}>
                       {usdRate ? `1 USD = ₺${fmt(usdRate)}` : 'yükleniyor...'} {eurRate ? `· 1 EUR = ₺${fmt(eurRate)}` : ''}
                     </span>
                   </p>
@@ -186,12 +186,12 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
                 <div className="flex gap-2">
                   <button onClick={() => setCombineMode('separate')}
                     className="flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all"
-                    style={combineMode === 'separate' ? { background: '#fbbf24', color: '#0f0f17' } : inputStyle}>
+                    style={combineMode === 'separate' ? { background: 'var(--accent)', color: 'var(--accent-contrast)' } : inputStyle}>
                     Ayrı Sayfalar
                   </button>
                   <button onClick={() => setCombineMode('combined')}
                     className="flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all"
-                    style={combineMode === 'combined' ? { background: '#fbbf24', color: '#0f0f17' } : inputStyle}>
+                    style={combineMode === 'combined' ? { background: 'var(--accent)', color: 'var(--accent-contrast)' } : inputStyle}>
                     Tek Sayfada Birleşik
                   </button>
                 </div>
@@ -199,7 +199,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
 
               <button disabled={!casinoId} onClick={() => setStep(2)}
                 className="w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                 Devam →
               </button>
             </>
@@ -211,7 +211,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
               {months.map((m, mi) => (
                 <div key={m.id} className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border-color)' }}>
                   <div className="px-3 py-2.5 border-b flex items-center justify-between" style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
-                    <p className="text-xs font-bold" style={{ color: '#fbbf24' }}>Ay #{mi + 1}: {MONTHS[m.month]} {m.year}</p>
+                    <p className="text-xs font-bold" style={{ color: 'var(--accent)' }}>Ay #{mi + 1}: {MONTHS[m.month]} {m.year}</p>
                     {months.length > 1 && (
                       <button onClick={() => removeMonth(m.id)} className="text-xs" style={{ color: '#ef4444' }}>✕ Kaldır</button>
                     )}
@@ -246,7 +246,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
                       {m.rows.map((r, ri) => (
                         <div key={ri} className="rounded-lg p-2.5 space-y-2" style={{ background: 'var(--bg-card)' }}>
                           <p className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>
-                            {r.kategori} — <span style={{ color: '#fbbf24' }}>{r.saglayici}</span>
+                            {r.kategori} — <span style={{ color: 'var(--accent)' }}>{r.saglayici}</span>
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             <input type="text" inputMode="decimal" value={r.bet} onChange={e => updateRow(m.id, ri, 'bet', e.target.value)}
@@ -261,7 +261,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-dim)' }}>Ekstra Kalemler</p>
-                        <button onClick={() => addExtra(m.id)} className="px-2 py-1 rounded-lg text-xs font-bold" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: '#fbbf24' }}>+ Ekle</button>
+                        <button onClick={() => addExtra(m.id)} className="px-2 py-1 rounded-lg text-xs font-bold" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', color: 'var(--accent)' }}>+ Ekle</button>
                       </div>
                       {m.extras.map((ex, ei) => (
                         <div key={ei} className="flex gap-2 items-center">
@@ -283,7 +283,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
 
               <button onClick={addMonth}
                 className="w-full py-2.5 rounded-xl text-xs font-bold border transition-colors"
-                style={{ borderColor: 'var(--border-accent)', color: '#fbbf24' }}>
+                style={{ borderColor: 'var(--border-accent)', color: 'var(--accent)' }}>
                 + Ay Ekle
               </button>
 
@@ -291,7 +291,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
 
               <button onClick={handleOlustur} disabled={saving}
                 className="w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98] disabled:opacity-40"
-                style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                 {saving ? 'Hazırlanıyor...' : `Raporu Oluştur (${months.length} Ay)`}
               </button>
             </>
@@ -312,7 +312,7 @@ export default function CokluFeeModal({ onClose }: { onClose: () => void }) {
                   <input readOnly value={reportId ? `${typeof window !== 'undefined' ? window.location.origin : ''}/reports/fee-multi/${reportId}` : ''}
                     className="flex-1 px-2.5 py-2 rounded-lg text-xs outline-none truncate" style={inputStyle} />
                   <button onClick={copyLink} className="px-3 py-2 rounded-lg text-xs font-bold transition-all"
-                    style={{ background: copied ? '#22c55e' : '#fbbf24', color: '#0f0f17' }}>
+                    style={{ background: copied ? '#22c55e' : 'var(--accent)', color: 'var(--accent-contrast)' }}>
                     {copied ? '✓' : 'Kopyala'}
                   </button>
                 </div>

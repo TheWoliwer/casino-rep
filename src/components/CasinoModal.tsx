@@ -146,7 +146,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
                 <button key={t} type="button" onClick={() => setFeeType(t)}
                   className="flex-1 py-2 rounded-xl text-xs font-medium transition-all border"
                   style={feeType === t
-                    ? { borderColor: 'rgba(251,191,36,0.5)', color: '#fbbf24', background: 'rgba(251,191,36,0.1)' }
+                    ? { borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
                     : { borderColor: 'var(--border-accent)', color: '#64748b', background: 'transparent' }}>
                   {FEE_TYPE_LABELS[t]}
                 </button>
@@ -196,7 +196,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
               };
 
               return (
-                <div className="rounded-xl p-3.5 space-y-3 mt-1" style={{ background: 'var(--bg-base)', border: '1px solid rgba(251,191,36,0.15)' }}>
+                <div className="rounded-xl p-3.5 space-y-3 mt-1" style={{ background: 'var(--bg-base)', border: '1px solid color-mix(in srgb, var(--accent) 15%, transparent)' }}>
                   <p className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider">Fee Hesaplayıcı</p>
 
                   <div className="flex gap-2">
@@ -225,7 +225,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
                       <div className="flex items-baseline justify-between">
                         <span className="text-xs text-slate-500">%{rate} fee sonucu</span>
                         <div className="text-right">
-                          <span className="text-lg font-bold" style={{ color: '#fbbf24' }}>
+                          <span className="text-lg font-bold" style={{ color: 'var(--accent)' }}>
                             {calcCurrency === 'TRY' ? '₺' : calcCurrency === 'EUR' ? '€' : '$'}{fmt(result)}
                           </span>
                           <span className="text-xs text-slate-500 ml-1">{calcCurrency}</span>
@@ -320,7 +320,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
                   <button key={p} onClick={() => setNewColPeriod(p)}
                     className="flex-1 py-1.5 rounded-lg text-xs font-medium border transition-all"
                     style={newColPeriod === p
-                      ? { borderColor: 'rgba(251,191,36,0.5)', color: '#fbbf24', background: 'rgba(251,191,36,0.1)' }
+                      ? { borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
                       : { borderColor: 'var(--border-accent)', color: '#64748b' }}>
                     {PERIOD_LABELS[p]}
                   </button>
@@ -329,7 +329,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
 
               <button onClick={addCol} disabled={addingCol || !newColName.trim()}
                 className="w-full py-2 rounded-xl text-sm font-semibold disabled:opacity-40 transition-all active:scale-95"
-                style={{ background: addingCol || !newColName.trim() ? 'var(--border-color)' : '#fbbf24', color: addingCol || !newColName.trim() ? '#475569' : 'var(--bg-base)' }}>
+                style={{ background: addingCol || !newColName.trim() ? 'var(--border-color)' : 'var(--accent)', color: addingCol || !newColName.trim() ? '#475569' : 'var(--bg-base)' }}>
                 {addingCol ? 'Ekleniyor...' : '+ Kalem Ekle'}
               </button>
             </div>
@@ -346,7 +346,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
           <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white transition-colors">İptal</button>
           <button onClick={saveCasino} disabled={saving}
             className="px-6 py-2.5 rounded-xl text-sm font-bold disabled:opacity-60 transition-all active:scale-95"
-            style={{ background: '#fbbf24', color: '#0f0f17' }}>
+            style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
             {saving ? 'Kaydediliyor...' : 'Kaydet'}
           </button>
         </div>

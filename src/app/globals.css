@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
-/* ── Tema değişkenleri ── */
+/* ── Tema değişkenleri ──
+   Sarı  (dark)  : koyu zemin + amber vurgu (varsayılan)
+   Mavi  (navy)  : koyu mavi zemin + mavi vurgu
+   Beyaz (light) : aydınlık zemin + koyu amber vurgu
+*/
 :root {
-  /* Koyu (varsayılan) */
   --bg-base:       #0f0f17;
   --bg-base-alt:   #111120;
   --bg-surface:    #16161f;
@@ -13,38 +16,56 @@
   --text-primary:  #f1f5f9;
   --text-muted:    #94a3b8;
   --text-dim:      #64748b;
+
+  --accent:          #fbbf24;
+  --accent-contrast: #0f0f17;
 }
 
 [data-theme="navy"] {
-  --bg-base:       #0f172a;
-  --bg-base-alt:   #132040;
-  --bg-surface:    #1e293b;
-  --bg-card:       #162032;
-  --bg-input:      #0d1526;
-  --border-color:  #293a52;
-  --border-accent: #364a66;
+  --bg-base:       #0a1220;
+  --bg-base-alt:   #0d1729;
+  --bg-surface:    #101c30;
+  --bg-card:       #0d1828;
+  --bg-input:      #081020;
+  --border-color:  #1c2c48;
+  --border-accent: #27395c;
   --text-primary:  #e2e8f0;
   --text-muted:    #94a3b8;
   --text-dim:      #64748b;
+
+  --accent:          #60a5fa;
+  --accent-contrast: #0a1220;
 }
 
 [data-theme="light"] {
-  --bg-base:       #e4eaf4;
-  --bg-base-alt:   #dce3ef;
-  --bg-surface:    #f2f5fb;
+  --bg-base:       #eef1f7;
+  --bg-base-alt:   #e6eaf3;
+  --bg-surface:    #f7f9fc;
   --bg-card:       #ffffff;
   --bg-input:      #ffffff;
-  --border-color:  #cdd5e2;
-  --border-accent: #b8c4d6;
+  --border-color:  #d3dae6;
+  --border-accent: #bcc8da;
   --text-primary:  #1a2535;
   --text-muted:    #4a5568;
   --text-dim:      #7a8fa6;
+
+  --accent:          #b45309;
+  --accent-contrast: #ffffff;
 
   /* Durum renkleri - light */
   --color-success: #065f46;
   --color-warning: #78350f;
   --color-danger:  #991b1b;
 }
+
+/* ── Amber utility sınıfları temanın vurgu rengini takip etsin ── */
+.text-amber-400,
+.text-amber-300 { color: var(--accent) !important; }
+.hover\:text-amber-300:hover,
+.hover\:text-amber-400:hover { color: var(--accent) !important; }
+.bg-amber-500\/20 { background: color-mix(in srgb, var(--accent) 18%, transparent) !important; }
+.bg-amber-400\/10 { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+.hover\:bg-amber-400\/10:hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
 
 /* ── Light tema metin override'ları ── */
 [data-theme="light"] .text-white        { color: #1a2535 !important; }

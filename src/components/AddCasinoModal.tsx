@@ -105,7 +105,7 @@ export default function AddCasinoModal({ onClose, onAdded }: Props) {
           </button>
           <button type="button" onClick={save} disabled={saving}
             className="px-5 py-2 rounded-lg text-sm font-semibold disabled:opacity-60 transition-all active:scale-95"
-            style={{ background: '#fbbf24', color: '#0f0f17' }}>
+            style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
             {saving ? 'Ekleniyor...' : 'Ekle'}
           </button>
         </div>

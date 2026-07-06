@@ -127,7 +127,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
 
   // Renkler
   const danger  = isLight ? '#991b1b' : '#fca5a5';
-  const warning = isLight ? '#78350f' : '#fbbf24';
+  const warning = isLight ? '#78350f' : 'var(--accent)';
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
@@ -161,7 +161,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
                 style={y === year
-                  ? { background: '#fbbf24', color: '#0f0f17', fontWeight: 700 }
+                  ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 }
                   : { color: 'var(--text-dim)' }}>
                 {y}
               </button>
@@ -216,12 +216,12 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
                         background: total > 0
                           ? isLight ? `rgba(153,27,27,${intensity * 0.6})` : `rgba(239,68,68,${intensity})`
                           : 'var(--bg-card)',
-                        borderColor: isCurrentMon ? '#fbbf24' : total > 0
+                        borderColor: isCurrentMon ? 'var(--accent)' : total > 0
                           ? isLight ? 'rgba(153,27,27,0.25)' : 'rgba(239,68,68,0.25)'
                           : 'var(--border-color)',
                       }}>
                       <div className="flex items-start justify-between mb-1.5">
-                        <p className="text-xs font-bold" style={{ color: isCurrentMon ? '#fbbf24' : 'var(--text-muted)' }}>
+                        <p className="text-xs font-bold" style={{ color: isCurrentMon ? 'var(--accent)' : 'var(--text-muted)' }}>
                           {MONTHS_SHORT[month]}
                         </p>
                         {count > 0 && (
@@ -284,7 +284,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
                           <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
                             {casinoName && (
                               <span className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-                                style={{ background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
+                                style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)' }}>
                                 {casinoName}
                               </span>
                             )}
@@ -383,7 +383,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
 
                 <button onClick={addExpense} disabled={saving || !name.trim() || !amount}
                   className="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 disabled:opacity-40"
-                  style={{ background: '#fbbf24', color: '#0f0f17' }}>
+                  style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                   {saving ? 'Kaydediliyor...' : '+ Gider Ekle'}
                 </button>
               </div>

@@ -280,7 +280,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
     return (
       <div>
         <p className="font-semibold text-white whitespace-nowrap">{fmtAmt(cell.amount)} {curSym(cell.currency)}</p>
-        <p className="text-[9px] font-bold tracking-wide" style={{ color: done ? '#4ade80' : some ? '#fbbf24' : '#f87171' }}>
+        <p className="text-[9px] font-bold tracking-wide" style={{ color: done ? '#4ade80' : some ? 'var(--accent)' : '#f87171' }}>
           {done ? 'ALINDI' : some ? 'KISMİ' : 'ALINMADI'}
         </p>
       </div>
@@ -395,7 +395,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
   ];
 
   const chipStyle = (active: boolean) => active
-    ? { background: 'rgba(251,191,36,0.12)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.4)' }
+    ? { background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)', border: '1px solid color-mix(in srgb, var(--accent) 40%, transparent)' }
     : { background: 'transparent', color: '#64748b', border: '1px solid var(--border-accent)' };
 
   return (
@@ -410,7 +410,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
           style={{ borderColor: 'var(--border-color)' }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-              style={{ background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
+              style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)' }}>
               👤
             </div>
             <div>
@@ -445,13 +445,13 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] text-slate-500">
               <span>Tüm zamanlar tahsilat oranı</span>
-              <span className="font-bold" style={{ color: rate >= 100 ? '#86efac' : rate > 50 ? '#fbbf24' : '#fca5a5' }}>
+              <span className="font-bold" style={{ color: rate >= 100 ? '#86efac' : rate > 50 ? 'var(--accent)' : '#fca5a5' }}>
                 %{rate.toFixed(1)}
               </span>
             </div>
             <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border-accent)' }}>
               <div className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${rate}%`, background: rate >= 100 ? '#22c55e' : rate > 50 ? '#fbbf24' : '#ef4444' }} />
+                style={{ width: `${rate}%`, background: rate >= 100 ? '#22c55e' : rate > 50 ? 'var(--accent)' : '#ef4444' }} />
             </div>
           </div>
         </div>
@@ -463,7 +463,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
             <button key={t.id} onClick={() => setTab(t.id)}
               className="px-3 py-2 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 -mb-px"
               style={tab === t.id
-                ? { color: '#fbbf24', borderColor: '#fbbf24' }
+                ? { color: 'var(--accent)', borderColor: 'var(--accent)' }
                 : { color: '#64748b', borderColor: 'transparent' }}>
               {t.label}
             </button>
@@ -487,7 +487,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                       <button key={y} onClick={() => setDetailYear(y)}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
                         style={detailYear === y
-                          ? { background: '#fbbf24', color: '#0f0f17' }
+                          ? { background: 'var(--accent)', color: 'var(--accent-contrast)' }
                           : { background: 'transparent', color: '#64748b', border: '1px solid var(--border-accent)' }}>
                         {y}
                       </button>
@@ -551,7 +551,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                               {t.amt > 0 ? (
                                 <div>
                                   <p className="font-bold text-white whitespace-nowrap">₺{fmt(t.amt)}</p>
-                                  <p className="text-[9px] font-semibold whitespace-nowrap" style={{ color: t.paid >= t.amt ? '#4ade80' : '#fbbf24' }}>
+                                  <p className="text-[9px] font-semibold whitespace-nowrap" style={{ color: t.paid >= t.amt ? '#4ade80' : 'var(--accent)' }}>
                                     ₺{fmt(t.paid)} alındı
                                   </p>
                                 </div>
@@ -634,7 +634,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                               const evRow = ev.rowId != null ? rowById.get(ev.rowId) : undefined;
                               return (
                                 <div key={ev.key} className="rounded-xl border overflow-hidden"
-                                  style={{ background: 'var(--bg-base)', borderColor: isOpen ? 'rgba(251,191,36,0.35)' : 'var(--border-accent)' }}>
+                                  style={{ background: 'var(--bg-base)', borderColor: isOpen ? 'color-mix(in srgb, var(--accent) 35%, transparent)' : 'var(--border-accent)' }}>
                                   <button
                                     onClick={() => setExpandedEvent(isOpen ? null : ev.key)}
                                     className="w-full p-3 text-left transition-colors hover:bg-white/5">
@@ -643,7 +643,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                                         <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0"
                                           style={isPayment
                                             ? { background: 'rgba(34,197,94,0.12)', color: '#86efac' }
-                                            : { background: 'rgba(251,191,36,0.12)', color: '#fbbf24' }}>
+                                            : { background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)' }}>
                                           {isPayment ? '💰' : '📝'}
                                         </span>
                                         <div className="flex-1 min-w-0">
@@ -667,8 +667,8 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                                         </div>
                                         <span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] flex-shrink-0 transition-transform"
                                           style={{
-                                            background: isOpen ? 'rgba(251,191,36,0.15)' : 'rgba(100,116,139,0.12)',
-                                            color: isOpen ? '#fbbf24' : '#64748b',
+                                            background: isOpen ? 'color-mix(in srgb, var(--accent) 15%, transparent)' : 'rgba(100,116,139,0.12)',
+                                            color: isOpen ? 'var(--accent)' : '#64748b',
                                             transform: isOpen ? 'rotate(90deg)' : 'none',
                                           }}>
                                           ▶
@@ -755,7 +755,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                                                       const isPart = paidAmt > 0 && !isFull;
                                                       return (
                                                         <div key={ii} className="flex items-center gap-2 text-xs">
-                                                          <span style={{ color: isFull ? '#86efac' : isPart ? '#fbbf24' : '#64748b' }}>
+                                                          <span style={{ color: isFull ? '#86efac' : isPart ? 'var(--accent)' : '#64748b' }}>
                                                             {isFull ? '✓' : isPart ? '≈' : '○'}
                                                           </span>
                                                           <span className="flex-1 truncate text-slate-300">{item.name}</span>
@@ -800,7 +800,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                       <button key={y} onClick={() => { setDetailYear(y); setExpandedMonth(null); }}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
                         style={detailYear === y
-                          ? { background: '#fbbf24', color: '#0f0f17' }
+                          ? { background: 'var(--accent)', color: 'var(--accent-contrast)' }
                           : { background: 'transparent', color: '#64748b', border: '1px solid var(--border-accent)' }}>
                         {y}
                       </button>
@@ -861,7 +861,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                                       const isPart = paidAmt > 0 && !isFull;
                                       return (
                                         <div key={ii} className="flex items-center gap-2 text-xs">
-                                          <span style={{ color: isFull ? '#86efac' : isPart ? '#fbbf24' : '#64748b' }}>
+                                          <span style={{ color: isFull ? '#86efac' : isPart ? 'var(--accent)' : '#64748b' }}>
                                             {isFull ? '✓' : isPart ? '≈' : '○'}
                                           </span>
                                           <span className="flex-1 truncate text-slate-300">{item.name}</span>
@@ -945,7 +945,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                     <div className="grid grid-cols-3 gap-2">
                       {[
                         { label: 'Tam Ödendi', count: fullPaid, icon: '✓', bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.25)', color: '#86efac' },
-                        { label: 'Kısmi',      count: partial,  icon: '≈', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.25)', color: '#fbbf24' },
+                        { label: 'Kısmi',      count: partial,  icon: '≈', bg: 'color-mix(in srgb, var(--accent) 8%, transparent)', border: 'color-mix(in srgb, var(--accent) 25%, transparent)', color: 'var(--accent)' },
                         { label: 'Ödenmedi',   count: unpaid,   icon: '✗', bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.25)', color: '#fca5a5' },
                       ].map(c => (
                         <div key={c.label} className="rounded-xl p-3 text-center border" style={{ background: c.bg, borderColor: c.border }}>
@@ -1100,7 +1100,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
           </button>
           <button onClick={onClose}
             className="px-5 py-2 rounded-xl text-sm font-bold transition-all active:scale-95"
-            style={{ background: '#fbbf24', color: '#0f0f17' }}>
+            style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
             Kapat
           </button>
         </div>
