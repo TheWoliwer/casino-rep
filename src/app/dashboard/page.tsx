@@ -599,6 +599,7 @@ export default function DashboardPage() {
         <CasinoProfileModal
           casino={profileModal}
           onClose={() => setProfileModal(null)}
+          onSaved={silentRefresh}
         />
       )}
 

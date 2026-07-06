@@ -2,10 +2,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import * as XLSX from 'xlsx';
 import type { Casino, FeeRow, Transaction, CasinoCol, ColEntry, Expense } from '@/lib/supabase';
+import FeeModal from '@/components/FeeModal';
 
 interface Props {
   casino: Casino;
   onClose: () => void;
+  onSaved?: () => void; // profil içinden düzenleme yapılırsa dashboard'ı tazelemek için
 }
 
 const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
@@ -25,7 +27,7 @@ function formatShortDate(d: string) {
   return new Date(d).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-type Tab = 'timeline' | 'monthly' | 'stats' | 'cols' | 'expenses';
+type Tab = 'table' | 'timeline' | 'monthly' | 'stats' | 'cols' | 'expenses';
 
 type HistoryEvent = {
   key: string;
@@ -39,7 +41,7 @@ type HistoryEvent = {
   txId: number | null;  // ödeme işlemi
 };
 
-export default function CasinoProfileModal({ casino, onClose }: Props) {
+export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) {
   const [feeRows, setFeeRows] = useState<FeeRow[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [cols, setCols] = useState<CasinoCol[]>([]);
@@ -49,7 +51,8 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   const [error, setError] = useState('');
   const [rates, setRates] = useState<{ usd: number; eur: number } | null>(null);
 
-  const [tab, setTab] = useState<Tab>('timeline');
+  const [tab, setTab] = useState<Tab>('table');
+  const [editMonth, setEditMonth] = useState<number | null>(null);
 
   // Hareketler filtreleri
   const [typeFilter, setTypeFilter] = useState<'all' | 'payment' | 'entry'>('all');
@@ -61,9 +64,8 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   const [detailYear, setDetailYear] = useState(new Date().getFullYear());
   const [expandedMonth, setExpandedMonth] = useState<number | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError('');
+  const fetchAll = useCallback(async (silent: boolean) => {
+    if (!silent) { setLoading(true); setError(''); }
     try {
       const [f, t, cc, ce, ex] = await Promise.all([
         fetch(`/api/fee-rows?casino_id=${casino.id}`).then(r => r.json()),
@@ -80,12 +82,12 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
       setColEntries((Array.isArray(ce) ? ce : []).filter((e: ColEntry) => colIds.has(e.col_id)));
       setExpenses(Array.isArray(ex) ? ex : []);
     } catch {
-      setError('Geçmiş yüklenemedi');
+      if (!silent) setError('Geçmiş yüklenemedi');
     }
-    setLoading(false);
+    if (!silent) setLoading(false);
   }, [casino.id]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { fetchAll(false); }, [fetchAll]);
 
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
@@ -96,10 +98,13 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   }, []);
 
   useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const fn = (e: KeyboardEvent) => {
+      // Üstte FeeModal açıkken Esc profili kapatmasın (onu FeeModal yakalar)
+      if (e.key === 'Escape' && editMonth === null) onClose();
+    };
     window.addEventListener('keydown', fn);
     return () => window.removeEventListener('keydown', fn);
-  }, [onClose]);
+  }, [onClose, editMonth]);
 
   const toUSD = (n: number) => rates ? n / rates.usd : n;
   const toTRY = (amount: number, currency: string) => {
@@ -207,6 +212,81 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
     paid: s.paid + (row?.paid_amount ?? 0),
   }), { debt: 0, paid: 0 });
 
+  // ── Aylık kalem matrisi (Tablo sekmesi) ──
+  const norm = (s: string) => s.trim().toLocaleUpperCase('tr');
+  const isFeeName = (s: string) => { const n = norm(s); return n === 'BORÇ' || n.includes('FEE'); };
+  const feeLabel = casino.fee_type === 'percent' ? `FEE %${casino.fee_rate}` : casino.fee_type === 'fixed' ? 'FEE (SABİT)' : 'BORÇ';
+
+  const matrixRows = MONTHS.slice(1).map((_, i) => {
+    const m = i + 1;
+    return { month: m, row: feeRows.find(r => r.year === detailYear && r.month === m) ?? null };
+  });
+
+  // Kolonlar: seçili yıldaki borç kalemi adlarının birleşimi (FEE/BORÇ hariç — o ayrı kolonda)
+  const itemColumns: string[] = [];
+  for (const { row } of matrixRows) {
+    for (const it of row?.debt_items ?? []) {
+      if (isFeeName(it.name)) continue;
+      const n = norm(it.name);
+      if (!itemColumns.includes(n)) itemColumns.push(n);
+    }
+  }
+
+  type CellData = { amount: number; paid: number; currency: string } | null;
+
+  function feeCellOf(row: FeeRow | null): CellData {
+    if (!row) return null;
+    const items = row.debt_items ?? [];
+    if (items.length === 0) {
+      if ((row.turnover ?? 0) === 0 && (row.paid_amount ?? 0) === 0) return null;
+      return { amount: row.turnover ?? 0, paid: row.paid_amount ?? 0, currency: 'TRY' };
+    }
+    const fi = items.filter(it => isFeeName(it.name));
+    if (fi.length === 0) return null;
+    return {
+      amount: fi.reduce((s, it) => s + it.amount, 0),
+      paid: fi.reduce((s, it) => s + (it.paid_amount ?? (it.paid ? it.amount : 0)), 0),
+      currency: fi[0].currency,
+    };
+  }
+
+  function itemCellOf(row: FeeRow | null, colName: string): CellData {
+    const its = (row?.debt_items ?? []).filter(it => !isFeeName(it.name) && norm(it.name) === colName);
+    if (its.length === 0) return null;
+    return {
+      amount: its.reduce((s, it) => s + it.amount, 0),
+      paid: its.reduce((s, it) => s + (it.paid_amount ?? (it.paid ? it.amount : 0)), 0),
+      currency: its[0].currency,
+    };
+  }
+
+  function columnTotalTRY(cellOf: (row: FeeRow | null) => CellData) {
+    return matrixRows.reduce((acc, { row }) => {
+      const c = cellOf(row);
+      if (c) { acc.amt += toTRY(c.amount, c.currency); acc.paid += toTRY(c.paid, c.currency); }
+      return acc;
+    }, { amt: 0, paid: 0 });
+  }
+  const feeColTotal = columnTotalTRY(feeCellOf);
+  const itemColTotals = itemColumns.map(name => columnTotalTRY(row => itemCellOf(row, name)));
+
+  const fmtAmt = (n: number) => n.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  const curSym = (c: string) => c === 'TRY' ? '₺' : c === 'EUR' ? '€' : c === 'USD' ? '$' : c;
+
+  function MatrixCell({ cell }: { cell: CellData }) {
+    if (!cell || cell.amount === 0) return <span className="text-slate-700">—</span>;
+    const done = cell.paid >= cell.amount;
+    const some = cell.paid > 0;
+    return (
+      <div>
+        <p className="font-semibold text-white whitespace-nowrap">{fmtAmt(cell.amount)} {curSym(cell.currency)}</p>
+        <p className="text-[9px] font-bold tracking-wide" style={{ color: done ? '#4ade80' : some ? '#fbbf24' : '#f87171' }}>
+          {done ? 'ALINDI' : some ? 'KISMİ' : 'ALINMADI'}
+        </p>
+      </div>
+    );
+  }
+
   // ── Giderler ──
   const totalExpensesTRY = expenses.reduce((s, e) => s + toTRY(e.amount ?? 0, e.currency || 'TRY'), 0);
   const netProfit = collected - totalExpensesTRY;
@@ -223,6 +303,25 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   // ── Excel ekstre ──
   function exportExcel() {
     const wb = XLSX.utils.book_new();
+
+    // Tablo görünümü (seçili yıl) — ekrandaki matrisin aynısı
+    const cellStatus = (c: { amount: number; paid: number } | null) =>
+      !c || c.amount === 0 ? '' : c.paid >= c.amount ? 'ALINDI' : c.paid > 0 ? 'KISMİ' : 'ALINMADI';
+    const tableData = matrixRows.map(({ month: m, row }) => {
+      const rec: Record<string, string | number> = { 'Ay': MONTHS[m] };
+      const fc = feeCellOf(row);
+      rec[feeLabel] = fc && fc.amount > 0 ? `${fmtAmt(fc.amount)} ${curSym(fc.currency)}` : '';
+      rec[`${feeLabel} DURUM`] = cellStatus(fc);
+      for (const name of itemColumns) {
+        const c = itemCellOf(row, name);
+        rec[name] = c && c.amount > 0 ? `${fmtAmt(c.amount)} ${curSym(c.currency)}` : '';
+        rec[`${name} DURUM`] = cellStatus(c);
+      }
+      return rec;
+    });
+    const wsTable = XLSX.utils.json_to_sheet(tableData);
+    wsTable['!cols'] = [{ wch: 9 }, ...Array((itemColumns.length + 1) * 2).fill({ wch: 14 })];
+    XLSX.utils.book_append_sheet(wb, wsTable, `Tablo ${detailYear}`);
 
     // Özet sayfası
     const summaryData: Record<string, string | number>[] = [
@@ -287,6 +386,7 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   }
 
   const TABS: { id: Tab; label: string }[] = [
+    { id: 'table',    label: '📊 Tablo' },
     { id: 'timeline', label: '🧾 Hareketler' },
     { id: 'monthly',  label: '📅 Aylık Detay' },
     { id: 'stats',    label: '📈 İstatistik' },
@@ -301,7 +401,7 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={onClose} style={{ background: 'rgba(0,0,0,0.75)' }}>
-      <div className="w-full sm:max-w-2xl rounded-t-2xl sm:rounded-xl border overflow-hidden flex flex-col"
+      <div className="w-full sm:max-w-4xl rounded-t-2xl sm:rounded-xl border overflow-hidden flex flex-col"
         style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', maxHeight: '92vh' }}
         onClick={e => e.stopPropagation()}>
 
@@ -378,6 +478,100 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
             <p className="text-red-400 text-sm text-center py-8">Hata: {error}</p>
           ) : (
             <>
+              {/* ═══ TABLO (Excel görünümü) ═══ */}
+              {tab === 'table' && (
+                <div className="space-y-3">
+                  {/* Yıl seçici */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {feeYears.map(y => (
+                      <button key={y} onClick={() => setDetailYear(y)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95"
+                        style={detailYear === y
+                          ? { background: '#fbbf24', color: '#0f0f17' }
+                          : { background: 'transparent', color: '#64748b', border: '1px solid var(--border-accent)' }}>
+                        {y}
+                      </button>
+                    ))}
+                    <span className="text-[10px] text-slate-600 ml-auto hidden sm:block">Satıra tıklayarak o ayı düzenleyebilirsin</span>
+                  </div>
+
+                  <div className="rounded-xl border overflow-x-auto" style={{ borderColor: 'var(--border-accent)' }}>
+                    <table className="w-full text-xs border-collapse" style={{ minWidth: 300 + (itemColumns.length + 1) * 130 }}>
+                      <thead>
+                        <tr style={{ background: 'var(--bg-card)' }}>
+                          <th className="px-3 py-2.5 text-left text-[10px] font-bold text-amber-400 uppercase tracking-wider sticky left-0 z-10 border-r border-b"
+                            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
+                            {casino.name} · {detailYear}
+                          </th>
+                          <th className="px-3 py-2.5 text-right text-[10px] font-bold text-slate-300 uppercase tracking-wider border-r border-b"
+                            style={{ borderColor: 'var(--border-color)' }}>
+                            {feeLabel}
+                          </th>
+                          {itemColumns.map(name => (
+                            <th key={name} className="px-3 py-2.5 text-right text-[10px] font-bold text-slate-300 uppercase tracking-wider border-r border-b"
+                              style={{ borderColor: 'var(--border-color)' }}>
+                              {name}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {matrixRows.map(({ month: m, row }, i) => {
+                          const rowBg = i % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-base-alt)';
+                          return (
+                            <tr key={m}
+                              onClick={() => setEditMonth(m)}
+                              className="cursor-pointer transition-colors hover:bg-white/5"
+                              style={{ background: rowBg, borderTop: '1px solid var(--border-color)' }}>
+                              <td className="px-3 py-2.5 font-semibold text-white uppercase sticky left-0 z-10 border-r"
+                                style={{ background: rowBg, borderColor: 'var(--border-color)' }}>
+                                {MONTHS[m]}
+                              </td>
+                              <td className="px-3 py-2 text-right border-r" style={{ borderColor: 'var(--border-color)' }}>
+                                <MatrixCell cell={feeCellOf(row)} />
+                              </td>
+                              {itemColumns.map(name => (
+                                <td key={name} className="px-3 py-2 text-right border-r" style={{ borderColor: 'var(--border-color)' }}>
+                                  <MatrixCell cell={itemCellOf(row, name)} />
+                                </td>
+                              ))}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                      <tfoot>
+                        <tr style={{ background: 'var(--bg-card)', borderTop: '2px solid var(--border-accent)' }}>
+                          <td className="px-3 py-2.5 text-[10px] font-bold text-white uppercase tracking-wider sticky left-0 z-10 border-r"
+                            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
+                            TOPLAM (₺)
+                          </td>
+                          {[feeColTotal, ...itemColTotals].map((t, ti) => (
+                            <td key={ti} className="px-3 py-2 text-right border-r" style={{ borderColor: 'var(--border-color)' }}>
+                              {t.amt > 0 ? (
+                                <div>
+                                  <p className="font-bold text-white whitespace-nowrap">₺{fmt(t.amt)}</p>
+                                  <p className="text-[9px] font-semibold whitespace-nowrap" style={{ color: t.paid >= t.amt ? '#4ade80' : '#fbbf24' }}>
+                                    ₺{fmt(t.paid)} alındı
+                                  </p>
+                                </div>
+                              ) : (
+                                <span className="text-slate-700">—</span>
+                              )}
+                            </td>
+                          ))}
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+
+                  {itemColumns.length === 0 && matrixRows.every(({ row }) => !feeCellOf(row)) && (
+                    <p className="text-center text-slate-600 text-xs py-4">
+                      {detailYear} yılında kayıt yok. Satıra tıklayıp borç girişi yapabilirsin.
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* ═══ HAREKETLER ═══ */}
               {tab === 'timeline' && (
                 <div className="space-y-3">
@@ -909,6 +1103,22 @@ export default function CasinoProfileModal({ casino, onClose }: Props) {
             Kapat
           </button>
         </div>
+
+        {/* Ay düzenleme pop-up'ı (tablo satırından açılır) */}
+        {editMonth !== null && (
+          <FeeModal
+            casino={casino}
+            month={editMonth}
+            year={detailYear}
+            feeRow={feeRows.find(r => r.year === detailYear && r.month === editMonth) ?? null}
+            cols={cols.filter(c => c.monthly === 1)}
+            colEntries={cols
+              .filter(c => c.monthly === 1)
+              .flatMap(c => colEntries.filter(e => e.col_id === c.id && e.year === detailYear && e.month === editMonth))}
+            onClose={() => setEditMonth(null)}
+            onSaved={() => { fetchAll(true); onSaved?.(); }}
+          />
+        )}
       </div>
     </div>
   );
