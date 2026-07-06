@@ -5,10 +5,12 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const year  = searchParams.get('year');
   const month = searchParams.get('month');
+  const casinoId = searchParams.get('casino_id');
 
   let query = supabaseAdmin.from('expenses').select('*, casinos(name)').order('created_at', { ascending: true });
   if (year)  query = query.eq('year', parseInt(year));
   if (month) query = query.eq('month', parseInt(month));
+  if (casinoId) query = query.eq('casino_id', parseInt(casinoId));
 
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
