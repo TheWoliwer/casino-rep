@@ -7,6 +7,7 @@ import AddCasinoModal from '@/components/AddCasinoModal';
 import CasinoModal from '@/components/CasinoModal';
 import GiderlerModal from '@/components/GiderlerModal';
 import AylikFeeModal from '@/components/AylikFeeModal';
+import CokluFeeModal from '@/components/CokluFeeModal';
 import { useTheme } from '@/components/ThemeProvider';
 
 const MONTHS = ['','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
@@ -65,6 +66,7 @@ export default function DashboardPage() {
   const [casinoModal, setCasinoModal] = useState<CasinoManage | null>(null);
   const [giderlerModal, setGiderlerModal] = useState(false);
   const [feeReportModal, setFeeReportModal] = useState(false);
+  const [cokluFeeModal, setCokluFeeModal] = useState(false);
   const [raporlarOpen, setRaporlarOpen] = useState(false);
   const [feeSubOpen, setFeeSubOpen] = useState(false);
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -176,7 +178,7 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <span className="text-amber-400 font-bold text-lg flex-shrink-0">♠</span>
+          <a href="/dashboard" title="Ana Sayfa" className="text-amber-400 font-bold text-lg flex-shrink-0 hover:opacity-80 transition-opacity">♠</a>
           <span className="font-bold text-white text-sm hidden sm:block">Casino Takip</span>
 
           {/* Year selector */}
@@ -246,6 +248,12 @@ export default function DashboardPage() {
                           className="w-full flex items-center gap-2 pl-7 pr-3 py-2 text-xs hover:bg-white/5 transition-colors"
                           style={{ color: 'var(--text-muted)' }}>
                           ✏️ Yeni Rapor Oluştur
+                        </button>
+                        <button
+                          onClick={() => { setRaporlarOpen(false); setFeeSubOpen(false); setCokluFeeModal(true); }}
+                          className="w-full flex items-center gap-2 pl-7 pr-3 py-2 text-xs hover:bg-white/5 transition-colors"
+                          style={{ color: 'var(--text-muted)' }}>
+                          📚 Çoklu Ay Rapor
                         </button>
                         <a href="/reports/fee"
                           onClick={() => { setRaporlarOpen(false); setFeeSubOpen(false); }}

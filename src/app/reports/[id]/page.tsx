@@ -6,6 +6,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import type { Casino, FeeRow, CasinoCol, ColEntry } from '@/lib/supabase';
+import FeeModal from '@/components/FeeModal';
 
 const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const SHORT  = ['','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
@@ -37,6 +38,7 @@ export default function CasinoReportPage() {
   const [usdRate, setUsdRate]   = useState<number | null>(null);
   const [pdfOpen, setPdfOpen]   = useState(false);
   const [monthPicker, setMonthPicker] = useState(false);
+  const [editMonth, setEditMonth] = useState<number | null>(null);
 
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
@@ -63,6 +65,15 @@ export default function CasinoReportPage() {
   }, [id, year]);
 
   useEffect(() => { load(); }, [load]);
+
+  const silentRefresh = useCallback(async () => {
+    const [allFees, allEntries] = await Promise.all([
+      fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
+      fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
+    ]);
+    setFeeRows((Array.isArray(allFees) ? allFees : []).filter((r: FeeRow) => r.casino_id === parseInt(id)));
+    setColEntries(Array.isArray(allEntries) ? allEntries : []);
+  }, [id, year]);
 
   if (!casino && !loading) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-base)' }}>
@@ -194,7 +205,7 @@ export default function CasinoReportPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <span className="text-amber-400 font-bold text-lg">♠</span>
+          <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
           <button onClick={() => router.push('/reports')} className="text-slate-400 hover:text-white text-sm transition-colors">
             Raporlar
           </button>
@@ -317,7 +328,7 @@ export default function CasinoReportPage() {
           <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border-color)' }}>
             <div className="px-4 py-3 border-b flex items-center justify-between" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
               <h2 className="font-semibold text-white text-sm">Aylık Detay</h2>
-              <span className="text-xs text-slate-500">Sütun başlıklarına tıklayarak sıralayın</span>
+              <span className="text-xs text-slate-500">Satıra tıklayarak düzenleyin · başlıklara tıklayarak sıralayın</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm" style={{ minWidth: 520 }}>
@@ -335,11 +346,15 @@ export default function CasinoReportPage() {
                         {label}<SortIcon k={k} />
                       </th>
                     ))}
+                    <th className="px-4 py-3" />
                   </tr>
                 </thead>
                 <tbody>
                   {sortedRows.map(({ month: m, row, outstanding: os }, i) => (
-                    <tr key={m} style={{ background: i % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-base-alt)', borderTop: '1px solid #1e1e2e' }}>
+                    <tr key={m}
+                      onClick={() => setEditMonth(m)}
+                      className="cursor-pointer transition-colors hover:bg-white/5"
+                      style={{ background: i % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-base-alt)', borderTop: '1px solid #1e1e2e' }}>
                       <td className="px-4 py-3 font-medium text-white">{MONTHS[m]}</td>
                       <td className="px-4 py-3 text-right text-slate-300 font-medium">
                         {row ? <><span className="text-white">${fmtUSD(toUSD(row.turnover ?? 0))}</span><br/><span className="text-xs text-slate-500">₺{fmt(row.turnover ?? 0)}</span></> : '—'}
@@ -355,6 +370,14 @@ export default function CasinoReportPage() {
                       <td className="px-4 py-3 text-right">
                         <StatusBadge row={row} />
                       </td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={e => { e.stopPropagation(); setEditMonth(m); }}
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all active:scale-95 whitespace-nowrap"
+                          style={{ borderColor: 'rgba(251,191,36,0.4)', color: '#fbbf24', background: 'rgba(251,191,36,0.08)' }}>
+                          ✎ Düzenle
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -369,6 +392,7 @@ export default function CasinoReportPage() {
                         %{rate.toFixed(1)}
                       </span>
                     </td>
+                    <td />
                   </tr>
                 </tfoot>
               </table>
@@ -436,6 +460,22 @@ export default function CasinoReportPage() {
             </p>
           </div>
         </div>
+      )}
+
+      {/* Ay düzenleme pop-up'ı (dashboard ile aynı modal) */}
+      {editMonth !== null && casino && (
+        <FeeModal
+          casino={casino}
+          month={editMonth}
+          year={year}
+          feeRow={feeRows.find(r => r.month === editMonth) ?? null}
+          cols={cols.filter(c => c.monthly === 1)}
+          colEntries={cols
+            .filter(c => c.monthly === 1)
+            .flatMap(c => colEntries.filter(e => e.col_id === c.id && e.year === year && e.month === editMonth))}
+          onClose={() => setEditMonth(null)}
+          onSaved={silentRefresh}
+        />
       )}
     </div>
   );

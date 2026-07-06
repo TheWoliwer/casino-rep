@@ -1,7 +1,10 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Casino, FeeRow } from '@/lib/supabase';
+import type { Casino, FeeRow, CasinoCol, ColEntry } from '@/lib/supabase';
+import FeeModal from '@/components/FeeModal';
+
+const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 
 function fmt(n: number) {
   return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -15,12 +18,16 @@ type SortDir = 'asc' | 'desc';
 
 export default function ReportsPage() {
   const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(0); // 0 = tüm yıl
   const [casinos, setCasinos] = useState<Casino[]>([]);
   const [feeRows, setFeeRows] = useState<FeeRow[]>([]);
+  const [casinoCols, setCasinoCols] = useState<CasinoCol[]>([]);
+  const [colEntries, setColEntries] = useState<ColEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortKey, setSortKey] = useState<SortKey>('outstanding');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [usdRate, setUsdRate] = useState<number | null>(null);
+  const [feeModal, setFeeModal] = useState<{ casino: Casino; month: number } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,25 +38,41 @@ export default function ReportsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [c, f] = await Promise.all([
+    const [c, f, cc, ce] = await Promise.all([
       fetch('/api/casinos').then(r => r.json()),
       fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
+      fetch('/api/casino-cols').then(r => r.json()),
+      fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
     ]);
     setCasinos(Array.isArray(c) ? c : []);
     setFeeRows(Array.isArray(f) ? f : []);
+    setCasinoCols(Array.isArray(cc) ? cc : []);
+    setColEntries(Array.isArray(ce) ? ce : []);
     setLoading(false);
+  }, [year]);
+
+  const silentRefresh = useCallback(async () => {
+    const [f, ce] = await Promise.all([
+      fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
+      fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
+    ]);
+    setFeeRows(Array.isArray(f) ? f : []);
+    setColEntries(Array.isArray(ce) ? ce : []);
   }, [year]);
 
   useEffect(() => { load(); }, [load]);
 
   function casinoStats(casino: Casino) {
     const rows = feeRows.filter(r => r.casino_id === casino.id);
-    const total = rows.reduce((s, r) => s + (r.turnover ?? 0), 0); // borç = turnover
-    const collected = rows.reduce((s, r) => s + (r.paid_amount ?? 0), 0);
-    const outstanding = Math.max(0, total - collected);
-    const rate = total > 0 ? (collected / total) * 100 : 0;
+    const total = rows.reduce((s, r) => s + (r.turnover ?? 0), 0); // Beklenen — her zaman yıllık toplam
+    // Ay seçiliyse Tahsil/Bekleyen o aya göre hesaplanır
+    const scoped = month === 0 ? rows : rows.filter(r => r.month === month);
+    const scopedTotal = scoped.reduce((s, r) => s + (r.turnover ?? 0), 0);
+    const collected = scoped.reduce((s, r) => s + (r.paid_amount ?? 0), 0);
+    const outstanding = Math.max(0, scopedTotal - collected);
+    const rate = scopedTotal > 0 ? (collected / scopedTotal) * 100 : 0;
     const months = rows.length;
-    return { total, collected, outstanding, rate, months };
+    return { total, scopedTotal, collected, outstanding, rate, months };
   }
 
   function toggleSort(key: SortKey) {
@@ -65,11 +88,12 @@ export default function ReportsPage() {
 
   const totals = tableData.reduce((s, r) => ({
     total: s.total + r.total,
+    scopedTotal: s.scopedTotal + r.scopedTotal,
     collected: s.collected + r.collected,
     outstanding: s.outstanding + r.outstanding,
-  }), { total: 0, collected: 0, outstanding: 0 });
+  }), { total: 0, scopedTotal: 0, collected: 0, outstanding: 0 });
 
-  const overallRate = totals.total > 0 ? (totals.collected / totals.total) * 100 : 0;
+  const overallRate = totals.scopedTotal > 0 ? (totals.collected / totals.scopedTotal) * 100 : 0;
   const toUSD = (n: number) => usdRate ? n / usdRate : n;
 
   function SortIcon({ k }: { k: SortKey }) {
@@ -85,7 +109,7 @@ export default function ReportsPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5">
-          <span className="text-amber-400 font-bold text-lg">♠</span>
+          <a href="/dashboard" title="Dashboard" className="text-amber-400 font-bold text-lg hover:opacity-80 transition-opacity">♠</a>
           <span className="font-bold text-white text-sm hidden sm:block">Casino Takip</span>
           <span className="text-slate-600 text-sm hidden sm:block">·</span>
           <span className="text-slate-400 text-sm font-medium">Raporlar</span>
@@ -117,8 +141,8 @@ export default function ReportsPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { label: 'Toplam Beklenen', try: totals.total, color: '#94a3b8' },
-              { label: 'Tahsil Edilen',   try: totals.collected, color: '#86efac' },
-              { label: 'Bekleyen',        try: totals.outstanding, color: '#fca5a5' },
+              { label: month === 0 ? 'Tahsil Edilen' : `Tahsil Edilen (${MONTHS[month]})`, try: totals.collected, color: '#86efac' },
+              { label: month === 0 ? 'Bekleyen' : `Bekleyen (${MONTHS[month]})`,           try: totals.outstanding, color: '#fca5a5' },
               { label: 'Tahsilat Oranı',  try: null, color: '#fbbf24' },
             ].map(card => (
               <div key={card.label} className="rounded-xl p-4 border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
@@ -138,9 +162,23 @@ export default function ReportsPage() {
 
         {/* Casino table */}
         <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border-color)' }}>
-          <div className="px-4 py-3 border-b flex items-center justify-between" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
-            <h2 className="font-semibold text-white text-sm">Casino Raporu — {year}</h2>
-            <span className="text-xs text-slate-500">{casinos.length} casino</span>
+          <div className="px-4 py-3 border-b flex items-center justify-between gap-3" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
+            <h2 className="font-semibold text-white text-sm">
+              Casino Raporu — {year}{month !== 0 && <span className="text-amber-400"> · {MONTHS[month]}</span>}
+            </h2>
+            <div className="flex items-center gap-3">
+              <select
+                value={month}
+                onChange={e => setMonth(parseInt(e.target.value))}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium outline-none cursor-pointer"
+                style={{ background: 'var(--bg-base)', border: `1px solid ${month !== 0 ? 'rgba(251,191,36,0.5)' : 'var(--border-accent)'}`, color: month !== 0 ? '#fbbf24' : 'var(--text-primary)' }}>
+                <option value={0}>Tüm Yıl</option>
+                {MONTHS.slice(1).map((m, i) => (
+                  <option key={i + 1} value={i + 1}>{m}</option>
+                ))}
+              </select>
+              <span className="text-xs text-slate-500 hidden sm:block">{casinos.length} casino</span>
+            </div>
           </div>
 
           {loading ? (
@@ -205,7 +243,18 @@ export default function ReportsPage() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-center text-slate-600 text-xs">→</td>
+                      <td className="px-4 py-3 text-center">
+                        {month !== 0 ? (
+                          <button
+                            onClick={e => { e.stopPropagation(); setFeeModal({ casino: row.casino, month }); }}
+                            className="px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all active:scale-95 whitespace-nowrap"
+                            style={{ borderColor: 'rgba(251,191,36,0.4)', color: '#fbbf24', background: 'rgba(251,191,36,0.08)' }}>
+                            Görüntüle
+                          </button>
+                        ) : (
+                          <span className="text-slate-600 text-xs">→</span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -234,6 +283,22 @@ export default function ReportsPage() {
           )}
         </div>
       </div>
+
+      {/* Ay detay düzenleme pop-up'ı (dashboard ile aynı modal) */}
+      {feeModal && (
+        <FeeModal
+          casino={feeModal.casino}
+          month={feeModal.month}
+          year={year}
+          feeRow={feeRows.find(r => r.casino_id === feeModal.casino.id && r.month === feeModal.month) ?? null}
+          cols={casinoCols.filter(c => c.casino_id === feeModal.casino.id && c.monthly === 1)}
+          colEntries={casinoCols
+            .filter(c => c.casino_id === feeModal.casino.id && c.monthly === 1)
+            .flatMap(c => colEntries.filter(e => e.col_id === c.id && e.year === year && e.month === feeModal.month))}
+          onClose={() => setFeeModal(null)}
+          onSaved={silentRefresh}
+        />
+      )}
     </div>
   );
 }
