@@ -126,7 +126,7 @@ export default function GiderlerModal({ year: initialYear, onClose }: Props) {
   } as React.CSSProperties;
 
   // Renkler
-  const danger  = isLight ? '#991b1b' : '#fca5a5';
+  const danger  = isLight ? '#991b1b' : 'var(--danger)';
   const warning = isLight ? '#78350f' : 'var(--accent)';
 
   return (

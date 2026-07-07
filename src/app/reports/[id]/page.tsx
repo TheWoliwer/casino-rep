@@ -218,7 +218,7 @@ export default function CasinoReportPage() {
             {years.map(y => (
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: '#94a3b8' }}>
+                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: 'var(--text-muted)' }}>
                 {y}
               </button>
             ))}
@@ -227,7 +227,7 @@ export default function CasinoReportPage() {
           <div className="ml-auto flex items-center gap-2">
             <button onClick={exportExcel} disabled={loading}
               className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors disabled:opacity-40"
-              style={{ borderColor: 'var(--border-accent)', color: '#86efac' }}>
+              style={{ borderColor: 'var(--border-accent)', color: 'var(--success)' }}>
               Excel
             </button>
             {/* PDF Dropdown */}
@@ -286,10 +286,10 @@ export default function CasinoReportPage() {
           {/* Summary cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'Toplam Beklenen', usd: toUSD(total), try: total, color: '#94a3b8' },
-              { label: 'Tahsil Edilen', usd: toUSD(collected), try: collected, color: '#86efac' },
-              { label: 'Bekleyen', usd: toUSD(outstanding), try: outstanding, color: outstanding > 0 ? '#fca5a5' : '#86efac' },
-              { label: 'Tahsilat Oranı', usd: null, try: null, pct: `%${rate.toFixed(1)}`, color: rate >= 100 ? '#86efac' : rate > 50 ? 'var(--accent)' : '#fca5a5' },
+              { label: 'Toplam Beklenen', usd: toUSD(total), try: total, color: 'var(--text-muted)' },
+              { label: 'Tahsil Edilen', usd: toUSD(collected), try: collected, color: 'var(--success)' },
+              { label: 'Bekleyen', usd: toUSD(outstanding), try: outstanding, color: outstanding > 0 ? 'var(--danger)' : 'var(--success)' },
+              { label: 'Tahsilat Oranı', usd: null, try: null, pct: `%${rate.toFixed(1)}`, color: rate >= 100 ? 'var(--success)' : rate > 50 ? 'var(--accent)' : 'var(--danger)' },
             ].map(card => (
               <div key={card.label} className="rounded-xl p-4 border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
                 <p className="text-xs text-slate-500 mb-1">{card.label}</p>
@@ -312,11 +312,11 @@ export default function CasinoReportPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }} barSize={14}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false}
+                  <XAxis dataKey="name" tick={{ fill: 'var(--text-dim)', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: 'var(--text-dim)', fontSize: 11 }} axisLine={false} tickLine={false}
                     tickFormatter={v => v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v)} width={45} />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
-                  <Legend wrapperStyle={{ fontSize: 12, color: '#94a3b8', paddingTop: 12 }} />
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'var(--text-muted)', paddingTop: 12 }} />
                   <Bar dataKey="Ödenen" stackId="a" fill="#22c55e" radius={[0, 0, 2, 2]} />
                   <Bar dataKey="Kalan" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -360,11 +360,11 @@ export default function CasinoReportPage() {
                         {row ? <><span className="text-white">${fmtUSD(toUSD(row.turnover ?? 0))}</span><br/><span className="text-xs text-slate-500">₺{fmt(row.turnover ?? 0)}</span></> : '—'}
                       </td>
                       <td className="px-4 py-3 text-right font-medium"
-                        style={{ color: row && (row.paid_amount ?? 0) > 0 ? '#86efac' : '#475569' }}>
+                        style={{ color: row && (row.paid_amount ?? 0) > 0 ? 'var(--success)' : '#475569' }}>
                         {row ? <><span>${fmtUSD(toUSD(row.paid_amount ?? 0))}</span><br/><span className="text-xs opacity-60">₺{fmt(row.paid_amount ?? 0)}</span></> : '—'}
                       </td>
                       <td className="px-4 py-3 text-right font-medium"
-                        style={{ color: os > 0 ? '#fca5a5' : row ? '#86efac' : '#475569' }}>
+                        style={{ color: os > 0 ? 'var(--danger)' : row ? 'var(--success)' : '#475569' }}>
                         {row ? <><span>${fmtUSD(toUSD(os))}</span><br/><span className="text-xs opacity-60">₺{fmt(os)}</span></> : '—'}
                       </td>
                       <td className="px-4 py-3 text-right">
@@ -388,7 +388,7 @@ export default function CasinoReportPage() {
                     <td className="px-4 py-3 text-right font-bold text-green-400">${fmtUSD(toUSD(collected))}<br/><span className="text-xs text-slate-500 font-normal">₺{fmt(collected)}</span></td>
                     <td className="px-4 py-3 text-right font-bold text-red-400">${fmtUSD(toUSD(outstanding))}<br/><span className="text-xs text-slate-500 font-normal">₺{fmt(outstanding)}</span></td>
                     <td className="px-4 py-3 text-right">
-                      <span className="text-xs font-bold" style={{ color: rate >= 100 ? '#86efac' : rate > 50 ? 'var(--accent)' : '#fca5a5' }}>
+                      <span className="text-xs font-bold" style={{ color: rate >= 100 ? 'var(--success)' : rate > 50 ? 'var(--accent)' : 'var(--danger)' }}>
                         %{rate.toFixed(1)}
                       </span>
                     </td>

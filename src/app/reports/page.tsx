@@ -143,7 +143,7 @@ export default function ReportsPage() {
             {years.map(y => (
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: '#94a3b8' }}>
+                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: 'var(--text-muted)' }}>
                 {y}
               </button>
             ))}
@@ -249,9 +249,9 @@ export default function ReportsPage() {
         {!loading && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'Toplam Beklenen', try: totals.total, color: '#94a3b8' },
-              { label: month === 0 ? 'Tahsil Edilen' : `Tahsil Edilen (${MONTHS[month]})`, try: totals.collected, color: '#86efac' },
-              { label: month === 0 ? 'Bekleyen' : `Bekleyen (${MONTHS[month]})`,           try: totals.outstanding, color: '#fca5a5' },
+              { label: 'Toplam Beklenen', try: totals.total, color: 'var(--text-muted)' },
+              { label: month === 0 ? 'Tahsil Edilen' : `Tahsil Edilen (${MONTHS[month]})`, try: totals.collected, color: 'var(--success)' },
+              { label: month === 0 ? 'Bekleyen' : `Bekleyen (${MONTHS[month]})`,           try: totals.outstanding, color: 'var(--danger)' },
               { label: 'Tahsilat Oranı',  try: null, color: 'var(--accent)' },
             ].map(card => (
               <div key={card.label} className="rounded-xl p-4 border" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
@@ -340,11 +340,11 @@ export default function ReportsPage() {
                         <p>${fmtUSD(toUSD(row.total))}</p>
                         <p className="text-xs text-slate-500">₺{fmt(row.total)}</p>
                       </td>
-                      <td className="px-4 py-3 text-right font-medium" style={{ color: row.collected > 0 ? '#86efac' : '#475569' }}>
+                      <td className="px-4 py-3 text-right font-medium" style={{ color: row.collected > 0 ? 'var(--success)' : '#475569' }}>
                         <p>${fmtUSD(toUSD(row.collected))}</p>
                         <p className="text-xs opacity-60">₺{fmt(row.collected)}</p>
                       </td>
-                      <td className="px-4 py-3 text-right font-medium" style={{ color: row.outstanding > 0 ? '#fca5a5' : '#475569' }}>
+                      <td className="px-4 py-3 text-right font-medium" style={{ color: row.outstanding > 0 ? 'var(--danger)' : '#475569' }}>
                         <p>${fmtUSD(toUSD(row.outstanding))}</p>
                         <p className="text-xs opacity-60">₺{fmt(row.outstanding)}</p>
                       </td>
@@ -358,7 +358,7 @@ export default function ReportsPage() {
                               }} />
                           </div>
                           <span className="text-xs font-semibold"
-                            style={{ color: row.rate >= 100 ? '#86efac' : row.rate > 50 ? 'var(--accent)' : '#fca5a5' }}>
+                            style={{ color: row.rate >= 100 ? 'var(--success)' : row.rate > 50 ? 'var(--accent)' : 'var(--danger)' }}>
                             %{row.rate.toFixed(0)}
                           </span>
                         </div>

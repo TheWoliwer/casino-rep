@@ -259,7 +259,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                       </div>
                       {(parsedRows[i].bet > 0 || parsedRows[i].win > 0) && (
                         <p className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
-                          Net: <span style={{ color: (parsedRows[i].win - parsedRows[i].bet) < 0 ? '#fca5a5' : '#86efac', fontWeight: 600 }}>
+                          Net: <span style={{ color: (parsedRows[i].win - parsedRows[i].bet) < 0 ? 'var(--danger)' : 'var(--success)', fontWeight: 600 }}>
                             {fmt(parsedRows[i].win - parsedRows[i].bet)} ₺
                           </span>
                         </p>
@@ -282,7 +282,7 @@ export default function AylikFeeModal({ onClose }: { onClose: () => void }) {
                   </div>
                   <div className="flex justify-between">
                     <span style={{ color: 'var(--text-dim)' }}>Net Kar/Zarar</span>
-                    <span style={{ color: totalNet < 0 ? '#fca5a5' : '#86efac', fontWeight: 700 }}>{fmt(totalNet)} ₺</span>
+                    <span style={{ color: totalNet < 0 ? 'var(--danger)' : 'var(--success)', fontWeight: 700 }}>{fmt(totalNet)} ₺</span>
                   </div>
                   {feeType !== 'none' && (
                     <>

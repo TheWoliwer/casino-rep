@@ -19,6 +19,11 @@
 
   --accent:          #fbbf24;
   --accent-contrast: #0f0f17;
+
+  --success:        #86efac;
+  --success-strong: #4ade80;
+  --danger:         #fca5a5;
+  --danger-strong:  #f87171;
 }
 
 [data-theme="navy"] {
@@ -35,22 +40,34 @@
 
   --accent:          #60a5fa;
   --accent-contrast: #0a1220;
+
+  --success:        #86efac;
+  --success-strong: #4ade80;
+  --danger:         #fca5a5;
+  --danger-strong:  #f87171;
 }
 
+/* Beyaz tema — temiz beyaz zemin, ince gri çizgiler, mavi vurgu,
+   doygun yeşil/kırmızı rakamlar (finans paneli görünümü) */
 [data-theme="light"] {
-  --bg-base:       #eef1f7;
-  --bg-base-alt:   #e6eaf3;
-  --bg-surface:    #f7f9fc;
-  --bg-card:       #ffffff;
+  --bg-base:       #f5f7fa;
+  --bg-base-alt:   #eef2f7;
+  --bg-surface:    #ffffff;
+  --bg-card:       #f8fafc;
   --bg-input:      #ffffff;
-  --border-color:  #d3dae6;
-  --border-accent: #bcc8da;
-  --text-primary:  #1a2535;
-  --text-muted:    #4a5568;
-  --text-dim:      #7a8fa6;
+  --border-color:  #e5e9f0;
+  --border-accent: #d2dae5;
+  --text-primary:  #111827;
+  --text-muted:    #4b5563;
+  --text-dim:      #8492a6;
 
-  --accent:          #b45309;
+  --accent:          #2563eb;
   --accent-contrast: #ffffff;
+
+  --success:        #15803d;
+  --success-strong: #16a34a;
+  --danger:         #dc2626;
+  --danger-strong:  #dc2626;
 
   /* Durum renkleri - light */
   --color-success: #065f46;
@@ -66,6 +83,14 @@
 .bg-amber-500\/20 { background: color-mix(in srgb, var(--accent) 18%, transparent) !important; }
 .bg-amber-400\/10 { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
 .hover\:bg-amber-400\/10:hover { background: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+
+/* ── Light tema durum renkleri: soluk pasteller yerine doygun tonlar ── */
+[data-theme="light"] .text-green-400 { color: #15803d !important; }
+[data-theme="light"] .text-green-300 { color: #15803d !important; }
+[data-theme="light"] .text-red-400   { color: #dc2626 !important; }
+[data-theme="light"] .text-red-300   { color: #dc2626 !important; }
+[data-theme="light"] .bg-green-500\/20 { background: rgba(22,163,74,0.12) !important; }
+[data-theme="light"] .bg-red-500\/20   { background: rgba(220,38,38,0.10) !important; }
 
 /* ── Light tema metin override'ları ── */
 [data-theme="light"] .text-white        { color: #1a2535 !important; }

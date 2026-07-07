@@ -147,7 +147,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
                   className="flex-1 py-2 rounded-xl text-xs font-medium transition-all border"
                   style={feeType === t
                     ? { borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
-                    : { borderColor: 'var(--border-accent)', color: '#64748b', background: 'transparent' }}>
+                    : { borderColor: 'var(--border-accent)', color: 'var(--text-dim)', background: 'transparent' }}>
                   {FEE_TYPE_LABELS[t]}
                 </button>
               ))}
@@ -272,7 +272,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
                   <button
                     onClick={e => { e.stopPropagation(); setTooltip(tooltip === col.id ? null : col.id); }}
                     className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold transition-all hover:bg-white/10"
-                    style={{ color: '#64748b', border: '1px solid #2a2a3e' }}
+                    style={{ color: 'var(--text-dim)', border: '1px solid #2a2a3e' }}
                     title="Ekleniş tarihi">
                     i
                   </button>
@@ -321,7 +321,7 @@ export default function CasinoModal({ casino, cols, onClose, onSaved }: Props) {
                     className="flex-1 py-1.5 rounded-lg text-xs font-medium border transition-all"
                     style={newColPeriod === p
                       ? { borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
-                      : { borderColor: 'var(--border-accent)', color: '#64748b' }}>
+                      : { borderColor: 'var(--border-accent)', color: 'var(--text-dim)' }}>
                     {PERIOD_LABELS[p]}
                   </button>
                 ))}

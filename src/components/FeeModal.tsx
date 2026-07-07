@@ -43,9 +43,9 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const clr = {
-    success: isLight ? '#065f46' : '#86efac',
+    success: isLight ? '#065f46' : 'var(--success)',
     warning: isLight ? '#78350f' : 'var(--accent)',
-    danger:  isLight ? '#991b1b' : '#fca5a5',
+    danger:  isLight ? '#991b1b' : 'var(--danger)',
   };
   // Debt items — named breakdown stored as JSON
   const [debtItems, setDebtItems] = useState<DebtItem[]>(() => feeRow?.debt_items || []);
@@ -470,7 +470,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                       className="px-2 py-1 rounded-lg text-xs font-medium transition-all active:scale-95 border"
                       style={itemName === p
                         ? { borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, transparent)' }
-                        : { borderColor: 'var(--border-accent)', color: '#64748b', background: 'transparent' }}>
+                        : { borderColor: 'var(--border-accent)', color: 'var(--text-dim)', background: 'transparent' }}>
                       {p}
                     </button>
                   ))}
@@ -489,7 +489,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                             className="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all border"
                             style={defaultCurrency === c
                               ? { background: 'var(--accent)', color: 'var(--accent-contrast)', borderColor: 'var(--accent)' }
-                              : { background: 'transparent', color: '#64748b', borderColor: 'var(--border-accent)' }}>
+                              : { background: 'transparent', color: 'var(--text-dim)', borderColor: 'var(--border-accent)' }}>
                             {c}
                           </button>
                         ))}
@@ -694,7 +694,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
 
                   <div className="grid grid-cols-3 gap-3">
                     {[
-                      { label: 'Borç',   usd: toUSD(totalBorc), try: totalBorc, color: '#94a3b8' },
+                      { label: 'Borç',   usd: toUSD(totalBorc), try: totalBorc, color: 'var(--text-muted)' },
                       { label: 'Ödenen', usd: toUSD(totalPaid),  try: totalPaid, color: totalPaid > 0 ? clr.success : '#475569' },
                       { label: 'Kalan',  usd: toUSD(remaining),  try: remaining, color: remaining > 0 ? clr.danger : clr.success },
                     ].map(c => (
@@ -795,7 +795,7 @@ export default function FeeModal({ casino, month, year, feeRow, cols, colEntries
                   type="button"
                   onClick={() => setShowHistory(true)}
                   className="w-full py-2.5 rounded-xl text-sm font-medium border transition-all hover:bg-white/5 flex items-center justify-center gap-2"
-                  style={{ borderColor: 'var(--border-accent)', color: '#94a3b8' }}>
+                  style={{ borderColor: 'var(--border-accent)', color: 'var(--text-muted)' }}>
                   <span>🕐</span>
                   <span>İşlem Geçmişi</span>
                 </button>

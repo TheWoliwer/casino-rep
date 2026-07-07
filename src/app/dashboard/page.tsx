@@ -26,7 +26,7 @@ function cellInfo(feeRow: FeeRow | null, isLight: boolean): { bg: string; color:
   if (borc > 0 && paid >= borc) {
     return isLight
       ? { bg: '#d1fae5', color: '#065f46', label: '✓', border: '#6ee7b7' }
-      : { bg: 'rgba(34,197,94,0.1)', color: '#86efac', label: '✓', border: 'rgba(34,197,94,0.3)' };
+      : { bg: 'rgba(34,197,94,0.1)', color: 'var(--success)', label: '✓', border: 'rgba(34,197,94,0.3)' };
   }
   if (paid > 0) {
     return isLight
@@ -34,8 +34,8 @@ function cellInfo(feeRow: FeeRow | null, isLight: boolean): { bg: string; color:
       : { bg: 'color-mix(in srgb, var(--accent) 10%, transparent)', color: 'var(--accent)', label: '≈', border: 'color-mix(in srgb, var(--accent) 30%, transparent)' };
   }
   return isLight
-    ? { bg: '#fee2e2', color: '#991b1b', label: '✗', border: '#fca5a5' }
-    : { bg: 'rgba(239,68,68,0.1)', color: '#fca5a5', label: '✗', border: 'rgba(239,68,68,0.3)' };
+    ? { bg: '#fee2e2', color: '#991b1b', label: '✗', border: 'var(--danger)' }
+    : { bg: 'rgba(239,68,68,0.1)', color: 'var(--danger)', label: '✗', border: 'rgba(239,68,68,0.3)' };
 }
 
 function cellTooltip(feeRow: FeeRow): string {
@@ -188,7 +188,7 @@ export default function DashboardPage() {
             {years.map(y => (
               <button key={y} onClick={() => setYear(y)}
                 className="px-2.5 sm:px-3 py-1 rounded-lg text-xs font-medium transition-all"
-                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: '#94a3b8' }}>
+                style={y === year ? { background: 'var(--accent)', color: 'var(--accent-contrast)', fontWeight: 700 } : { color: 'var(--text-muted)' }}>
                 {y}
               </button>
             ))}
@@ -529,7 +529,7 @@ export default function DashboardPage() {
                                 <span
                                   title={cellTooltip(feeRow)}
                                   className="absolute top-0.5 right-0.5 w-3.5 h-3.5 flex items-center justify-center rounded-full text-[8px] font-bold cursor-default select-none"
-                                  style={{ background: 'rgba(100,116,139,0.15)', color: '#64748b', border: '1px solid rgba(100,116,139,0.25)', lineHeight: 1 }}>
+                                  style={{ background: 'rgba(100,116,139,0.15)', color: 'var(--text-dim)', border: '1px solid rgba(100,116,139,0.25)', lineHeight: 1 }}>
                                   i
                                 </span>
                               )}
