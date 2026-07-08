@@ -28,9 +28,15 @@ function fmtUSD(n: number) {
 type SortKey = 'name' | 'total' | 'collected' | 'outstanding' | 'rate';
 type SortDir = 'asc' | 'desc';
 
+function readStoredInt(key: string, fallback: number) {
+  if (typeof window === 'undefined') return fallback;
+  const saved = window.localStorage.getItem(key);
+  return saved !== null ? parseInt(saved) : fallback;
+}
+
 export default function ReportsPage() {
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(0); // 0 = tüm yıl
+  const [year, setYear] = useState(() => readStoredInt('ct_reports_year', new Date().getFullYear()));
+  const [month, setMonth] = useState(() => readStoredInt('ct_reports_month', 0)); // 0 = tüm yıl
   const [casinos, setCasinos] = useState<Casino[]>([]);
   const [feeRows, setFeeRows] = useState<FeeRow[]>([]);
   const [casinoCols, setCasinoCols] = useState<CasinoCol[]>([]);
@@ -86,6 +92,9 @@ export default function ReportsPage() {
   }, [year]);
 
   useEffect(() => { load(); }, [load]);
+
+  useEffect(() => { window.localStorage.setItem('ct_reports_year', String(year)); }, [year]);
+  useEffect(() => { window.localStorage.setItem('ct_reports_month', String(month)); }, [month]);
 
   function casinoStats(casino: Casino) {
     const rows = feeRows.filter(r => r.casino_id === casino.id);

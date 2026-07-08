@@ -552,7 +552,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                                 <div>
                                   <p className="font-bold text-white whitespace-nowrap">₺{fmt(t.amt)}</p>
                                   <p className="text-[9px] font-semibold whitespace-nowrap" style={{ color: t.paid >= t.amt ? 'var(--success-strong)' : 'var(--accent)' }}>
-                                    ₺{fmt(t.paid)} alındı
+                                    ₺{fmt(t.paid)}
                                   </p>
                                 </div>
                               ) : (
