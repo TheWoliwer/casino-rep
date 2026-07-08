@@ -549,12 +549,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                             <td key={ti} className="px-3 py-2 text-right border-r"
                               style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', boxShadow: '0 -2px 0 var(--border-accent)' }}>
                               {t.amt > 0 ? (
-                                <div>
-                                  <p className="font-bold text-white whitespace-nowrap">₺{fmt(t.amt)}</p>
-                                  <p className="text-[9px] font-semibold whitespace-nowrap" style={{ color: t.paid >= t.amt ? 'var(--success-strong)' : 'var(--accent)' }}>
-                                    ₺{fmt(t.paid)}
-                                  </p>
-                                </div>
+                                <p className="font-bold text-white whitespace-nowrap">₺{fmt(t.amt)}</p>
                               ) : (
                                 <span className="text-slate-700">—</span>
                               )}
