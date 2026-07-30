@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
 const secret = new TextEncoder().encode(process.env.SESSION_SECRET!);
-const PUBLIC = ['/login', '/api/auth/login'];
+const PUBLIC = ['/login', '/api/auth/login', '/api/auth/reset-password'];
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
