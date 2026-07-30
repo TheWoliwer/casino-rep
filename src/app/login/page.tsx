@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
+type ResetStep = 'idle' | 'code' | 'newpass' | 'success';
+
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError]       = useState('');
@@ -10,8 +12,16 @@ export default function LoginPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router   = useRouter();
 
+  // Reset akışı
+  const [resetOpen, setResetOpen]     = useState(false);
+  const [resetStep, setResetStep]     = useState<ResetStep>('idle');
+  const [resetCode, setResetCode]     = useState('');
+  const [newPass, setNewPass]         = useState('');
+  const [newPassConfirm, setNewPassConfirm] = useState('');
+  const [resetError, setResetError]   = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+
   useEffect(() => {
-    // Ana sayfayı önceden yükle — giriş sonrası bekletmeden açılsın
     router.prefetch('/reports');
     const t = setTimeout(() => {
       setVisible(true);
@@ -30,7 +40,6 @@ export default function LoginPage() {
       body: JSON.stringify({ password }),
     });
     if (res.ok) {
-      // loading açık kalsın — yönlendirme bitene kadar spinner dönsün
       router.replace('/reports');
     } else {
       setLoading(false);
@@ -38,6 +47,62 @@ export default function LoginPage() {
       setError(data.error || 'Hata oluştu');
       setPassword('');
       inputRef.current?.focus();
+    }
+  }
+
+  function openReset() {
+    setResetOpen(true);
+    setResetStep('code');
+    setResetCode('');
+    setNewPass('');
+    setNewPassConfirm('');
+    setResetError('');
+  }
+
+  function closeReset() {
+    setResetOpen(false);
+    setResetStep('idle');
+    setResetError('');
+  }
+
+  async function handleResetSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setResetError('');
+
+    if (resetStep === 'code') {
+      if (!resetCode.trim()) {
+        setResetError('Reset kodunu girin');
+        return;
+      }
+      setResetStep('newpass');
+      return;
+    }
+
+    if (resetStep === 'newpass') {
+      if (newPass.length < 4) {
+        setResetError('Şifre en az 4 karakter olmalı');
+        return;
+      }
+      if (newPass !== newPassConfirm) {
+        setResetError('Şifreler eşleşmiyor');
+        return;
+      }
+      setResetLoading(true);
+      try {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resetCode, newPassword: newPass }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setResetStep('success');
+        } else {
+          setResetError(data.error || 'Hata oluştu');
+        }
+      } finally {
+        setResetLoading(false);
+      }
     }
   }
 
@@ -83,14 +148,12 @@ export default function LoginPage() {
         {/* Sahte tablo */}
         <div className="absolute top-48 left-6 right-6 rounded-2xl border overflow-hidden"
           style={{ background: '#14141f', borderColor: '#2a2a3e' }}>
-          {/* Başlık satırı */}
           <div className="flex items-center gap-3 px-4 py-3" style={{ background: '#1a1a27' }}>
             <div className="w-28 h-2.5 rounded" style={{ background: '#334155' }} />
             {[...Array(12)].map((_, i) => (
               <div key={i} className="flex-1 h-2 rounded" style={{ background: '#2a2a3e' }} />
             ))}
           </div>
-          {/* Tablo satırları */}
           {[...Array(9)].map((_, i) => (
             <div key={i} className="flex items-center gap-3 px-4 py-2.5 border-t"
               style={{ borderColor: '#1e1e2e', background: i % 2 === 0 ? '#14141f' : '#16161f' }}>
@@ -182,11 +245,167 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-slate-700 text-[10px] mt-4">
+          {/* Şifremi unuttum linki */}
+          <div className="text-center mt-3">
+            <button
+              onClick={openReset}
+              className="text-slate-500 text-xs hover:text-amber-400 transition-colors underline underline-offset-2"
+            >
+              Şifremi unuttum
+            </button>
+          </div>
+
+          <p className="text-center text-slate-700 text-[10px] mt-3">
             Oturum 15 dakika sonra otomatik kapanır
           </p>
         </div>
       </div>
+
+      {/* ── Şifre Sıfırlama Modal ── */}
+      {resetOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center p-4 z-50"
+          style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}
+          onClick={e => { if (e.target === e.currentTarget) closeReset(); }}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl p-6"
+            style={{
+              background: 'rgba(18,18,28,0.97)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              boxShadow: '0 40px 80px rgba(0,0,0,0.8)',
+            }}
+          >
+            {/* Modal başlık */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-2">
+                <span className="text-amber-400 text-lg">🔑</span>
+                <h2 className="text-white font-semibold text-sm">Şifre Sıfırlama</h2>
+              </div>
+              <button
+                onClick={closeReset}
+                className="text-slate-600 hover:text-slate-400 transition-colors text-lg leading-none"
+              >
+                ✕
+              </button>
+            </div>
+
+            {resetStep === 'success' ? (
+              /* Başarı ekranı */
+              <div className="text-center py-4">
+                <div className="text-4xl mb-3">✅</div>
+                <p className="text-white font-semibold mb-1">Şifre güncellendi!</p>
+                <p className="text-slate-400 text-xs mb-5">Yeni şifrenizle giriş yapabilirsiniz.</p>
+                <button
+                  onClick={closeReset}
+                  className="w-full py-2.5 rounded-xl font-bold text-sm transition-all active:scale-[0.97]"
+                  style={{ background: '#fbbf24', color: '#0f0f17' }}
+                >
+                  Giriş yap
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleResetSubmit} className="space-y-3">
+
+                {resetStep === 'code' && (
+                  <>
+                    <p className="text-slate-400 text-xs mb-4">
+                      Güvenlik kodunu girerek şifrenizi sıfırlayabilirsiniz.
+                    </p>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Reset Kodu</label>
+                      <input
+                        type="text"
+                        value={resetCode}
+                        onChange={e => { setResetCode(e.target.value); setResetError(''); }}
+                        className="w-full px-4 py-3 rounded-xl text-sm text-white outline-none transition-all"
+                        style={{
+                          background: 'rgba(255,255,255,0.04)',
+                          border: resetError ? '1px solid rgba(239,68,68,0.45)' : '1px solid rgba(255,255,255,0.09)',
+                        }}
+                        placeholder="Güvenlik kodunuzu girin"
+                        autoFocus
+                      />
+                    </div>
+                  </>
+                )}
+
+                {resetStep === 'newpass' && (
+                  <>
+                    <p className="text-slate-400 text-xs mb-4">
+                      Yeni şifrenizi belirleyin.
+                    </p>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Yeni Şifre</label>
+                      <input
+                        type="password"
+                        value={newPass}
+                        onChange={e => { setNewPass(e.target.value); setResetError(''); }}
+                        className="w-full px-4 py-3 rounded-xl text-sm text-white outline-none transition-all"
+                        style={{
+                          background: 'rgba(255,255,255,0.04)',
+                          border: resetError ? '1px solid rgba(239,68,68,0.45)' : '1px solid rgba(255,255,255,0.09)',
+                          letterSpacing: newPass ? '0.18em' : 'normal',
+                        }}
+                        placeholder="••••••••"
+                        autoFocus
+                      />
+                    </div>
+                    <div>
+                      <label className="text-slate-400 text-xs mb-1 block">Şifre Tekrar</label>
+                      <input
+                        type="password"
+                        value={newPassConfirm}
+                        onChange={e => { setNewPassConfirm(e.target.value); setResetError(''); }}
+                        className="w-full px-4 py-3 rounded-xl text-sm text-white outline-none transition-all"
+                        style={{
+                          background: 'rgba(255,255,255,0.04)',
+                          border: resetError ? '1px solid rgba(239,68,68,0.45)' : '1px solid rgba(255,255,255,0.09)',
+                          letterSpacing: newPassConfirm ? '0.18em' : 'normal',
+                        }}
+                        placeholder="••••••••"
+                      />
+                    </div>
+                  </>
+                )}
+
+                {resetError && (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                    <span className="text-red-400 text-xs">⚠</span>
+                    <p className="text-red-400 text-xs">{resetError}</p>
+                  </div>
+                )}
+
+                <div className="flex gap-2 pt-1">
+                  {resetStep === 'newpass' && (
+                    <button
+                      type="button"
+                      onClick={() => { setResetStep('code'); setResetError(''); }}
+                      className="flex-1 py-2.5 rounded-xl font-medium text-sm transition-all"
+                      style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}
+                    >
+                      ← Geri
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={resetLoading}
+                    className="flex-1 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-[0.97] disabled:opacity-50"
+                    style={{ background: '#fbbf24', color: '#0f0f17' }}
+                  >
+                    {resetLoading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
+                        İşleniyor...
+                      </span>
+                    ) : resetStep === 'code' ? 'Devam Et →' : 'Şifreyi Güncelle'}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
