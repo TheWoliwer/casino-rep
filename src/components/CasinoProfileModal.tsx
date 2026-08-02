@@ -27,7 +27,7 @@ function formatShortDate(d: string) {
   return new Date(d).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-type Tab = 'table' | 'timeline' | 'monthly' | 'stats' | 'cols' | 'expenses' | 'info';
+type Tab = 'table' | 'timeline' | 'monthly' | 'stats' | 'cols' | 'expenses' | 'bilgiler' | 'notlar';
 
 type HistoryEvent = {
   key: string;
@@ -60,21 +60,28 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
   const [searchQ, setSearchQ] = useState('');
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
-  // Aylık detay
+  // AÜlık detay
   const [detailYear, setDetailYear] = useState(new Date().getFullYear());
   const [expandedMonth, setExpandedMonth] = useState<number | null>(null);
 
-  // ── Bilgiler & Notlar (JSON dosyasına kaydedilir) ──
-  const [infoWebsite, setInfoWebsite]         = useState('');
-  const [infoPhone, setInfoPhone]             = useState('');
-  const [infoContact, setInfoContact]         = useState('');
-  const [infoAddress, setInfoAddress]         = useState('');
-  const [infoTags, setInfoTags]               = useState('');
-  const [infoNotes, setInfoNotes]             = useState('');
-  const [infoLoading, setInfoLoading]         = useState(false);
-  const [infoSaving, setInfoSaving]           = useState(false);
-  const [infoSaved, setInfoSaved]             = useState(false);
-  const [infoError, setInfoError]             = useState('');
+  // ── Casino Bilgileri düzenle ──
+  const [editName, setEditName]           = useState(casino.name);
+  const [editFeeType, setEditFeeType]     = useState<'percent' | 'fixed' | 'none'>(casino.fee_type);
+  const [editFeeRate, setEditFeeRate]     = useState(String(casino.fee_rate ?? ''));
+  const [editFeeCur, setEditFeeCur]       = useState(casino.fee_currency || 'TRY');
+  const [editSaving, setEditSaving]       = useState(false);
+  const [editSaved, setEditSaved]         = useState(false);
+  const [editError, setEditError]         = useState('');
+
+  // ── Notlar (JSON dosyasına kaydedilir) ──
+  const [notes, setNotes]                 = useState('');
+  const [notesLoading, setNotesLoading]   = useState(false);
+  const [notesSaving, setNotesSaving]     = useState(false);
+  const [notesSaved, setNotesSaved]       = useState(false);
+  const [notesError, setNotesError]       = useState('');
+  const [notesDraft, setNotesDraft]       = useState(''); // edit draft
+  const [notesEditing, setNotesEditing]   = useState(false);
+  const [lastUpdated, setLastUpdated]     = useState<string | null>(null);
 
   const fetchAll = useCallback(async (silent: boolean) => {
     if (!silent) { setLoading(true); setError(''); }
@@ -101,47 +108,65 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
 
   useEffect(() => { fetchAll(false); }, [fetchAll]);
 
-  // Info sekmesi açıldığında JSON'dan yükle
+  // Notlar sekmesi açıldığında JSON'dan yükle
   useEffect(() => {
-    if (tab !== 'info') return;
-    setInfoLoading(true);
+    if (tab !== 'notlar') return;
+    setNotesLoading(true);
     fetch(`/api/casino-notes/${casino.id}`)
       .then(r => r.json())
       .then(d => {
-        setInfoWebsite(d.website ?? '');
-        setInfoPhone(d.phone ?? '');
-        setInfoContact(d.contactName ?? '');
-        setInfoAddress(d.address ?? '');
-        setInfoTags((d.tags ?? []).join(', '));
-        setInfoNotes(d.notes ?? '');
+        setNotes(d.notes ?? '');
+        setNotesDraft(d.notes ?? '');
+        setLastUpdated(d.updatedAt ?? null);
       })
       .catch(() => {})
-      .finally(() => setInfoLoading(false));
+      .finally(() => setNotesLoading(false));
   }, [tab, casino.id]);
 
-  async function saveInfo() {
-    setInfoSaving(true);
-    setInfoError('');
+  async function saveNotes() {
+    setNotesSaving(true);
+    setNotesError('');
     try {
-      const tags = infoTags.split(',').map(t => t.trim()).filter(Boolean);
       await fetch(`/api/casino-notes/${casino.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notes: notesDraft }),
+      });
+      setNotes(notesDraft);
+      setNotesEditing(false);
+      setNotesSaved(true);
+      setLastUpdated(new Date().toISOString());
+      setTimeout(() => setNotesSaved(false), 2500);
+    } catch {
+      setNotesError('Kaydedilemedi, tekrar dene.');
+    } finally {
+      setNotesSaving(false);
+    }
+  }
+
+  async function saveCasinoInfo() {
+    if (!editName.trim()) { setEditError('Casino adı boş olamaz'); return; }
+    setEditSaving(true);
+    setEditError('');
+    try {
+      const res = await fetch(`/api/casinos/${casino.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          website: infoWebsite,
-          phone: infoPhone,
-          contactName: infoContact,
-          address: infoAddress,
-          tags,
-          notes: infoNotes,
+          name: editName.trim(),
+          fee_type: editFeeType,
+          fee_rate: parseFloat(editFeeRate) || 0,
+          fee_currency: editFeeType === 'fixed' ? editFeeCur : 'TRY',
         }),
       });
-      setInfoSaved(true);
-      setTimeout(() => setInfoSaved(false), 2500);
-    } catch {
-      setInfoError('Kaydedilemedi, tekrar dene.');
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error || 'Hata'); }
+      setEditSaved(true);
+      setTimeout(() => setEditSaved(false), 2500);
+      onSaved?.();
+    } catch (err: unknown) {
+      setEditError(err instanceof Error ? err.message : 'Hata oluştu');
     } finally {
-      setInfoSaving(false);
+      setEditSaving(false);
     }
   }
 
@@ -448,7 +473,8 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
     { id: 'stats',    label: '📈 İstatistik' },
     { id: 'cols',     label: '📌 Özel Kalemler' },
     { id: 'expenses', label: '💸 Giderler' },
-    { id: 'info',     label: '📋 Bilgiler & Notlar' },
+    { id: 'bilgiler', label: '⚙️ Bilgiler' },
+    { id: 'notlar',   label: '📝 Notlar' },
   ];
 
   const chipStyle = (active: boolean) => active
@@ -1138,118 +1164,183 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                 </div>
               )}
 
-              {/* ═══ BİLGİLER & NOTLAR ═══ */}
-              {tab === 'info' && (
-                <div className="space-y-5 max-w-2xl">
-                  {infoLoading ? (
-                    <p className="text-slate-500 text-sm animate-pulse py-6 text-center">Yükleniyor...</p>
-                  ) : (
-                    <>
-                      {/* Casino Bilgileri */}
-                      <div className="rounded-xl border p-4 space-y-4" style={{ borderColor: 'var(--border-accent)', background: 'var(--bg-card)' }}>
-                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                          <span className="text-base">🏢</span> Casino Bilgileri
-                        </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[11px] text-slate-400 mb-1">🌐 Web Sitesi</label>
-                            <input
-                              type="text"
-                              value={infoWebsite}
-                              onChange={e => setInfoWebsite(e.target.value)}
-                              placeholder="https://casino.com"
-                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
-                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[11px] text-slate-400 mb-1">📞 Telefon</label>
-                            <input
-                              type="text"
-                              value={infoPhone}
-                              onChange={e => setInfoPhone(e.target.value)}
-                              placeholder="+90 5xx xxx xx xx"
-                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
-                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[11px] text-slate-400 mb-1">👤 İletişim Kişisi</label>
-                            <input
-                              type="text"
-                              value={infoContact}
-                              onChange={e => setInfoContact(e.target.value)}
-                              placeholder="Ad Soyad"
-                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
-                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[11px] text-slate-400 mb-1">📍 Adres / Konum</label>
-                            <input
-                              type="text"
-                              value={infoAddress}
-                              onChange={e => setInfoAddress(e.target.value)}
-                              placeholder="İstanbul, Türkiye"
-                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
-                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
-                            />
-                          </div>
-                          <div className="sm:col-span-2">
-                            <label className="block text-[11px] text-slate-400 mb-1">🏷️ Etiketler <span className="text-slate-600">(virgülle ayır)</span></label>
-                            <input
-                              type="text"
-                              value={infoTags}
-                              onChange={e => setInfoTags(e.target.value)}
-                              placeholder="VIP, Aktif, Riskli..."
-                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
-                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
-                            />
-                            {infoTags && (
-                              <div className="flex flex-wrap gap-1.5 mt-2">
-                                {infoTags.split(',').map(t => t.trim()).filter(Boolean).map(tag => (
-                                  <span key={tag} className="px-2 py-0.5 rounded-full text-[10px] font-semibold"
-                                    style={{ background: 'color-mix(in srgb, var(--accent) 15%, transparent)', color: 'var(--accent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
+              {/* ═══ BİLGİLER (casino ayarlarını düzenle) ═══ */}
+              {tab === 'bilgiler' && (
+                <div className="space-y-4 max-w-lg">
+                  <div className="rounded-xl border p-5 space-y-4" style={{ borderColor: 'var(--border-accent)', background: 'var(--bg-card)' }}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)' }}>⚙️</span>
+                      <div>
+                        <p className="text-sm font-bold text-white">Casino Ayarları</p>
+                        <p className="text-[11px] text-slate-500">Ad ve fee bilgilerini buradan güncelleyebilirsin</p>
+                      </div>
+                    </div>
+
+                    {/* Casino Adı */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Casino Adı</label>
+                      <input
+                        type="text"
+                        value={editName}
+                        onChange={e => setEditName(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
+                        style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                        placeholder="Casino adı"
+                      />
+                    </div>
+
+                    {/* Fee Türü */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Fee Türü</label>
+                      <div className="flex gap-2">
+                        {(['percent', 'fixed', 'none'] as const).map(t => (
+                          <button key={t} type="button" onClick={() => setEditFeeType(t)}
+                            className="flex-1 py-2 rounded-lg text-xs font-semibold transition-all border"
+                            style={editFeeType === t
+                              ? { background: 'color-mix(in srgb, var(--accent) 15%, transparent)', color: 'var(--accent)', borderColor: 'color-mix(in srgb, var(--accent) 40%, transparent)' }
+                              : { background: 'transparent', color: 'var(--text-dim)', borderColor: 'var(--border-accent)' }}>
+                            {t === 'percent' ? 'Yüzde %' : t === 'fixed' ? 'Sabit' : 'Yok'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Fee Oranı */}
+                    {editFeeType !== 'none' && (
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                          {editFeeType === 'percent' ? 'Fee Oranı (%)' : 'Sabit Tutar'}
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            value={editFeeRate}
+                            onChange={e => setEditFeeRate(e.target.value)}
+                            className="flex-1 px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
+                            style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                            placeholder="0"
+                          />
+                          {editFeeType === 'fixed' && (
+                            <select
+                              value={editFeeCur}
+                              onChange={e => setEditFeeCur(e.target.value)}
+                              className="px-3 py-2.5 rounded-lg text-sm outline-none"
+                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)', color: 'var(--text-primary)' }}>
+                              {['TRY', 'USD', 'EUR', 'CRYPTO'].map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                          )}
                         </div>
                       </div>
+                    )}
 
-                      {/* Notlar */}
-                      <div className="rounded-xl border p-4 space-y-3" style={{ borderColor: 'var(--border-accent)', background: 'var(--bg-card)' }}>
-                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                          <span className="text-base">📝</span> Notlar
-                        </h3>
-                        <textarea
-                          value={infoNotes}
-                          onChange={e => setInfoNotes(e.target.value)}
-                          placeholder="Bu casino hakkında özel notlarınızı buraya yazın..."
-                          rows={7}
-                          className="w-full px-3 py-3 rounded-lg text-sm text-white outline-none transition-all resize-none leading-relaxed"
-                          style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
-                        />
-                        <p className="text-[10px] text-slate-600">{infoNotes.length} karakter · Veriler sunucuda JSON dosyasında saklanır</p>
+                    {editError && (
+                      <div className="px-3 py-2 rounded-lg text-xs text-red-400" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                        ⚠️ {editError}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={saveCasinoInfo}
+                      disabled={editSaving}
+                      className="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] disabled:opacity-50"
+                      style={{ background: editSaved ? '#22c55e' : 'var(--accent)', color: editSaved ? '#fff' : 'var(--accent-contrast)' }}
+                    >
+                      {editSaving ? '⏳ Kaydediliyor...' : editSaved ? '✅ Kaydedildi!' : 'Kaydet'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══ NOTLAR ═══ */}
+              {tab === 'notlar' && (
+                <div className="max-w-2xl">
+                  {notesLoading ? (
+                    <div className="flex items-center justify-center py-16">
+                      <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
+                    </div>
+                  ) : notesEditing ? (
+                    /* Düzenleme modu */
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Not Düzenleniyor</p>
+                        <button onClick={() => { setNotesDraft(notes); setNotesEditing(false); }}
+                          className="text-xs text-slate-500 hover:text-slate-300 transition-colors">
+                          × İptal
+                        </button>
+                      </div>
+                      <textarea
+                        value={notesDraft}
+                        onChange={e => setNotesDraft(e.target.value)}
+                        autoFocus
+                        rows={14}
+                        className="w-full px-4 py-3.5 rounded-xl text-sm text-white outline-none transition-all resize-none leading-relaxed"
+                        style={{
+                          background: 'var(--bg-base)',
+                          border: '1.5px solid color-mix(in srgb, var(--accent) 40%, transparent)',
+                          fontFamily: 'inherit',
+                        }}
+                        placeholder={`${casino.name} hakkında notlarınızı buraya yazın...`}
+                      />
+                      <div className="flex items-center justify-between">
+                        <p className="text-[10px] text-slate-600">{notesDraft.length} karakter</p>
+                        {notesError && <p className="text-[11px] text-red-400">⚠ {notesError}</p>}
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => { setNotesDraft(notes); setNotesEditing(false); }}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
+                          style={{ background: 'transparent', border: '1px solid var(--border-accent)', color: 'var(--text-dim)' }}>
+                          İptal
+                        </button>
+                        <button onClick={saveNotes} disabled={notesSaving}
+                          className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] disabled:opacity-50"
+                          style={{ background: notesSaved ? '#22c55e' : 'var(--accent)', color: notesSaved ? '#fff' : 'var(--accent-contrast)' }}>
+                          {notesSaving ? '⏳ Kaydediliyor...' : '💾 Kaydet'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Görüntüleme modu */
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Notlar</p>
+                          {lastUpdated && (
+                            <p className="text-[10px] text-slate-600 mt-0.5">
+                              Son güncelleme: {new Date(lastUpdated).toLocaleString('tr-TR', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}
+                            </p>
+                          )}
+                        </div>
+                        <button onClick={() => { setNotesDraft(notes); setNotesEditing(true); }}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                          style={{ background: 'color-mix(in srgb, var(--accent) 10%, transparent)', color: 'var(--accent)', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)' }}>
+                          ✏️ Düzenle
+                        </button>
                       </div>
 
-                      {/* Kaydet butonu */}
-                      {infoError && (
-                        <div className="px-3 py-2 rounded-lg text-xs text-red-400" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
-                          ⚠ {infoError}
+                      {notes ? (
+                        <div
+                          className="w-full min-h-[280px] px-4 py-4 rounded-xl text-sm text-slate-200 leading-relaxed whitespace-pre-wrap"
+                          style={{
+                            background: 'var(--bg-base)',
+                            border: '1px solid var(--border-accent)',
+                            fontFamily: 'inherit',
+                          }}
+                        >
+                          {notes}
+                        </div>
+                      ) : (
+                        <div
+                          className="flex flex-col items-center justify-center min-h-[280px] rounded-xl gap-3 cursor-pointer"
+                          style={{ background: 'var(--bg-base)', border: '1px dashed var(--border-accent)' }}
+                          onClick={() => setNotesEditing(true)}
+                        >
+                          <span className="text-3xl">📝</span>
+                          <p className="text-slate-500 text-sm">Henüz not eklenmemiş</p>
+                          <p className="text-slate-600 text-xs">Tıkla ve yazmaya başla</p>
                         </div>
                       )}
-                      <button
-                        onClick={saveInfo}
-                        disabled={infoSaving}
-                        className="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] disabled:opacity-50"
-                        style={{ background: infoSaved ? '#22c55e' : 'var(--accent)', color: infoSaved ? '#fff' : 'var(--accent-contrast)' }}
-                      >
-                        {infoSaving ? '⏳ Kaydediliyor...' : infoSaved ? '✅ Kaydedildi!' : '💾 Kaydet'}
-                      </button>
-                    </>
+                    </div>
                   )}
                 </div>
               )}
