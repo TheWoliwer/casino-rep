@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { invalidatePasswordCache } from '@/lib/password-cache';
 
 export async function POST(req: NextRequest) {
   const { resetCode, newPassword } = await req.json();
@@ -25,5 +26,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Şifre güncellenemedi: ' + error.message }, { status: 500 });
   }
 
+  // Eski şifreyi cache'ten temizle
+  invalidatePasswordCache();
+
   return NextResponse.json({ ok: true });
 }
+

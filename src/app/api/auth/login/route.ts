@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { getCachedPassword } from '@/lib/password-cache';
 import { createSession, COOKIE } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
 
-  const { data } = await supabaseAdmin
-    .from('settings')
-    .select('v')
-    .eq('k', 'password')
-    .single();
+  // Cache'ten oku — ilk çağrıda Supabase'den çekip saklıyor,
+  // sonraki isteklerde anında dönüyor (0 ms gecikme).
+  const stored = await getCachedPassword();
 
-  if (!data || data.v !== password) {
+  if (!stored || stored !== password) {
     return NextResponse.json({ error: 'Şifre hatalı' }, { status: 401 });
   }
 
