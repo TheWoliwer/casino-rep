@@ -27,7 +27,7 @@ function formatShortDate(d: string) {
   return new Date(d).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-type Tab = 'table' | 'timeline' | 'monthly' | 'stats' | 'cols' | 'expenses';
+type Tab = 'table' | 'timeline' | 'monthly' | 'stats' | 'cols' | 'expenses' | 'info';
 
 type HistoryEvent = {
   key: string;
@@ -64,6 +64,18 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
   const [detailYear, setDetailYear] = useState(new Date().getFullYear());
   const [expandedMonth, setExpandedMonth] = useState<number | null>(null);
 
+  // ── Bilgiler & Notlar (JSON dosyasına kaydedilir) ──
+  const [infoWebsite, setInfoWebsite]         = useState('');
+  const [infoPhone, setInfoPhone]             = useState('');
+  const [infoContact, setInfoContact]         = useState('');
+  const [infoAddress, setInfoAddress]         = useState('');
+  const [infoTags, setInfoTags]               = useState('');
+  const [infoNotes, setInfoNotes]             = useState('');
+  const [infoLoading, setInfoLoading]         = useState(false);
+  const [infoSaving, setInfoSaving]           = useState(false);
+  const [infoSaved, setInfoSaved]             = useState(false);
+  const [infoError, setInfoError]             = useState('');
+
   const fetchAll = useCallback(async (silent: boolean) => {
     if (!silent) { setLoading(true); setError(''); }
     try {
@@ -88,6 +100,50 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
   }, [casino.id]);
 
   useEffect(() => { fetchAll(false); }, [fetchAll]);
+
+  // Info sekmesi açıldığında JSON'dan yükle
+  useEffect(() => {
+    if (tab !== 'info') return;
+    setInfoLoading(true);
+    fetch(`/api/casino-notes/${casino.id}`)
+      .then(r => r.json())
+      .then(d => {
+        setInfoWebsite(d.website ?? '');
+        setInfoPhone(d.phone ?? '');
+        setInfoContact(d.contactName ?? '');
+        setInfoAddress(d.address ?? '');
+        setInfoTags((d.tags ?? []).join(', '));
+        setInfoNotes(d.notes ?? '');
+      })
+      .catch(() => {})
+      .finally(() => setInfoLoading(false));
+  }, [tab, casino.id]);
+
+  async function saveInfo() {
+    setInfoSaving(true);
+    setInfoError('');
+    try {
+      const tags = infoTags.split(',').map(t => t.trim()).filter(Boolean);
+      await fetch(`/api/casino-notes/${casino.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          website: infoWebsite,
+          phone: infoPhone,
+          contactName: infoContact,
+          address: infoAddress,
+          tags,
+          notes: infoNotes,
+        }),
+      });
+      setInfoSaved(true);
+      setTimeout(() => setInfoSaved(false), 2500);
+    } catch {
+      setInfoError('Kaydedilemedi, tekrar dene.');
+    } finally {
+      setInfoSaving(false);
+    }
+  }
 
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
@@ -392,6 +448,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
     { id: 'stats',    label: '📈 İstatistik' },
     { id: 'cols',     label: '📌 Özel Kalemler' },
     { id: 'expenses', label: '💸 Giderler' },
+    { id: 'info',     label: '📋 Bilgiler & Notlar' },
   ];
 
   const chipStyle = (active: boolean) => active
@@ -1077,6 +1134,122 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
                         </div>
                       ))}
                     </div>
+                  )}
+                </div>
+              )}
+
+              {/* ═══ BİLGİLER & NOTLAR ═══ */}
+              {tab === 'info' && (
+                <div className="space-y-5 max-w-2xl">
+                  {infoLoading ? (
+                    <p className="text-slate-500 text-sm animate-pulse py-6 text-center">Yükleniyor...</p>
+                  ) : (
+                    <>
+                      {/* Casino Bilgileri */}
+                      <div className="rounded-xl border p-4 space-y-4" style={{ borderColor: 'var(--border-accent)', background: 'var(--bg-card)' }}>
+                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                          <span className="text-base">🏢</span> Casino Bilgileri
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[11px] text-slate-400 mb-1">🌐 Web Sitesi</label>
+                            <input
+                              type="text"
+                              value={infoWebsite}
+                              onChange={e => setInfoWebsite(e.target.value)}
+                              placeholder="https://casino.com"
+                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
+                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] text-slate-400 mb-1">📞 Telefon</label>
+                            <input
+                              type="text"
+                              value={infoPhone}
+                              onChange={e => setInfoPhone(e.target.value)}
+                              placeholder="+90 5xx xxx xx xx"
+                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
+                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] text-slate-400 mb-1">👤 İletişim Kişisi</label>
+                            <input
+                              type="text"
+                              value={infoContact}
+                              onChange={e => setInfoContact(e.target.value)}
+                              placeholder="Ad Soyad"
+                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
+                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] text-slate-400 mb-1">📍 Adres / Konum</label>
+                            <input
+                              type="text"
+                              value={infoAddress}
+                              onChange={e => setInfoAddress(e.target.value)}
+                              placeholder="İstanbul, Türkiye"
+                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
+                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-[11px] text-slate-400 mb-1">🏷️ Etiketler <span className="text-slate-600">(virgülle ayır)</span></label>
+                            <input
+                              type="text"
+                              value={infoTags}
+                              onChange={e => setInfoTags(e.target.value)}
+                              placeholder="VIP, Aktif, Riskli..."
+                              className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none transition-all"
+                              style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                            />
+                            {infoTags && (
+                              <div className="flex flex-wrap gap-1.5 mt-2">
+                                {infoTags.split(',').map(t => t.trim()).filter(Boolean).map(tag => (
+                                  <span key={tag} className="px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                                    style={{ background: 'color-mix(in srgb, var(--accent) 15%, transparent)', color: 'var(--accent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Notlar */}
+                      <div className="rounded-xl border p-4 space-y-3" style={{ borderColor: 'var(--border-accent)', background: 'var(--bg-card)' }}>
+                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                          <span className="text-base">📝</span> Notlar
+                        </h3>
+                        <textarea
+                          value={infoNotes}
+                          onChange={e => setInfoNotes(e.target.value)}
+                          placeholder="Bu casino hakkında özel notlarınızı buraya yazın..."
+                          rows={7}
+                          className="w-full px-3 py-3 rounded-lg text-sm text-white outline-none transition-all resize-none leading-relaxed"
+                          style={{ background: 'var(--bg-base)', border: '1px solid var(--border-accent)' }}
+                        />
+                        <p className="text-[10px] text-slate-600">{infoNotes.length} karakter · Veriler sunucuda JSON dosyasında saklanır</p>
+                      </div>
+
+                      {/* Kaydet butonu */}
+                      {infoError && (
+                        <div className="px-3 py-2 rounded-lg text-xs text-red-400" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                          ⚠ {infoError}
+                        </div>
+                      )}
+                      <button
+                        onClick={saveInfo}
+                        disabled={infoSaving}
+                        className="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] disabled:opacity-50"
+                        style={{ background: infoSaved ? '#22c55e' : 'var(--accent)', color: infoSaved ? '#fff' : 'var(--accent-contrast)' }}
+                      >
+                        {infoSaving ? '⏳ Kaydediliyor...' : infoSaved ? '✅ Kaydedildi!' : '💾 Kaydet'}
+                      </button>
+                    </>
                   )}
                 </div>
               )}
