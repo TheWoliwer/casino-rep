@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCachedPassword } from '@/lib/password-cache';
 import { createSession, COOKIE } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
 
-  // Cache'ten oku — ilk çağrıda Supabase'den çekip saklıyor,
-  // sonraki isteklerde anında dönüyor (0 ms gecikme).
-  const stored = await getCachedPassword();
+  // APP_PASSWORD env'den okunur — sıfır network çağrısı, anında karşılaştırma.
+  const stored = process.env.APP_PASSWORD;
 
   if (!stored || stored !== password) {
     return NextResponse.json({ error: 'Şifre hatalı' }, { status: 401 });
