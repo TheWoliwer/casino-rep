@@ -28,6 +28,15 @@ function fmtUSD(n: number) {
 type SortKey = 'name' | 'total' | 'collected' | 'outstanding' | 'rate';
 type SortDir = 'asc' | 'desc';
 
+interface ArchiveEntry {
+  id: number;
+  name: string;
+  fee_type: string;
+  fee_rate: number;
+  fee_currency: string;
+  archivedAt: string;
+}
+
 function readStoredInt(key: string, fallback: number) {
   if (typeof window === 'undefined') return fallback;
   const saved = window.localStorage.getItem(key);
@@ -56,6 +65,11 @@ export default function ReportsPage() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
+  // Arşiv
+  const [archiveModal, setArchiveModal] = useState(false);
+  const [archivedList, setArchivedList] = useState<ArchiveEntry[]>([]);
+  const [archiveLoading, setArchiveLoading] = useState(false);
+
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
@@ -69,16 +83,20 @@ export default function ReportsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [c, f, cc, ce] = await Promise.all([
+    const [c, f, cc, ce, arch] = await Promise.all([
       fetch('/api/casinos').then(r => r.json()),
       fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
       fetch('/api/casino-cols').then(r => r.json()),
       fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
+      fetch('/api/casino-archive').then(r => r.json()),
     ]);
-    setCasinos(Array.isArray(c) ? c : []);
+    const archList: ArchiveEntry[] = Array.isArray(arch) ? arch : [];
+    const archIds = new Set<number>(archList.map((a: ArchiveEntry) => a.id));
+    setCasinos((Array.isArray(c) ? c : []).filter((casino: Casino) => !archIds.has(casino.id)));
     setFeeRows(Array.isArray(f) ? f : []);
     setCasinoCols(Array.isArray(cc) ? cc : []);
     setColEntries(Array.isArray(ce) ? ce : []);
+    setArchivedList(archList);
     setLoading(false);
   }, [year]);
 
@@ -164,6 +182,22 @@ export default function ReportsPage() {
               style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               <span>+</span>
               <span className="hidden sm:inline">Casino Ekle</span>
+            </button>
+
+            {/* Arşiv */}
+            <button
+              onClick={() => setArchiveModal(true)}
+              title="Arşiv"
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all border"
+              style={{ borderColor: 'var(--border-accent)', color: 'var(--text-muted)' }}>
+              <span>📦</span>
+              <span className="hidden sm:inline">Arşiv</span>
+              {archivedList.length > 0 && (
+                <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold"
+                  style={{ background: 'rgba(251,191,36,0.15)', color: 'var(--accent)' }}>
+                  {archivedList.length}
+                </span>
+              )}
             </button>
             {/* Menü */}
             <div className="relative">
@@ -439,6 +473,82 @@ export default function ReportsPage() {
       {giderlerModal && <GiderlerModal year={year} onClose={() => setGiderlerModal(false)} />}
       {feeReportModal && <AylikFeeModal onClose={() => setFeeReportModal(false)} />}
       {cokluFeeModal && <CokluFeeModal onClose={() => setCokluFeeModal(false)} />}
+
+      {/* ═══ ARŞİV MODAL ═══ */}
+      {archiveModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setArchiveModal(false)}>
+          <div className="w-full max-w-xl rounded-2xl border flex flex-col"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', maxHeight: '80vh' }}
+            onClick={e => e.stopPropagation()}>
+
+            <div className="flex items-center justify-between px-5 py-4 border-b flex-shrink-0"
+              style={{ borderColor: 'var(--border-color)' }}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
+                  style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.2)' }}>📦</div>
+                <div>
+                  <h2 className="font-bold text-white text-sm">Arşiv</h2>
+                  <p className="text-[11px] text-slate-500">{archivedList.length} casino arşivde</p>
+                </div>
+              </div>
+              <button onClick={() => setArchiveModal(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all text-lg">×</button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4">
+              {archivedList.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-3">
+                  <span className="text-4xl">📭</span>
+                  <p className="text-slate-500 text-sm">Henüz arşivlenen casino yok</p>
+                  <p className="text-slate-600 text-xs">Dashboard'daki 📦 butonuyla arşivleyebilirsin</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {archivedList.map(entry => (
+                    <div key={entry.id}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl border"
+                      style={{ background: 'var(--bg-card)', borderColor: 'var(--border-accent)' }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm"
+                        style={{ background: 'rgba(148,163,184,0.08)', border: '1px solid var(--border-accent)' }}>🏛️</div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white text-sm truncate">{entry.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-md font-medium"
+                            style={{ background: 'rgba(251,191,36,0.1)', color: 'var(--accent)' }}>
+                            {entry.fee_type === 'percent' ? `%${entry.fee_rate}` :
+                              entry.fee_type === 'fixed' ? `Sabit ${entry.fee_rate} ${entry.fee_currency}` : 'Fee yok'}
+                          </span>
+                          <span className="text-[10px] text-slate-500">
+                            {new Date(entry.archivedAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          setArchiveLoading(true);
+                          await fetch('/api/casino-archive', {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: entry.id }),
+                          });
+                          await load();
+                          setArchiveLoading(false);
+                        }}
+                        disabled={archiveLoading}
+                        className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 disabled:opacity-50"
+                        style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>
+                        ↩ Geri Yükle
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
