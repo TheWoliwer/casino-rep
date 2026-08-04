@@ -16,6 +16,16 @@ const MONTHS = ['','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki'
 interface FeeCell { casino: Casino; month: number; }
 interface CasinoManage { casino: Casino; }
 
+// Arşiv entry (JSON dosyasından)
+interface ArchiveEntry {
+  id: number;
+  name: string;
+  fee_type: string;
+  fee_rate: number;
+  fee_currency: string;
+  archivedAt: string;
+}
+
 
 function cellInfo(feeRow: FeeRow | null, isLight: boolean): { bg: string; color: string; label: string; border: string } {
   const empty = { bg: 'transparent', color: isLight ? '#7a8fa6' : '#334155', label: '–', border: 'var(--border-color)' };
@@ -74,6 +84,12 @@ export default function DashboardPage() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
+  // Arşiv
+  const [archiveModal, setArchiveModal] = useState(false);
+  const [archivedList, setArchivedList] = useState<ArchiveEntry[]>([]);
+  const [archivedIds, setArchivedIds] = useState<Set<number>>(new Set());
+  const [archiveLoading, setArchiveLoading] = useState(false);
+
   // Drag & drop sıralama
   const [dragId, setDragId]       = useState<number | null>(null);
   const [dragOverId, setDragOverId] = useState<number | null>(null);
@@ -121,31 +137,62 @@ export default function DashboardPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [c, f, cc, ce] = await Promise.all([
+    const [c, f, cc, ce, arch] = await Promise.all([
       fetch('/api/casinos').then(r => r.json()),
       fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
       fetch('/api/casino-cols').then(r => r.json()),
       fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
+      fetch('/api/casino-archive').then(r => r.json()),
     ]);
-    setCasinos(Array.isArray(c) ? c : []);
+    const archList: ArchiveEntry[] = Array.isArray(arch) ? arch : [];
+    const archIds = new Set<number>(archList.map((a: ArchiveEntry) => a.id));
+    setCasinos((Array.isArray(c) ? c : []).filter((casino: Casino) => !archIds.has(casino.id)));
     setFeeRows(Array.isArray(f) ? f : []);
     setCasinoCols(Array.isArray(cc) ? cc : []);
     setColEntries(Array.isArray(ce) ? ce : []);
+    setArchivedList(archList);
+    setArchivedIds(archIds);
     setLoading(false);
   }, [year]);
 
   const silentRefresh = useCallback(async () => {
-    const [c, f, cc, ce] = await Promise.all([
+    const [c, f, cc, ce, arch] = await Promise.all([
       fetch('/api/casinos').then(r => r.json()),
       fetch(`/api/fee-rows?year=${year}`).then(r => r.json()),
       fetch('/api/casino-cols').then(r => r.json()),
       fetch(`/api/col-entries?year=${year}`).then(r => r.json()),
+      fetch('/api/casino-archive').then(r => r.json()),
     ]);
-    setCasinos(Array.isArray(c) ? c : []);
+    const archList: ArchiveEntry[] = Array.isArray(arch) ? arch : [];
+    const archIds = new Set<number>(archList.map((a: ArchiveEntry) => a.id));
+    setCasinos((Array.isArray(c) ? c : []).filter((casino: Casino) => !archIds.has(casino.id)));
     setFeeRows(Array.isArray(f) ? f : []);
     setCasinoCols(Array.isArray(cc) ? cc : []);
     setColEntries(Array.isArray(ce) ? ce : []);
+    setArchivedList(archList);
+    setArchivedIds(archIds);
   }, [year]);
+
+  async function archiveCasino(casino: Casino) {
+    if (!confirm(`"${casino.name}" arşivlensin mi? Dashboard'dan kaldırılır, arşivden geri yükleyebilirsin.`)) return;
+    await fetch('/api/casino-archive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(casino),
+    });
+    load();
+  }
+
+  async function restoreCasino(entry: ArchiveEntry) {
+    setArchiveLoading(true);
+    await fetch('/api/casino-archive', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: entry.id }),
+    });
+    await load();
+    setArchiveLoading(false);
+  }
 
   useEffect(() => { load(); }, [load]);
 
@@ -216,6 +263,22 @@ export default function DashboardPage() {
               style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               <span>+</span>
               <span className="hidden sm:inline">Casino Ekle</span>
+            </button>
+
+            {/* Arşiv butonu */}
+            <button
+              onClick={() => setArchiveModal(true)}
+              title="Arşiv"
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all border flex-shrink-0"
+              style={{ borderColor: 'var(--border-accent)', color: 'var(--text-muted)' }}>
+              <span>📦</span>
+              <span className="hidden sm:inline">Arşiv</span>
+              {archivedList.length > 0 && (
+                <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold"
+                  style={{ background: 'rgba(251,191,36,0.15)', color: 'var(--accent)' }}>
+                  {archivedList.length}
+                </span>
+              )}
             </button>
 
             {/* Masaüstü Raporlar dropdown */}
@@ -385,6 +448,13 @@ export default function DashboardPage() {
                       <span className="text-sm">⚙</span>
                     </button>
 
+                    <button onClick={() => archiveCasino(casino)}
+                      title="Arşivle"
+                      className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-amber-400 transition-colors"
+                      style={{ border: '1px solid var(--border-accent)' }}>
+                      <span className="text-sm">📦</span>
+                    </button>
+
                     <button onClick={() => setExpandedId(isExpanded ? null : casino.id)}
                       className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-slate-500 transition-transform"
                       style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
@@ -508,6 +578,13 @@ export default function DashboardPage() {
                                   style={{ background: '#f97316' }} />
                               )}
                             </button>
+                            <button
+                              onClick={() => archiveCasino(casino)}
+                              title="Arşivle"
+                              className="flex-shrink-0 flex items-center px-2 py-1 rounded-lg text-xs font-medium transition-all hover:bg-amber-400/10"
+                              style={{ color: '#94a3b8', border: '1px solid var(--border-accent)' }}>
+                              <span>📦</span>
+                            </button>
                           </div>
                         </td>
 
@@ -601,6 +678,81 @@ export default function DashboardPage() {
           onClose={() => setProfileModal(null)}
           onSaved={silentRefresh}
         />
+      )}
+
+      {/* ═══ ARŞİV MODAL ═══ */}
+      {archiveModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setArchiveModal(false)}>
+          <div className="w-full max-w-xl rounded-2xl border flex flex-col"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', maxHeight: '80vh' }}
+            onClick={e => e.stopPropagation()}>
+
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b flex-shrink-0"
+              style={{ borderColor: 'var(--border-color)' }}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
+                  style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.2)' }}>📦</div>
+                <div>
+                  <h2 className="font-bold text-white text-sm">Arşiv</h2>
+                  <p className="text-[11px] text-slate-500">{archivedList.length} casino arşivde</p>
+                </div>
+              </div>
+              <button onClick={() => setArchiveModal(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all text-lg">×</button>
+            </div>
+
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto p-4">
+              {archivedList.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-3">
+                  <span className="text-4xl">📭</span>
+                  <p className="text-slate-500 text-sm">Henüz arşivlenen casino yok</p>
+                  <p className="text-slate-600 text-xs">Casino satırındaki 📦 butonuyla arşivleyebilirsin</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {archivedList.map(entry => (
+                    <div key={entry.id}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl border"
+                      style={{ background: 'var(--bg-card)', borderColor: 'var(--border-accent)' }}>
+
+                      {/* Icon */}
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm"
+                        style={{ background: 'rgba(148,163,184,0.08)', border: '1px solid var(--border-accent)' }}>🏛️</div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white text-sm truncate">{entry.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-md font-medium"
+                            style={{ background: 'rgba(251,191,36,0.1)', color: 'var(--accent)' }}>
+                            {entry.fee_type === 'percent' ? `%${entry.fee_rate}` :
+                              entry.fee_type === 'fixed' ? `Sabit ${entry.fee_rate} ${entry.fee_currency}` : 'Fee yok'}
+                          </span>
+                          <span className="text-[10px] text-slate-500">
+                            {new Date(entry.archivedAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Geri yükle */}
+                      <button
+                        onClick={() => restoreCasino(entry)}
+                        disabled={archiveLoading}
+                        className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 disabled:opacity-50"
+                        style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>
+                        ↩ Geri Yükle
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
     </div>
