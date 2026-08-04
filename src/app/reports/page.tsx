@@ -75,6 +75,16 @@ export default function ReportsPage() {
     router.push('/login');
   }
 
+  async function archiveCasino(casino: Casino) {
+    if (!confirm(`"${casino.name}" arşivlensin mi?`)) return;
+    await fetch('/api/casino-archive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(casino),
+    });
+    load();
+  }
+
   useEffect(() => {
     fetch('/api/currency').then(r => r.json()).then(d => {
       if (d.usd) setUsdRate(parseFloat(d.usd));
@@ -467,6 +477,7 @@ export default function ReportsPage() {
           casino={profileCasino}
           onClose={() => setProfileCasino(null)}
           onSaved={silentRefresh}
+          onArchive={(casino) => { setProfileCasino(null); archiveCasino(casino); }}
         />
       )}
       {addModal && <AddCasinoModal onClose={() => setAddModal(false)} onAdded={load} />}

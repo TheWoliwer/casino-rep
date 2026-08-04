@@ -677,6 +677,7 @@ export default function DashboardPage() {
           casino={profileModal}
           onClose={() => setProfileModal(null)}
           onSaved={silentRefresh}
+          onArchive={(casino) => { setProfileModal(null); archiveCasino(casino); }}
         />
       )}
 

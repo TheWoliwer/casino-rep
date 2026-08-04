@@ -8,6 +8,7 @@ interface Props {
   casino: Casino;
   onClose: () => void;
   onSaved?: () => void; // profil içinden düzenleme yapılırsa dashboard'ı tazelemek için
+  onArchive?: (casino: Casino) => void;
 }
 
 const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
@@ -41,7 +42,7 @@ type HistoryEvent = {
   txId: number | null;  // ödeme işlemi
 };
 
-export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) {
+export default function CasinoProfileModal({ casino, onClose, onSaved, onArchive }: Props) {
   const [feeRows, setFeeRows] = useState<FeeRow[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [cols, setCols] = useState<CasinoCol[]>([]);
@@ -53,6 +54,7 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
 
   const [tab, setTab] = useState<Tab>('table');
   const [editMonth, setEditMonth] = useState<number | null>(null);
+  const [optOpen, setOptOpen] = useState(false);
 
   // Hareketler filtreleri
   const [typeFilter, setTypeFilter] = useState<'all' | 'payment' | 'entry'>('all');
@@ -505,8 +507,50 @@ export default function CasinoProfileModal({ casino, onClose, onSaved }: Props) 
               </p>
             </div>
           </div>
-          <button onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all text-xl flex-shrink-0">×</button>
+          <div className="flex items-center gap-2">
+            {/* ⋯ Seçenekler dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setOptOpen(o => !o)}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all hover:bg-white/5"
+                style={{ borderColor: 'var(--border-accent)', color: 'var(--text-dim)' }}
+              >
+                <span className="text-base leading-none">&#8943;</span>
+                <span className="hidden sm:inline text-[11px]">Seçenekler</span>
+              </button>
+              {optOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setOptOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-44 rounded-xl border shadow-xl z-50 overflow-hidden"
+                    style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-accent)' }}>
+                    <button
+                      onClick={() => {
+                        setOptOpen(false);
+                        if (onArchive) {
+                          onArchive(casino);
+                        } else {
+                          // fallback: doğrudan API'ye gönder ve kapat
+                          fetch('/api/casino-archive', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(casino),
+                          }).then(() => onClose());
+                        }
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs hover:bg-white/5 transition-colors text-left"
+                      style={{ color: '#f59e0b' }}
+                    >
+                      <span>📦</span>
+                      <span>Arşivle</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <button onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all text-xl flex-shrink-0">&#215;</button>
+          </div>
         </div>
 
         {/* Genel özet — sabit üst alan */}
