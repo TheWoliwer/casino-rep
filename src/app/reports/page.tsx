@@ -377,7 +377,7 @@ export default function ReportsPage() {
                       className="cursor-pointer transition-colors hover:bg-white/5"
                       style={{ borderTop: '1px solid #1e1e2e', background: i % 2 === 0 ? 'var(--bg-base)' : 'var(--bg-base-alt)' }}>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-semibold text-white">{row.casino.name}</span>
                           <button
                             onClick={e => { e.stopPropagation(); setProfileCasino(row.casino); }}
@@ -385,6 +385,13 @@ export default function ReportsPage() {
                             className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold border transition-all active:scale-95 flex-shrink-0"
                             style={{ borderColor: 'color-mix(in srgb, var(--accent) 40%, transparent)', color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 8%, transparent)' }}>
                             👤 Profil
+                          </button>
+                          <button
+                            onClick={e => { e.stopPropagation(); archiveCasino(row.casino); }}
+                            title="Arşivle"
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold border transition-all active:scale-95 flex-shrink-0"
+                            style={{ borderColor: 'rgba(148,163,184,0.25)', color: '#94a3b8', background: 'rgba(148,163,184,0.06)' }}>
+                            📦 Arşivle
                           </button>
                         </div>
                       </td>
