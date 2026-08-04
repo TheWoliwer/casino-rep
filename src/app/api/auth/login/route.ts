@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 import { createSession, COOKIE } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
 
-  // APP_PASSWORD env'den okunur — sıfır network çağrısı, anında karşılaştırma.
-  const stored = process.env.APP_PASSWORD;
+  // 1. Önce env'den kontrol — anında, sıfır gecikme
+  const envPassword = process.env.APP_PASSWORD;
+  let ok = envPassword === password;
 
-  if (!stored || stored !== password) {
+  // 2. Env eşleşmediyse Supabase'den çek (reset sonrası devreye girer)
+  if (!ok) {
+    const { data } = await supabaseAdmin
+      .from('settings')
+      .select('v')
+      .eq('k', 'password')
+      .single();
+    ok = !!data && data.v === password;
+  }
+
+  if (!ok) {
     return NextResponse.json({ error: 'Şifre hatalı' }, { status: 401 });
   }
 
