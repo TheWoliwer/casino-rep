@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
-
-const DATA_FILE = path.join(process.cwd(), 'data', 'casino-archive.json');
+import { supabaseAdmin } from '@/lib/supabase';
 
 export interface ArchiveEntry {
   id: number;
@@ -13,18 +10,22 @@ export interface ArchiveEntry {
   archivedAt: string;
 }
 
+const ARCHIVE_KEY = 'casino_archive';
+
 async function readArchive(): Promise<ArchiveEntry[]> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+  const { data } = await supabaseAdmin
+    .from('settings')
+    .select('v')
+    .eq('k', ARCHIVE_KEY)
+    .maybeSingle();
+  if (!data?.v) return [];
+  try { return JSON.parse(data.v); } catch { return []; }
 }
 
 async function writeArchive(entries: ArchiveEntry[]) {
-  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(entries, null, 2), 'utf-8');
+  await supabaseAdmin
+    .from('settings')
+    .upsert({ k: ARCHIVE_KEY, v: JSON.stringify(entries) }, { onConflict: 'k' });
 }
 
 /** Arşivdeki casinoları listele */
@@ -38,7 +39,6 @@ export async function POST(req: NextRequest) {
   const casino = await req.json();
   const entries = await readArchive();
 
-  // Zaten arşivdeyse güncelle
   const existing = entries.findIndex((e) => e.id === casino.id);
   const entry: ArchiveEntry = {
     id: casino.id,
@@ -63,7 +63,6 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   const entries = await readArchive();
-  const filtered = entries.filter((e) => e.id !== id);
-  await writeArchive(filtered);
+  await writeArchive(entries.filter((e) => e.id !== id));
   return NextResponse.json({ ok: true });
 }

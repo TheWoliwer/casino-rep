@@ -1,31 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
-
-const DATA_FILE = path.join(process.cwd(), 'data', 'casino-notes.json');
-
-async function readAll(): Promise<Record<string, CasinoNote>> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
-}
-
-async function writeAll(data: Record<string, CasinoNote>) {
-  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
-}
+import { supabaseAdmin } from '@/lib/supabase';
 
 export interface CasinoNote {
-  website?: string;
-  phone?: string;
-  contactName?: string;
-  address?: string;
-  tags?: string[];
   notes?: string;
   updatedAt?: string;
+}
+
+// key formatı: note_{casinoId}
+function noteKey(id: string) {
+  return `note_${id}`;
 }
 
 export async function GET(
@@ -33,8 +16,18 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const all = await readAll();
-  return NextResponse.json(all[id] ?? {});
+  const { data } = await supabaseAdmin
+    .from('settings')
+    .select('v')
+    .eq('k', noteKey(id))
+    .maybeSingle();
+
+  if (!data?.v) return NextResponse.json({});
+  try {
+    return NextResponse.json(JSON.parse(data.v));
+  } catch {
+    return NextResponse.json({ notes: data.v });
+  }
 }
 
 export async function PUT(
@@ -43,8 +36,14 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body: CasinoNote = await req.json();
-  const all = await readAll();
-  all[id] = { ...body, updatedAt: new Date().toISOString() };
-  await writeAll(all);
-  return NextResponse.json(all[id]);
+  const payload: CasinoNote = { ...body, updatedAt: new Date().toISOString() };
+
+  const { error } = await supabaseAdmin
+    .from('settings')
+    .upsert({ k: noteKey(id), v: JSON.stringify(payload) }, { onConflict: 'k' });
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  return NextResponse.json(payload);
 }
