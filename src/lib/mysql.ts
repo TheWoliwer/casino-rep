@@ -16,6 +16,7 @@ const pool = mysql.createPool({
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000,
   charset: 'utf8mb4',
+  decimalNumbers: true,
 });
 
 export async function query<T = any>(sql: string, params: any[] = []): Promise<T[]> {

@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, queryOne, execute } from '@/lib/mysql';
 
+function formatExpense(row: any) {
+  if (!row) return null;
+  return {
+    ...row,
+    id: Number(row.id),
+    year: Number(row.year),
+    month: Number(row.month),
+    amount: Number(row.amount) || 0,
+    casino_id: row.casino_id ? Number(row.casino_id) : null,
+  };
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -32,7 +44,7 @@ export async function GET(req: NextRequest) {
     sql += ' ORDER BY e.created_at ASC';
 
     const rows = await query(sql, params);
-    return NextResponse.json(rows);
+    return NextResponse.json(rows.map(formatExpense));
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -49,11 +61,11 @@ export async function POST(req: NextRequest) {
 
     const result = await execute(
       'INSERT INTO expenses (name, amount, currency, year, month, note, casino_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [name, amount, currency || 'TRY', year, month, note || '', casino_id || null]
+      [name, Number(amount) || 0, currency || 'TRY', Number(year), Number(month), note || '', casino_id ? Number(casino_id) : null]
     );
 
     const inserted = await queryOne('SELECT * FROM expenses WHERE id = ?', [result.insertId]);
-    return NextResponse.json(inserted);
+    return NextResponse.json(formatExpense(inserted));
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

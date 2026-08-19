@@ -3,16 +3,29 @@ import { query, queryOne, execute } from '@/lib/mysql';
 
 function formatFeeRow(row: any) {
   if (!row) return null;
-  if (typeof row.debt_items === 'string') {
+  let debt_items = row.debt_items;
+  if (typeof debt_items === 'string') {
     try {
-      row.debt_items = JSON.parse(row.debt_items);
+      debt_items = JSON.parse(debt_items);
     } catch {
-      row.debt_items = [];
+      debt_items = [];
     }
-  } else if (!row.debt_items) {
-    row.debt_items = [];
+  } else if (!debt_items) {
+    debt_items = [];
   }
-  return row;
+
+  return {
+    ...row,
+    id: Number(row.id),
+    casino_id: Number(row.casino_id),
+    year: Number(row.year),
+    month: Number(row.month),
+    turnover: Number(row.turnover) || 0,
+    fee_amount: Number(row.fee_amount) || 0,
+    paid_amount: Number(row.paid_amount) || 0,
+    status: Number(row.status) || 0,
+    debt_items,
+  };
 }
 
 export async function GET(req: NextRequest) {

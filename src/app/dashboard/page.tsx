@@ -30,8 +30,8 @@ interface ArchiveEntry {
 function cellInfo(feeRow: FeeRow | null, isLight: boolean): { bg: string; color: string; label: string; border: string } {
   const empty = { bg: 'transparent', color: isLight ? '#7a8fa6' : '#334155', label: '–', border: 'var(--border-color)' };
   if (!feeRow) return empty;
-  const paid = feeRow.paid_amount ?? 0;
-  const borc = feeRow.turnover ?? 0;
+  const paid = Number(feeRow.paid_amount) || 0;
+  const borc = Number(feeRow.turnover) || 0;
   if (borc === 0 && paid === 0) return empty;
   if (borc > 0 && paid >= borc) {
     return isLight
@@ -49,12 +49,15 @@ function cellInfo(feeRow: FeeRow | null, isLight: boolean): { bg: string; color:
 }
 
 function cellTooltip(feeRow: FeeRow): string {
-  const fmt = (n: number) => n.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const fmt = (n: number) => (Number(n) || 0).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   const lines: string[] = [];
-  if (feeRow.turnover > 0) lines.push(`Ciro: ₺${fmt(feeRow.turnover)}`);
-  if (feeRow.fee_amount > 0) lines.push(`Fee: ₺${fmt(feeRow.fee_amount)}`);
-  if (feeRow.paid_amount > 0) lines.push(`Ödenen: ₺${fmt(feeRow.paid_amount)}`);
-  const rem = feeRow.turnover - feeRow.paid_amount;
+  const turnover = Number(feeRow.turnover) || 0;
+  const fee_amount = Number(feeRow.fee_amount) || 0;
+  const paid_amount = Number(feeRow.paid_amount) || 0;
+  if (turnover > 0) lines.push(`Ciro: ₺${fmt(turnover)}`);
+  if (fee_amount > 0) lines.push(`Fee: ₺${fmt(fee_amount)}`);
+  if (paid_amount > 0) lines.push(`Ödenen: ₺${fmt(paid_amount)}`);
+  const rem = turnover - paid_amount;
   if (rem > 0) lines.push(`Kalan: ₺${fmt(rem)}`);
   if (feeRow.note) lines.push(`Not: ${feeRow.note}`);
   return lines.join('\n') || '—';

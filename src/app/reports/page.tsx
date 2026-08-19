@@ -126,11 +126,11 @@ export default function ReportsPage() {
 
   function casinoStats(casino: Casino) {
     const rows = feeRows.filter(r => r.casino_id === casino.id);
-    const total = rows.reduce((s, r) => s + (r.turnover ?? 0), 0); // Beklenen — her zaman yıllık toplam
+    const total = rows.reduce((s, r) => s + (Number(r.turnover) || 0), 0); // Beklenen — her zaman yıllık toplam
     // Ay seçiliyse Tahsil/Bekleyen o aya göre hesaplanır
     const scoped = month === 0 ? rows : rows.filter(r => r.month === month);
-    const scopedTotal = scoped.reduce((s, r) => s + (r.turnover ?? 0), 0);
-    const collected = scoped.reduce((s, r) => s + (r.paid_amount ?? 0), 0);
+    const scopedTotal = scoped.reduce((s, r) => s + (Number(r.turnover) || 0), 0);
+    const collected = scoped.reduce((s, r) => s + (Number(r.paid_amount) || 0), 0);
     const outstanding = Math.max(0, scopedTotal - collected);
     const rate = scopedTotal > 0 ? (collected / scopedTotal) * 100 : 0;
     const months = rows.length;
@@ -145,18 +145,21 @@ export default function ReportsPage() {
   const tableData = casinos.map(c => ({ casino: c, ...casinoStats(c) })).sort((a, b) => {
     const mult = sortDir === 'asc' ? 1 : -1;
     if (sortKey === 'name') return a.casino.name.localeCompare(b.casino.name, 'tr') * mult;
-    return ((a[sortKey] as number) - (b[sortKey] as number)) * mult;
+    return (((Number(a[sortKey]) || 0)) - ((Number(b[sortKey]) || 0))) * mult;
   });
 
   const totals = tableData.reduce((s, r) => ({
-    total: s.total + r.total,
-    scopedTotal: s.scopedTotal + r.scopedTotal,
-    collected: s.collected + r.collected,
-    outstanding: s.outstanding + r.outstanding,
+    total: s.total + (Number(r.total) || 0),
+    scopedTotal: s.scopedTotal + (Number(r.scopedTotal) || 0),
+    collected: s.collected + (Number(r.collected) || 0),
+    outstanding: s.outstanding + (Number(r.outstanding) || 0),
   }), { total: 0, scopedTotal: 0, collected: 0, outstanding: 0 });
 
   const overallRate = totals.scopedTotal > 0 ? (totals.collected / totals.scopedTotal) * 100 : 0;
-  const toUSD = (n: number) => usdRate ? n / usdRate : n;
+  const toUSD = (n: number) => {
+    const num = Number(n) || 0;
+    return usdRate ? num / usdRate : num;
+  };
 
   function SortIcon({ k }: { k: SortKey }) {
     if (sortKey !== k) return <span className="ml-1 text-slate-600">↕</span>;

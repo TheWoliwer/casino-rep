@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, queryOne, execute } from '@/lib/mysql';
 
+function formatCol(row: any) {
+  if (!row) return null;
+  return {
+    ...row,
+    id: Number(row.id),
+    casino_id: Number(row.casino_id),
+    amount: Number(row.amount) || 0,
+    monthly: Number(row.monthly) ?? 1,
+    sort_order: Number(row.sort_order) || 0,
+  };
+}
+
 export async function GET() {
   try {
     const data = await query('SELECT * FROM casino_cols ORDER BY sort_order ASC');
-    return NextResponse.json(data);
+    return NextResponse.json(data.map(formatCol));
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -24,11 +36,11 @@ export async function POST(req: NextRequest) {
 
     const result = await execute(
       'INSERT INTO casino_cols (casino_id, name, amount, currency, monthly, sort_order) VALUES (?, ?, ?, ?, ?, ?)',
-      [casino_id, name, amount || 0, currency || 'TRY', monthly ?? 1, sort_order]
+      [casino_id, name, Number(amount) || 0, currency || 'TRY', Number(monthly) ?? 1, sort_order]
     );
 
     const inserted = await queryOne('SELECT * FROM casino_cols WHERE id = ?', [result.insertId]);
-    return NextResponse.json(inserted);
+    return NextResponse.json(formatCol(inserted));
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, queryOne, execute } from '@/lib/mysql';
 
+function formatEntry(row: any) {
+  if (!row) return null;
+  return {
+    ...row,
+    id: Number(row.id),
+    col_id: Number(row.col_id),
+    year: row.year !== null ? Number(row.year) : null,
+    month: row.month !== null ? Number(row.month) : null,
+    amount: row.amount !== null ? Number(row.amount) : null,
+    status: Number(row.status) || 0,
+  };
+}
+
 export async function GET(req: NextRequest) {
   try {
     const year = req.nextUrl.searchParams.get('year');
@@ -13,7 +26,7 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await query(sql, params);
-    return NextResponse.json(data);
+    return NextResponse.json(data.map(formatEntry));
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -32,17 +45,17 @@ export async function POST(req: NextRequest) {
     if (existing) {
       await execute(
         'UPDATE col_entries SET amount = ?, status = ?, note = ?, updated_at = NOW() WHERE id = ?',
-        [amount ?? null, status ?? 0, note || '', existing.id]
+        [amount !== null && amount !== undefined ? Number(amount) : null, status ?? 0, note || '', existing.id]
       );
       const updated = await queryOne('SELECT * FROM col_entries WHERE id = ?', [existing.id]);
-      return NextResponse.json(updated);
+      return NextResponse.json(formatEntry(updated));
     } else {
       const result = await execute(
         'INSERT INTO col_entries (col_id, year, month, amount, status, note, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW())',
-        [col_id, year ?? null, month ?? null, amount ?? null, status ?? 0, note || '']
+        [col_id, year ?? null, month ?? null, amount !== null && amount !== undefined ? Number(amount) : null, status ?? 0, note || '']
       );
       const inserted = await queryOne('SELECT * FROM col_entries WHERE id = ?', [result.insertId]);
-      return NextResponse.json(inserted);
+      return NextResponse.json(formatEntry(inserted));
     }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -63,7 +76,11 @@ export async function PATCH(req: NextRequest) {
     for (const key of allowed) {
       if (updates[key] !== undefined) {
         updateClauses.push(`\`${key}\` = ?`);
-        values.push(updates[key]);
+        if (key === 'amount') {
+          values.push(updates[key] !== null ? Number(updates[key]) : null);
+        } else {
+          values.push(updates[key]);
+        }
       }
     }
 
@@ -74,7 +91,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const row = await queryOne('SELECT * FROM col_entries WHERE id = ?', [id]);
-    return NextResponse.json(row);
+    return NextResponse.json(formatEntry(row));
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
