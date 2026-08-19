@@ -25,17 +25,16 @@ $rates = getExchangeRates();
       --bg-base: #090d16;
       --bg-surface: #0f1626;
       --bg-card: #131c31;
-      --bg-card-hover: #192540;
-      --bg-side: #0c1220;
+      --bg-card-hover: #18233d;
+      --bg-drawer: #0f172a;
       --border-color: #1c273c;
-      --border-accent: #25334d;
+      --border-accent: #26354f;
       --accent: #38bdf8;
       --accent-dim: rgba(56, 189, 248, 0.12);
       --gold: #fbbf24;
-      --gold-dim: rgba(251, 191, 36, 0.12);
       --success: #22c55e;
       --danger: #f43f5e;
-      --text-main: #f1f5f9;
+      --text-main: #f8fafc;
       --text-muted: #64748b;
       --text-slate: #94a3b8;
     }
@@ -46,8 +45,8 @@ $rates = getExchangeRates();
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--bg-base);
       color: var(--text-main);
-      font-size: 0.845rem;
-      line-height: 1.55;
+      font-size: 0.86rem;
+      line-height: 1.6;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
@@ -56,57 +55,57 @@ $rates = getExchangeRates();
 
     /* Header */
     .header-nav {
-      background-color: rgba(15, 22, 38, 0.92);
-      backdrop-filter: blur(10px);
+      background-color: rgba(15, 22, 38, 0.94);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
-      padding: 0.65rem 1.25rem;
+      padding: 0.75rem 1.5rem;
     }
 
     .main-container {
-      max-width: 1180px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 1.75rem 1.25rem;
+      padding: 2rem 1.25rem;
     }
 
     /* Summary Cards */
     .card-kpi {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.15rem 1.25rem;
+      border-radius: 16px;
+      padding: 1.25rem 1.4rem;
       transition: all 0.2s ease;
     }
     .card-kpi:hover {
       border-color: var(--border-accent);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
     .kpi-title {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.4rem;
       font-weight: 500;
     }
     .kpi-val {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 700;
       line-height: 1.25;
       letter-spacing: -0.01em;
     }
     .kpi-sub {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
-      margin-top: 0.2rem;
+      margin-top: 0.25rem;
     }
 
     /* Table Container */
     .table-panel {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
     }
     .table-panel-header {
-      padding: 0.85rem 1.25rem;
+      padding: 1rem 1.4rem;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
@@ -122,27 +121,27 @@ $rates = getExchangeRates();
     .table-rep thead th {
       background-color: var(--bg-card);
       color: var(--text-slate);
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 0.8rem 1.15rem;
+      padding: 0.9rem 1.25rem;
       border: none;
     }
     .table-rep tbody tr {
       border-top: 1px solid #162033;
       background-color: var(--bg-base);
-      transition: background-color 0.12s ease;
+      transition: background-color 0.15s ease;
       cursor: pointer;
     }
     .table-rep tbody tr:hover {
       background-color: var(--bg-card-hover);
     }
     .table-rep td {
-      padding: 0.8rem 1.15rem;
+      padding: 0.9rem 1.25rem;
       vertical-align: middle;
       border: none;
-      font-size: 0.845rem;
+      font-size: 0.86rem;
     }
     .table-rep tfoot tr {
       background: var(--bg-surface);
@@ -150,7 +149,7 @@ $rates = getExchangeRates();
       font-weight: 700;
     }
     .table-rep tfoot td {
-      padding: 0.9rem 1.15rem;
+      padding: 1rem 1.25rem;
       border: none;
     }
 
@@ -159,10 +158,10 @@ $rates = getExchangeRates();
       background: rgba(56, 189, 248, 0.08);
       color: #38bdf8;
       border: 1px solid rgba(56, 189, 248, 0.3);
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      padding: 0.2rem 0.55rem;
-      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
       transition: all 0.15s;
     }
     .btn-badge-profil:hover {
@@ -174,10 +173,10 @@ $rates = getExchangeRates();
       background: rgba(148, 163, 184, 0.08);
       color: #94a3b8;
       border: 1px solid rgba(148, 163, 184, 0.2);
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      padding: 0.2rem 0.55rem;
-      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
       transition: all 0.15s;
     }
     .btn-badge-archive:hover {
@@ -186,9 +185,9 @@ $rates = getExchangeRates();
     }
 
     .btn-year-tab {
-      padding: 0.3rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 8px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #64748b;
       background: transparent;
@@ -205,23 +204,24 @@ $rates = getExchangeRates();
       background: #38bdf8;
       color: #090d16;
       font-weight: 700;
-      font-size: 0.78rem;
-      padding: 0.4rem 0.95rem;
+      font-size: 0.8rem;
+      padding: 0.45rem 1rem;
       border-radius: 8px;
       border: none;
-      transition: opacity 0.15s;
+      transition: all 0.15s;
     }
     .btn-action-primary:hover {
-      opacity: 0.9;
+      opacity: 0.92;
       color: #090d16;
+      transform: scale(1.01);
     }
 
     .btn-action-outline {
       background: transparent;
       color: #94a3b8;
       font-weight: 500;
-      font-size: 0.78rem;
-      padding: 0.38rem 0.85rem;
+      font-size: 0.8rem;
+      padding: 0.42rem 0.9rem;
       border-radius: 8px;
       border: 1px solid var(--border-accent);
       transition: all 0.15s;
@@ -235,26 +235,26 @@ $rates = getExchangeRates();
     .modal-content-compact {
       background-color: #0e1424;
       border: 1px solid var(--border-accent);
-      border-radius: 16px;
+      border-radius: 18px;
       color: var(--text-main);
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
     }
     .modal-header-compact {
       border-bottom: 1px solid var(--border-color);
-      padding: 1rem 1.35rem;
+      padding: 1.15rem 1.5rem;
     }
     .modal-footer-compact {
       border-top: 1px solid var(--border-color);
-      padding: 0.85rem 1.35rem;
+      padding: 1rem 1.5rem;
     }
 
     .form-input-compact {
       background-color: #090d16;
       border: 1px solid var(--border-accent);
       color: #fff;
-      font-size: 0.825rem;
+      font-size: 0.85rem;
       border-radius: 8px;
-      padding: 0.45rem 0.75rem;
+      padding: 0.5rem 0.85rem;
     }
     .form-input-compact:focus {
       background-color: #090d16;
@@ -265,7 +265,7 @@ $rates = getExchangeRates();
 
     /* Progress bar */
     .progress-bar-container {
-      width: 54px;
+      width: 58px;
       height: 5px;
       border-radius: 99px;
       background: #1c273c;
@@ -278,10 +278,10 @@ $rates = getExchangeRates();
 
     /* Preset Chips */
     .chip-item {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
       background: #151e33;
       border: 1px solid var(--border-accent);
       color: #94a3b8;
@@ -294,40 +294,55 @@ $rates = getExchangeRates();
       background: var(--accent-dim);
     }
 
-    /* Split Side Panel inside Profile Modal */
-    .profile-split-container {
+    /* ═════════════════════════════════════════════════════ */
+    /* SAĞ DIŞ ÇEKMECE / EXTERNAL RIGHT DRAWER (YAN PANEL)   */
+    /* ═════════════════════════════════════════════════════ */
+    .external-right-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 440px;
+      max-width: 90vw;
+      background-color: var(--bg-drawer);
+      border-left: 1px solid var(--border-accent);
+      box-shadow: -15px 0 45px rgba(0, 0, 0, 0.75);
+      z-index: 1070; /* Above modal backdrop */
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
-      gap: 1rem;
-      transition: all 0.25s ease;
+      flex-direction: column;
     }
-    .profile-table-side {
-      flex: 1 1 100%;
-      transition: all 0.25s ease;
-    }
-    .profile-table-side.is-split {
-      flex: 1 1 58%;
-    }
-    .profile-editor-side {
-      display: none;
-      flex: 1 1 42%;
-      background: var(--bg-side);
-      border: 1px solid var(--border-accent);
-      border-radius: 12px;
-      padding: 1.15rem;
-      animation: fadeInRight 0.2s ease;
-    }
-    .profile-editor-side.is-active {
-      display: block;
+    .external-right-drawer.open {
+      transform: translateX(0);
     }
 
-    @keyframes fadeInRight {
-      from { opacity: 0; transform: translateX(10px); }
-      to { opacity: 1; transform: translateX(0); }
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0d1322;
+    }
+    .drawer-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .drawer-footer {
+      padding: 1.15rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #0d1322;
     }
 
-    .matrix-row-active {
+    .matrix-row-selected {
       background-color: rgba(56, 189, 248, 0.12) !important;
-      border-left: 3px solid #38bdf8 !important;
+      border-left: 4px solid #38bdf8 !important;
     }
   </style>
 </head>
@@ -338,14 +353,14 @@ $rates = getExchangeRates();
     <div class="d-flex align-items-center justify-content-between">
       
       <!-- Left: Logo & Navigation -->
-      <div class="d-flex align-items-center gap-2.5">
-        <span style="color: #38bdf8; font-weight: 800; font-size: 1.25rem;">♠</span>
+      <div class="d-flex align-items-center gap-3">
+        <span style="color: #38bdf8; font-weight: 800; font-size: 1.35rem;">♠</span>
         <span class="fw-bold text-white fs-6 d-none d-sm-inline">Casino Takip</span>
         <span class="text-secondary opacity-40 d-none d-sm-inline">·</span>
-        <span class="text-slate fw-medium" style="font-size: 0.825rem;">Raporlar</span>
+        <span class="text-slate fw-medium">Raporlar</span>
 
         <!-- Year Switcher -->
-        <div class="d-flex align-items-center gap-1 ms-2.5" id="yearButtons">
+        <div class="d-flex align-items-center gap-1 ms-3" id="yearButtons">
           <button class="btn-year-tab" onclick="setYear(2025)">2025</button>
           <button class="btn-year-tab active" onclick="setYear(2026)">2026</button>
           <button class="btn-year-tab" onclick="setYear(2027)">2027</button>
@@ -353,32 +368,32 @@ $rates = getExchangeRates();
       </div>
 
       <!-- Right: Actions -->
-      <div class="d-flex align-items-center gap-2">
+      <div class="d-flex align-items-center gap-2.5">
         <!-- Live Currency Rates -->
-        <div class="d-none d-md-flex align-items-center gap-2.5 px-3 py-1 rounded-3" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.74rem;">
+        <div class="d-none d-md-flex align-items-center gap-2.5 px-3 py-1.5 rounded-3" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.76rem;">
           <span class="text-secondary">USD:</span> <strong class="text-white font-mono" id="rateUSD">₺<?= number_format($rates['usd'], 2) ?></strong>
           <span class="text-secondary opacity-30">|</span>
           <span class="text-secondary">EUR:</span> <strong class="text-white font-mono" id="rateEUR">₺<?= number_format($rates['eur'], 2) ?></strong>
         </div>
 
-        <button class="btn-action-primary d-flex align-items-center gap-1" onclick="openAddCasinoModal()">
+        <button class="btn-action-primary d-flex align-items-center gap-1.5" onclick="openAddCasinoModal()">
           <span>+</span> <span class="d-none d-sm-inline">Casino Ekle</span>
         </button>
 
-        <button class="btn-action-outline d-flex align-items-center gap-1" onclick="openArchiveModal()">
+        <button class="btn-action-outline d-flex align-items-center gap-1.5" onclick="openArchiveModal()">
           <span>📦</span> <span class="d-none d-sm-inline">Arşiv</span>
-          <span class="badge ms-1" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.65rem;" id="badgeArchive">0</span>
+          <span class="badge ms-1" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.68rem;" id="badgeArchive">0</span>
         </button>
 
-        <button class="btn-action-outline d-flex align-items-center gap-1" onclick="openExpensesModal()">
+        <button class="btn-action-outline d-flex align-items-center gap-1.5" onclick="openExpensesModal()">
           <span>💸</span> <span class="d-none d-sm-inline">Giderler</span>
         </button>
 
-        <button class="btn-action-outline" style="padding: 0.38rem 0.65rem;" onclick="exportReportsToExcel()" title="Excel İndir">
+        <button class="btn-action-outline" style="padding: 0.42rem 0.75rem;" onclick="exportReportsToExcel()" title="Excel İndir">
           <i class="fa-solid fa-file-excel text-success"></i>
         </button>
 
-        <button class="btn-action-outline" style="padding: 0.38rem 0.65rem;" onclick="loadData()" title="Yenile">
+        <button class="btn-action-outline" style="padding: 0.42rem 0.75rem;" onclick="loadData()" title="Yenile">
           <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
         </button>
       </div>
@@ -386,11 +401,11 @@ $rates = getExchangeRates();
     </div>
   </header>
 
-  <!-- Main Content Container -->
+  <!-- Main Container -->
   <main class="main-container">
     
     <!-- 4 Summary KPI Cards -->
-    <div class="row g-3 mb-4">
+    <div class="row g-3.5 mb-4">
       <div class="col-6 col-sm-3">
         <div class="card-kpi">
           <div class="kpi-title">Toplam Beklenen</div>
@@ -416,7 +431,7 @@ $rates = getExchangeRates();
         <div class="card-kpi">
           <div class="kpi-title">Tahsilat Oranı</div>
           <div class="kpi-val font-mono" style="color: #38bdf8;" id="cardRatePercent">%0.0</div>
-          <div class="kpi-sub d-flex align-items-center gap-2" style="margin-top: 0.4rem;">
+          <div class="kpi-sub d-flex align-items-center gap-2" style="margin-top: 0.45rem;">
             <div class="progress-bar-container w-100" style="height: 4px;">
               <div class="progress-bar-fill" id="cardProgressBar" style="width: 0%; background: #38bdf8;"></div>
             </div>
@@ -429,7 +444,7 @@ $rates = getExchangeRates();
     <div class="table-panel">
       <!-- Panel Header -->
       <div class="table-panel-header">
-        <h2 class="m-0 fw-semibold text-white" style="font-size: 0.875rem;">
+        <h2 class="m-0 fw-semibold text-white" style="font-size: 0.92rem;">
           Casino Raporu — <span id="titleYear">2026</span><span id="titleMonthBadge"></span>
         </h2>
 
@@ -449,7 +464,7 @@ $rates = getExchangeRates();
             <option value="11">Kasım</option>
             <option value="12">Aralık</option>
           </select>
-          <span class="text-secondary d-none d-sm-inline" style="font-size: 0.75rem;" id="casinoCountBadge">0 casino</span>
+          <span class="text-secondary d-none d-sm-inline" style="font-size: 0.78rem;" id="casinoCountBadge">0 casino</span>
         </div>
       </div>
 
@@ -459,11 +474,11 @@ $rates = getExchangeRates();
           <thead>
             <tr>
               <th onclick="sortTable('name')" style="cursor: pointer;">CASİNO <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
-              <th onclick="sortTable('months')" class="text-center" style="cursor: pointer; width: 60px;">AY <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
+              <th onclick="sortTable('months')" class="text-center" style="cursor: pointer; width: 70px;">AY <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
               <th onclick="sortTable('total')" class="text-end" style="cursor: pointer;">BEKLENEN <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
               <th onclick="sortTable('collected')" class="text-end" style="cursor: pointer;">TAHSİL <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
               <th onclick="sortTable('outstanding')" class="text-end" style="cursor: pointer;">BEKLEYEN <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
-              <th onclick="sortTable('rate')" class="text-end" style="cursor: pointer; width: 110px;">ORAN % <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
+              <th onclick="sortTable('rate')" class="text-end" style="cursor: pointer; width: 120px;">ORAN % <i class="fa-solid fa-sort ms-1 opacity-30"></i></th>
               <th class="text-center" style="width: 40px;"></th>
             </tr>
           </thead>
@@ -476,7 +491,7 @@ $rates = getExchangeRates();
           </tbody>
           <tfoot>
             <tr>
-              <td class="text-white" style="font-size: 0.78rem;">TOPLAM</td>
+              <td class="text-white" style="font-size: 0.82rem;">TOPLAM</td>
               <td class="text-center text-secondary font-mono" id="footMonths">-</td>
               <td class="text-end font-mono" id="footTotal">-</td>
               <td class="text-end font-mono" style="color: var(--success);" id="footCollected">-</td>
@@ -492,170 +507,96 @@ $rates = getExchangeRates();
   </main>
 
   <!-- ═════════════════════════════════════════════════════ -->
-  <!-- PROFİL MODAL & YAN YANA AÇILAN BORÇ DÜZENLEME PANELİ -->
+  <!-- PROFİL MODALI (TAM BOYUTLU, FERAH, GENİŞ TABLO)      -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="modal fade" id="profileModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 1050px;">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 1080px;">
       <div class="modal-content modal-content-compact">
         <!-- Modal Header -->
         <div class="modal-header modal-header-compact d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center gap-2.5">
-            <span class="rounded-3 p-1.5 px-2.5" style="background: rgba(56,189,248,0.1); color: #38bdf8; font-size: 1rem;">👤</span>
+          <div class="d-flex align-items-center gap-3">
+            <span class="rounded-3 p-2 px-3" style="background: rgba(56,189,248,0.1); color: #38bdf8; font-size: 1.1rem;">👤</span>
             <div>
-              <h6 class="modal-title fw-bold text-white m-0" id="profileModalTitle">Casino</h6>
-              <small class="text-secondary" style="font-size: 0.72rem;" id="profileModalSub">Profil · Hareket Geçmişi</small>
+              <h5 class="modal-title fw-bold text-white m-0" id="profileModalTitle">Casino</h5>
+              <small class="text-secondary" style="font-size: 0.76rem;" id="profileModalSub">Profil · Hareket Geçmişi</small>
             </div>
           </div>
           
           <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-outline-secondary btn-sm py-1 px-3 rounded-2" style="font-size: 0.75rem;" onclick="archiveCurrentProfileCasino()">
+            <button class="btn btn-outline-secondary btn-sm py-1.5 px-3 rounded-2" style="font-size: 0.78rem;" onclick="archiveCurrentProfileCasino()">
               📦 Arşivle
             </button>
-            <button type="button" class="btn-close btn-close-white" style="font-size: 0.8rem;" data-bs-dismiss="modal"></button>
+            <button type="button" class="btn-close btn-close-white" style="font-size: 0.85rem;" data-bs-dismiss="modal"></button>
           </div>
         </div>
 
         <!-- Modal Body -->
-        <div class="modal-body p-3.5">
+        <div class="modal-body p-4">
           <!-- Summary 3-Column Card -->
-          <div class="row g-2.5 text-center mb-3.5">
+          <div class="row g-3 text-center mb-4">
             <div class="col-4">
-              <div class="p-2.5 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
-                <div class="text-secondary" style="font-size: 0.72rem;">Beklenen</div>
-                <strong class="text-white font-mono" style="font-size: 1rem;" id="profTotalUSD">$0.00</strong>
-                <div class="text-secondary font-mono" style="font-size: 0.68rem;" id="profTotalTRY">₺0,00</div>
+              <div class="p-3 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
+                <div class="text-secondary" style="font-size: 0.76rem;">Beklenen</div>
+                <strong class="text-white font-mono" style="font-size: 1.15rem;" id="profTotalUSD">$0.00</strong>
+                <div class="text-secondary font-mono" style="font-size: 0.72rem;" id="profTotalTRY">₺0,00</div>
               </div>
             </div>
             <div class="col-4">
-              <div class="p-2.5 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
-                <div class="text-secondary" style="font-size: 0.72rem;">Tahsil Edilen</div>
-                <strong class="font-mono" style="color: var(--success); font-size: 1rem;" id="profCollectedUSD">$0.00</strong>
-                <div class="text-secondary font-mono" style="font-size: 0.68rem;" id="profCollectedTRY">₺0,00</div>
+              <div class="p-3 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
+                <div class="text-secondary" style="font-size: 0.76rem;">Tahsil Edilen</div>
+                <strong class="font-mono" style="color: var(--success); font-size: 1.15rem;" id="profCollectedUSD">$0.00</strong>
+                <div class="text-secondary font-mono" style="font-size: 0.72rem;" id="profCollectedTRY">₺0,00</div>
               </div>
             </div>
             <div class="col-4">
-              <div class="p-2.5 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
-                <div class="text-secondary" style="font-size: 0.72rem;">Bekleyen</div>
-                <strong class="font-mono" style="color: var(--danger); font-size: 1rem;" id="profOutstandingUSD">$0.00</strong>
-                <div class="text-secondary font-mono" style="font-size: 0.68rem;" id="profOutstandingTRY">₺0,00</div>
+              <div class="p-3 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
+                <div class="text-secondary" style="font-size: 0.76rem;">Bekleyen</div>
+                <strong class="font-mono" style="color: var(--danger); font-size: 1.15rem;" id="profOutstandingUSD">$0.00</strong>
+                <div class="text-secondary font-mono" style="font-size: 0.72rem;" id="profOutstandingTRY">₺0,00</div>
               </div>
             </div>
           </div>
 
           <!-- Tab Navigation -->
-          <ul class="nav nav-pills mb-2.5 gap-1.5 border-bottom pb-2" style="font-size: 0.78rem;">
+          <ul class="nav nav-pills mb-3 gap-2 border-bottom pb-2.5" style="font-size: 0.82rem;">
             <li class="nav-item">
-              <button class="nav-link active py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabTable">📊 Tablo</button>
+              <button class="nav-link active py-1.5 px-3.5 rounded-2" data-bs-toggle="pill" data-bs-target="#tabTable">📊 Tablo</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabTimeline">🕒 Hareketler</button>
+              <button class="nav-link py-1.5 px-3.5 rounded-2" data-bs-toggle="pill" data-bs-target="#tabTimeline">🕒 Hareketler</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabInfo">ℹ️ Bilgiler</button>
+              <button class="nav-link py-1.5 px-3.5 rounded-2" data-bs-toggle="pill" data-bs-target="#tabInfo">ℹ️ Bilgiler</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabNotes">📝 Notlar</button>
+              <button class="nav-link py-1.5 px-3.5 rounded-2" data-bs-toggle="pill" data-bs-target="#tabNotes">📝 Notlar</button>
             </li>
           </ul>
 
           <div class="tab-content pt-1">
             
-            <!-- ══ TAB 1: SPLIT TABLO & SAĞ PANEL DÜZENLEYİCİ ══ -->
+            <!-- ══ TAB 1: TAM BOYUTLU EXCEL TABLOSU (SIKIŞIKLIK YOK) ══ -->
             <div class="tab-pane fade show active" id="tabTable">
-              <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center justify-content-between mb-2.5">
                 <div class="d-flex gap-1" id="profMatrixYearButtons"></div>
-                <span class="text-secondary" style="font-size: 0.72rem;">* Satıra tıkla, sağ panelde anında düzenle</span>
+                <span class="text-secondary" style="font-size: 0.76rem;"><i class="fa-solid fa-arrow-pointer text-info me-1"></i> Satıra tıkla, sağ ekrandaki panelde düzenle</span>
               </div>
 
-              <!-- Split Container -->
-              <div class="profile-split-container" id="profileSplitContainer">
-                
-                <!-- Sol Taraf: Aylık Tablo -->
-                <div class="profile-table-side" id="profileTableSide">
-                  <div class="table-responsive rounded-2 border" style="border-color: var(--border-color) !important; max-height: 52vh;">
-                    <table class="table-rep w-100">
-                      <thead class="sticky-top" style="background: #0f1626;">
-                        <tr>
-                          <th style="width: 85px;">AY</th>
-                          <th class="text-end">FEE (₺)</th>
-                          <th class="text-end">BORÇ (₺)</th>
-                          <th class="text-end">ÖDENEN (₺)</th>
-                          <th class="text-end">KALAN (₺)</th>
-                          <th class="text-center" style="width: 75px;">DURUM</th>
-                        </tr>
-                      </thead>
-                      <tbody id="profileMatrixBody"></tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- Sağ Taraf: Yan Panel Borç & Tahsilat Düzenleyici (Modal içinde modal yerine!) -->
-                <div class="profile-editor-side" id="profileEditorSide">
-                  <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom" style="border-color: var(--border-color) !important;">
-                    <h6 class="fw-bold text-white m-0 d-flex align-items-center gap-1.5" style="font-size: 0.85rem;" id="sideEditorTitle">
-                      <i class="fa-solid fa-pen-to-square text-info"></i> Ay Düzenle
-                    </h6>
-                    <button class="btn btn-link text-secondary btn-sm p-0" onclick="closeSideEditor()" title="Kapat">
-                      <i class="fa-solid fa-xmark fs-6"></i>
-                    </button>
-                  </div>
-
-                  <!-- Quick Presets -->
-                  <div class="mb-3">
-                    <span class="text-secondary d-block mb-1.5" style="font-size: 0.7rem; font-weight: 600;">HIZLI KALEM EKLE</span>
-                    <div class="d-flex flex-wrap gap-1">
-                      <span class="chip-item" onclick="quickAddPreset('MAKİNA KİRASI')">+ Makina</span>
-                      <span class="chip-item" onclick="quickAddPreset('DEPOZİTO')">+ Depozito</span>
-                      <span class="chip-item" onclick="quickAddPreset('SERVER ÜCRETİ')">+ Server</span>
-                      <span class="chip-item" onclick="quickAddPreset('RTP')">+ RTP</span>
-                      <span class="chip-item" onclick="quickAddPreset('KİRA')">+ Kira</span>
-                      <span class="chip-item" onclick="quickAddPreset('SABİT-FEE')">+ Sabit-Fee</span>
-                      <span class="chip-item" onclick="quickAddPreset('FEE')">+ Fee</span>
-                    </div>
-                  </div>
-
-                  <!-- Debt Items -->
-                  <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1.5">
-                      <span class="text-secondary fw-semibold" style="font-size: 0.72rem;">BORÇ KALEMLERİ</span>
-                      <button class="btn-badge-profil py-0.5" onclick="addDebtItemRow()">+ Kalem</button>
-                    </div>
-                    <div id="debtItemsContainer" class="space-y-1.5" style="max-height: 22vh; overflow-y: auto;"></div>
-                    
-                    <div class="p-2 rounded-2 mt-2 d-flex justify-content-between align-items-center font-mono" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.78rem;">
-                      <span class="text-secondary">Kalemler Toplamı:</span>
-                      <strong class="text-white" id="debtItemsLiveTotal">₺0,00</strong>
-                    </div>
-                  </div>
-
-                  <!-- Quick Payment Entry -->
-                  <div class="p-2.5 rounded-2 mb-3" style="background: #090d16; border: 1px solid var(--border-color);">
-                    <div class="d-flex justify-content-between align-items-center mb-1.5">
-                      <span class="text-success fw-semibold" style="font-size: 0.72rem;">+ TAHSİLAT / ÖDEME GİR</span>
-                      <small class="text-secondary font-mono" style="font-size: 0.7rem;" id="feeCurrentPaidAmount">Ödenen: ₺0,00</small>
-                    </div>
-                    <div class="row g-1.5">
-                      <div class="col-6">
-                        <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Tutar (₺)">
-                      </div>
-                      <div class="col-6">
-                        <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu">
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- General Note -->
-                  <div class="mb-3">
-                    <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için genel not...">
-                  </div>
-
-                  <!-- Save Button in Side Panel -->
-                  <div class="d-flex justify-content-end gap-2">
-                    <button type="button" class="btn-action-outline py-1 px-3" onclick="closeSideEditor()">Kapat</button>
-                    <button type="button" class="btn-action-primary py-1 px-4" onclick="saveFeeRowData()">Kaydet</button>
-                  </div>
-                </div>
-
+              <div class="table-responsive rounded-3 border" style="border-color: var(--border-color) !important; max-height: 56vh;">
+                <table class="table-rep w-100">
+                  <thead class="sticky-top" style="background: #0f1626; z-index: 2;">
+                    <tr>
+                      <th style="width: 100px;">AY</th>
+                      <th class="text-end">FEE (₺)</th>
+                      <th class="text-end">BORÇ TOPLAMI (₺)</th>
+                      <th class="text-end">ÖDENEN (₺)</th>
+                      <th class="text-end">KALAN (₺)</th>
+                      <th class="text-center" style="width: 90px;">DURUM</th>
+                      <th class="text-center" style="width: 50px;"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="profileMatrixBody"></tbody>
+                </table>
               </div>
             </div>
 
@@ -673,12 +614,12 @@ $rates = getExchangeRates();
                   <input type="text" class="form-input-compact w-100" id="timelineSearch" placeholder="Arama yap..." oninput="renderProfileTimeline()">
                 </div>
               </div>
-              <div id="profileTimelineContainer" style="max-height: 48vh; overflow-y: auto;"></div>
+              <div id="profileTimelineContainer" style="max-height: 50vh; overflow-y: auto;"></div>
             </div>
 
             <!-- ══ TAB 3: BİLGİLER ══ -->
             <div class="tab-pane fade" id="tabInfo">
-              <form onsubmit="saveCasinoInfoSettings(event)" class="p-3 rounded-2" style="background: #090d16; border: 1px solid var(--border-color); max-width: 520px;">
+              <form onsubmit="saveCasinoInfoSettings(event)" class="p-3.5 rounded-3" style="background: #090d16; border: 1px solid var(--border-color); max-width: 540px;">
                 <div class="mb-3">
                   <label class="small text-secondary mb-1">Casino İsmi</label>
                   <input type="text" class="form-input-compact w-100" id="editInfoName" required>
@@ -705,13 +646,13 @@ $rates = getExchangeRates();
 
             <!-- ══ TAB 4: NOTLAR ══ -->
             <div class="tab-pane fade" id="tabNotes">
-              <div class="p-3 rounded-2" style="background: #090d16; border: 1px solid var(--border-color);">
+              <div class="p-3.5 rounded-3" style="background: #090d16; border: 1px solid var(--border-color);">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <span class="small text-secondary fw-semibold">ÖZEL CASİNO NOTLARI</span>
-                  <small class="text-secondary" style="font-size: 0.7rem;" id="notesLastUpdated">-</small>
+                  <small class="text-secondary" style="font-size: 0.72rem;" id="notesLastUpdated">-</small>
                 </div>
-                <textarea class="form-input-compact w-100 font-mono" id="profileNotesText" rows="7" placeholder="Casino ile ilgili özel notlar, anlaşma detayları..."></textarea>
-                <div class="d-flex justify-content-end mt-2.5">
+                <textarea class="form-input-compact w-100 font-mono" id="profileNotesText" rows="8" placeholder="Casino ile ilgili özel notlar, anlaşma detayları..."></textarea>
+                <div class="d-flex justify-content-end mt-3">
                   <button class="btn-action-primary" onclick="saveProfileNote()">Notu Kaydet</button>
                 </div>
               </div>
@@ -725,17 +666,95 @@ $rates = getExchangeRates();
   </div>
 
   <!-- ═════════════════════════════════════════════════════ -->
+  <!-- SAĞ TARAFTA AÇILAN HARİCİ YAN ÇEKMECE (DRAWER)        -->
+  <!-- Pop-up'ın içinde değil, ekranın sağında açılır!       -->
+  <!-- ═════════════════════════════════════════════════════ -->
+  <div class="external-right-drawer" id="externalRightDrawer">
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="rounded-2 p-1.5 px-2 bg-info bg-opacity-10 text-info">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </span>
+        <h6 class="fw-bold text-white m-0" style="font-size: 0.92rem;" id="drawerTitle">Ay Düzenle</h6>
+      </div>
+      <button type="button" class="btn btn-link text-secondary p-0" onclick="closeDrawer()" title="Kapat">
+        <i class="fa-solid fa-xmark fs-5"></i>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="drawer-body">
+      <!-- Quick Presets -->
+      <div class="mb-3.5">
+        <span class="text-secondary d-block mb-2" style="font-size: 0.74rem; font-weight: 600;">HIZLI KALEM EKLE</span>
+        <div class="d-flex flex-wrap gap-1.5">
+          <span class="chip-item" onclick="quickAddPreset('MAKİNA KİRASI')">+ Makina</span>
+          <span class="chip-item" onclick="quickAddPreset('DEPOZİTO')">+ Depozito</span>
+          <span class="chip-item" onclick="quickAddPreset('SERVER ÜCRETİ')">+ Server</span>
+          <span class="chip-item" onclick="quickAddPreset('RTP')">+ RTP</span>
+          <span class="chip-item" onclick="quickAddPreset('KİRA')">+ Kira</span>
+          <span class="chip-item" onclick="quickAddPreset('SABİT-FEE')">+ Sabit-Fee</span>
+          <span class="chip-item" onclick="quickAddPreset('FEE')">+ Fee</span>
+        </div>
+      </div>
+
+      <!-- Debt Items List -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-secondary fw-semibold" style="font-size: 0.76rem;">BORÇ KALEMLERİ</span>
+          <button class="btn-badge-profil py-0.5" onclick="addDebtItemRow()">+ Kalem Ekle</button>
+        </div>
+        <div id="debtItemsContainer" class="space-y-2"></div>
+        
+        <div class="p-2.5 rounded-3 mt-2.5 d-flex justify-content-between align-items-center font-mono" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.84rem;">
+          <span class="text-secondary">Kalemler Toplamı:</span>
+          <strong class="text-white" id="debtItemsLiveTotal">₺0,00</strong>
+        </div>
+      </div>
+
+      <!-- Payment Input -->
+      <div class="p-3 rounded-3 mb-3.5" style="background: #090d16; border: 1px solid var(--border-color);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-success fw-semibold" style="font-size: 0.76rem;">+ TAHSİLAT / ÖDEME GİR</span>
+          <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="feeCurrentPaidAmount">Ödenen: ₺0,00</small>
+        </div>
+        <div class="row g-2">
+          <div class="col-6">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Tutar (₺)">
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu">
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div class="mb-2">
+        <label class="small text-secondary mb-1">Genel Not</label>
+        <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için özel not...">
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="drawer-footer">
+      <button type="button" class="btn-action-outline px-3" onclick="closeDrawer()">Vazgeç</button>
+      <button type="button" class="btn-action-primary px-4" onclick="saveFeeRowData()">Kaydet</button>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════ -->
   <!-- COMPACT MODAL: CASINO EKLE                            -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="modal fade" id="addCasinoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
       <div class="modal-content modal-content-compact">
         <div class="modal-header modal-header-compact">
           <h6 class="modal-title fw-bold text-white m-0">+ Yeni Casino Ekle</h6>
-          <button type="button" class="btn-close btn-close-white" style="font-size: 0.8rem;" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" style="font-size: 0.85rem;" data-bs-dismiss="modal"></button>
         </div>
         <form onsubmit="submitAddCasino(event)">
-          <div class="modal-body p-3.5 space-y-2.5">
+          <div class="modal-body p-4 space-y-3">
             <div class="mb-3">
               <label class="small text-secondary mb-1">Casino Adı</label>
               <input type="text" class="form-input-compact w-100" id="addName" required placeholder="Örn: ELEXUS VIP">
@@ -768,14 +787,14 @@ $rates = getExchangeRates();
   <!-- COMPACT MODAL: ARŞİV                                  -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="modal fade" id="archiveModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 460px;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
       <div class="modal-content modal-content-compact">
         <div class="modal-header modal-header-compact">
           <h6 class="modal-title fw-bold text-white m-0">📦 Arşivlenen Casinolar</h6>
-          <button type="button" class="btn-close btn-close-white" style="font-size: 0.8rem;" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" style="font-size: 0.85rem;" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body p-3">
-          <div id="archiveListContainer" style="max-height: 48vh; overflow-y: auto;">
+        <div class="modal-body p-3.5">
+          <div id="archiveListContainer" style="max-height: 50vh; overflow-y: auto;">
             <p class="text-secondary text-center py-4 m-0">Arşivde casino bulunmuyor.</p>
           </div>
         </div>
@@ -787,14 +806,14 @@ $rates = getExchangeRates();
   <!-- COMPACT MODAL: GİDERLER                               -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="modal fade" id="expensesModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 520px;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 540px;">
       <div class="modal-content modal-content-compact">
         <div class="modal-header modal-header-compact">
           <h6 class="modal-title fw-bold text-white m-0">💸 Aylık Giderler</h6>
-          <button type="button" class="btn-close btn-close-white" style="font-size: 0.8rem;" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" style="font-size: 0.85rem;" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body p-3.5">
-          <form onsubmit="submitAddExpense(event)" class="p-3 rounded-2 mb-3" style="background: #090d16; border: 1px solid var(--border-color);">
+        <div class="modal-body p-4">
+          <form onsubmit="submitAddExpense(event)" class="p-3.5 rounded-3 mb-3.5" style="background: #090d16; border: 1px solid var(--border-color);">
             <div class="row g-2">
               <div class="col-6">
                 <input type="text" class="form-input-compact w-100" id="expName" required placeholder="Gider Adı">
@@ -831,7 +850,7 @@ $rates = getExchangeRates();
             </div>
           </form>
 
-          <div class="table-responsive rounded-2 border" style="border-color: var(--border-color) !important; max-height: 38vh;">
+          <div class="table-responsive rounded-3 border" style="border-color: var(--border-color) !important; max-height: 40vh;">
             <table class="table-rep w-100">
               <thead>
                 <tr>
@@ -998,22 +1017,22 @@ $rates = getExchangeRates();
             <td class="text-center text-secondary font-mono">${row.months}</td>
             <td class="text-end">
               <div class="text-white font-mono">$${fmtUSD(toUSD(row.total))}</div>
-              <div class="text-secondary font-mono" style="font-size: 0.7rem;">₺${fmt(row.total)}</div>
+              <div class="text-secondary font-mono" style="font-size: 0.72rem;">₺${fmt(row.total)}</div>
             </td>
             <td class="text-end" style="color: ${row.collected > 0 ? 'var(--success)' : '#475569'};">
               <div class="font-mono">$${fmtUSD(toUSD(row.collected))}</div>
-              <div class="opacity-60 font-mono" style="font-size: 0.7rem;">₺${fmt(row.collected)}</div>
+              <div class="opacity-60 font-mono" style="font-size: 0.72rem;">₺${fmt(row.collected)}</div>
             </td>
             <td class="text-end" style="color: ${row.outstanding > 0 ? 'var(--danger)' : '#475569'};">
               <div class="font-mono">$${fmtUSD(toUSD(row.outstanding))}</div>
-              <div class="opacity-60 font-mono" style="font-size: 0.7rem;">₺${fmt(row.outstanding)}</div>
+              <div class="opacity-60 font-mono" style="font-size: 0.72rem;">₺${fmt(row.outstanding)}</div>
             </td>
             <td class="text-end">
               <div class="d-flex align-items-center justify-content-end gap-2">
                 <div class="progress-bar-container">
                   <div class="progress-bar-fill" style="width: ${Math.min(100, row.rate)}%; background: ${progressBg};"></div>
                 </div>
-                <span class="fw-semibold font-mono" style="color: ${rateColor}; font-size: 0.78rem; width: 38px;">%${row.rate.toFixed(0)}</span>
+                <span class="fw-semibold font-mono" style="color: ${rateColor}; font-size: 0.8rem; width: 40px;">%${row.rate.toFixed(0)}</span>
               </div>
             </td>
             <td class="text-center text-secondary opacity-40">
@@ -1025,14 +1044,14 @@ $rates = getExchangeRates();
 
       // Footer
       document.getElementById('footMonths').innerText = totals.months;
-      document.getElementById('footTotal').innerHTML = `$${fmtUSD(toUSD(totals.total))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totals.total)}</span>`;
-      document.getElementById('footCollected').innerHTML = `$${fmtUSD(toUSD(totals.collected))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totals.collected)}</span>`;
-      document.getElementById('footOutstanding').innerHTML = `$${fmtUSD(toUSD(totals.outstanding))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totals.outstanding)}</span>`;
+      document.getElementById('footTotal').innerHTML = `$${fmtUSD(toUSD(totals.total))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.72rem;">₺${fmt(totals.total)}</span>`;
+      document.getElementById('footCollected').innerHTML = `$${fmtUSD(toUSD(totals.collected))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.72rem;">₺${fmt(totals.collected)}</span>`;
+      document.getElementById('footOutstanding').innerHTML = `$${fmtUSD(toUSD(totals.outstanding))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.72rem;">₺${fmt(totals.outstanding)}</span>`;
       document.getElementById('footRate').innerText = `%${overallRate.toFixed(1)}`;
     }
 
     // ═════════════════════════════════════════════════════
-    // PROFIL MODALI VE SAĞ PANEL DÜZENLEYİCİ
+    // PROFIL MODALI
     // ═════════════════════════════════════════════════════
     async function openProfileModal(casinoId) {
       const res = await fetch(`api.php?action=get_profile&casino_id=${casinoId}`);
@@ -1064,7 +1083,7 @@ $rates = getExchangeRates();
       document.getElementById('profOutstandingTRY').innerText = '₺' + fmt(outstanding);
 
       currentProfileMatrixYear = currentYear;
-      closeSideEditor();
+      closeDrawer();
       renderProfileMatrixYears();
       renderProfileMatrixTable();
       renderProfileTimeline();
@@ -1076,7 +1095,7 @@ $rates = getExchangeRates();
       const container = document.getElementById('profMatrixYearButtons');
       const years = [2025, 2026, 2027];
       container.innerHTML = years.map(y => `
-        <button class="btn-year-tab ${y === currentProfileMatrixYear ? 'active' : ''}" onclick="currentProfileMatrixYear = ${y}; closeSideEditor(); renderProfileMatrixYears(); renderProfileMatrixTable();">
+        <button class="btn-year-tab ${y === currentProfileMatrixYear ? 'active' : ''}" onclick="currentProfileMatrixYear = ${y}; closeDrawer(); renderProfileMatrixYears(); renderProfileMatrixTable();">
           ${y}
         </button>
       `).join('');
@@ -1098,24 +1117,25 @@ $rates = getExchangeRates();
         let statusCell = '<span class="text-secondary opacity-30">—</span>';
         if (turnover > 0 || paidAmount > 0) {
           if (turnover > 0 && paidAmount >= turnover) {
-            statusCell = '<span class="badge" style="background: rgba(34,197,94,0.15); color: #22c55e; font-size: 0.68rem;">✓ Ödendi</span>';
+            statusCell = '<span class="badge" style="background: rgba(34,197,94,0.15); color: #22c55e; font-size: 0.72rem; padding: 0.3rem 0.6rem;">✓ Ödendi</span>';
           } else if (paidAmount > 0) {
-            statusCell = '<span class="badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.68rem;">≈ Kısmi</span>';
+            statusCell = '<span class="badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.72rem; padding: 0.3rem 0.6rem;">≈ Kısmi</span>';
           } else {
-            statusCell = '<span class="badge" style="background: rgba(244,63,94,0.15); color: #f43f5e; font-size: 0.68rem;">✗ Bekliyor</span>';
+            statusCell = '<span class="badge" style="background: rgba(244,63,94,0.15); color: #f43f5e; font-size: 0.72rem; padding: 0.3rem 0.6rem;">✗ Bekliyor</span>';
           }
         }
 
-        const isActiveRow = currentEditingMonth === m;
+        const isSelected = currentEditingMonth === m;
 
         html += `
-          <tr class="${isActiveRow ? 'matrix-row-active' : ''}" onclick="openSideEditor(${m})">
+          <tr class="${isSelected ? 'matrix-row-selected' : ''}" onclick="openMonthDrawer(${m})">
             <td class="fw-semibold text-white">${MONTHS[m]}</td>
             <td class="text-end font-mono">${feeAmount > 0 ? '₺' + fmt(feeAmount) : '—'}</td>
             <td class="text-end font-mono">${turnover > 0 ? '₺' + fmt(turnover) : '—'}</td>
             <td class="text-end font-mono" style="color: var(--success);">${paidAmount > 0 ? '₺' + fmt(paidAmount) : '—'}</td>
             <td class="text-end font-mono" style="color: ${rem > 0 ? 'var(--danger)' : '#64748b'};">${rem > 0 ? '₺' + fmt(rem) : (turnover > 0 ? '₺0,00' : '—')}</td>
             <td class="text-center">${statusCell}</td>
+            <td class="text-center text-secondary opacity-50"><i class="fa-solid fa-pen-to-square"></i></td>
           </tr>
         `;
       }
@@ -1123,13 +1143,15 @@ $rates = getExchangeRates();
       tbody.innerHTML = html;
     }
 
-    // SAĞ PANEL: Pop-up yerine yan panelde düzenleme!
-    function openSideEditor(month) {
+    // ═════════════════════════════════════════════════════
+    // SAĞ ÇEKMECEDE AY DÜZENLEME (EKRANIN SAĞINDA AÇILIR)
+    // ═════════════════════════════════════════════════════
+    function openMonthDrawer(month) {
       currentEditingMonth = month;
       const casinoId = currentActiveProfile.casino.id;
       const year = currentProfileMatrixYear;
 
-      document.getElementById('sideEditorTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-info"></i> ${MONTHS[month]} ${year} Düzenle`;
+      document.getElementById('drawerTitle').innerHTML = `${MONTHS[month]} ${year} Borç & Tahsilat`;
       document.getElementById('feeNewPayment').value = '';
       document.getElementById('feePaymentNote').value = '';
 
@@ -1138,29 +1160,28 @@ $rates = getExchangeRates();
       document.getElementById('feeGeneralNote').value = existing ? existing.note || '' : '';
       document.getElementById('feeCurrentPaidAmount').innerText = 'Ödenen: ₺' + fmt(existing ? existing.paid_amount : 0);
 
-      document.getElementById('profileTableSide').classList.add('is-split');
-      document.getElementById('profileEditorSide').classList.add('is-active');
-
       renderDebtItems();
       renderProfileMatrixTable();
+
+      // Open Right Drawer
+      document.getElementById('externalRightDrawer').classList.add('open');
     }
 
-    function closeSideEditor() {
+    function closeDrawer() {
       currentEditingMonth = null;
-      document.getElementById('profileTableSide').classList.remove('is-split');
-      document.getElementById('profileEditorSide').classList.remove('is-active');
+      document.getElementById('externalRightDrawer').classList.remove('open');
       renderProfileMatrixTable();
     }
 
     function renderDebtItems() {
       const container = document.getElementById('debtItemsContainer');
       if (currentDebtItems.length === 0) {
-        container.innerHTML = '<p class="text-secondary text-center py-2 m-0" style="font-size: 0.74rem;">Henüz borç kalemi yok.</p>';
+        container.innerHTML = '<p class="text-secondary text-center py-3 m-0" style="font-size: 0.76rem;">Henüz borç kalemi yok.</p>';
         updateDebtItemsLiveTotal();
         return;
       }
       container.innerHTML = currentDebtItems.map((item, idx) => `
-        <div class="row g-1 align-items-center p-1.5 rounded-2 mb-1" style="background: #090d16; border: 1px solid var(--border-color);">
+        <div class="row g-2 align-items-center p-2 rounded-3 mb-2" style="background: #090d16; border: 1px solid var(--border-color);">
           <div class="col-5">
             <input type="text" class="form-input-compact w-100" value="${item.name || ''}" placeholder="Kalem Adı" oninput="currentDebtItems[${idx}].name = this.value">
           </div>
@@ -1241,7 +1262,6 @@ $rates = getExchangeRates();
       });
 
       if (newPayment > 0) {
-        // Refresh to get fee_row ID
         const res = await fetch(`api.php?action=get_profile&casino_id=${casino_id}`);
         const freshProfile = await res.json();
         const updatedRow = (freshProfile.fee_rows || []).find(r => r.year === year && r.month === month);
@@ -1260,7 +1280,7 @@ $rates = getExchangeRates();
 
       Swal.fire({ icon: 'success', title: 'Kaydedildi', timer: 700, showConfirmButton: false });
       
-      // Refresh active profile without closing modal
+      // Update profile data in modal without closing
       const res = await fetch(`api.php?action=get_profile&casino_id=${casino_id}`);
       const data = await res.json();
       if (data.success) {
@@ -1311,17 +1331,17 @@ $rates = getExchangeRates();
       if (search) all = all.filter(e => e.note.toLowerCase().includes(search));
 
       if (all.length === 0) {
-        container.innerHTML = '<p class="text-secondary text-center py-4 m-0" style="font-size: 0.78rem;">Hareket bulunamadı.</p>';
+        container.innerHTML = '<p class="text-secondary text-center py-4 m-0" style="font-size: 0.8rem;">Hareket bulunamadı.</p>';
         return;
       }
 
       container.innerHTML = all.map(e => `
-        <div class="d-flex align-items-center justify-content-between p-2.5 rounded-2 mb-1.5" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.78rem;">
+        <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.82rem;">
           <div>
-            <strong class="font-mono" style="color: ${e.kind === 'payment' ? 'var(--success)' : '#38bdf8'}; font-size: 0.85rem;">${e.kind === 'payment' ? '+' : ''}₺${fmt(e.amount)}</strong>
-            <small class="text-secondary d-block" style="font-size: 0.72rem;">${e.note}</small>
+            <strong class="font-mono" style="color: ${e.kind === 'payment' ? 'var(--success)' : '#38bdf8'}; font-size: 0.9rem;">${e.kind === 'payment' ? '+' : ''}₺${fmt(e.amount)}</strong>
+            <small class="text-secondary d-block" style="font-size: 0.74rem;">${e.note}</small>
           </div>
-          <small class="text-secondary font-mono" style="font-size: 0.7rem;">${new Date(e.date).toLocaleDateString('tr-TR')}</small>
+          <small class="text-secondary font-mono" style="font-size: 0.72rem;">${new Date(e.date).toLocaleDateString('tr-TR')}</small>
         </div>
       `).join('');
     }
@@ -1359,6 +1379,7 @@ $rates = getExchangeRates();
     async function archiveCurrentProfileCasino() {
       if (!currentActiveProfile) return;
       bootstrap.Modal.getInstance(document.getElementById('profileModal')).hide();
+      closeDrawer();
       archiveCasino(currentActiveProfile.casino.id, currentActiveProfile.casino.name);
     }
 
@@ -1420,13 +1441,13 @@ $rates = getExchangeRates();
       const list = data.list || [];
 
       if (list.length === 0) {
-        container.innerHTML = '<p class="text-secondary text-center py-4 m-0" style="font-size: 0.78rem;">Arşivde casino bulunmuyor.</p>';
+        container.innerHTML = '<p class="text-secondary text-center py-4 m-0" style="font-size: 0.8rem;">Arşivde casino bulunmuyor.</p>';
       } else {
         container.innerHTML = list.map(item => `
-          <div class="d-flex align-items-center justify-content-between p-2.5 rounded-2 mb-1.5" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.78rem;">
+          <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.82rem;">
             <div>
               <strong class="text-white d-block">${item.name}</strong>
-              <small class="text-secondary" style="font-size: 0.7rem;">${item.fee_type === 'percent' ? '%' + item.fee_rate : item.fee_type}</small>
+              <small class="text-secondary" style="font-size: 0.72rem;">${item.fee_type === 'percent' ? '%' + item.fee_rate : item.fee_type}</small>
             </div>
             <button class="btn-badge-profil" onclick="restoreCasino(${item.id})">
               ↩ Geri Yükle
@@ -1457,7 +1478,7 @@ $rates = getExchangeRates();
       const list = data.expenses || [];
 
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-secondary" style="font-size: 0.78rem;">Kayıtlı gider yok.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-secondary" style="font-size: 0.8rem;">Kayıtlı gider yok.</td></tr>';
       } else {
         tbody.innerHTML = list.map(e => `
           <tr>
