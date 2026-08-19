@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { query, execute } from '@/lib/mysql';
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin.from('settings').select('*');
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  try {
+    const data = await query('SELECT * FROM settings');
+    return NextResponse.json(data);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function PATCH(req: NextRequest) {
-  const { key, value } = await req.json();
-  const { error } = await supabaseAdmin
-    .from('settings')
-    .upsert({ k: key, v: value }, { onConflict: 'k' });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  try {
+    const { key, value } = await req.json();
+    await execute(
+      'INSERT INTO settings (k, v) VALUES (?, ?) ON DUPLICATE KEY UPDATE v = VALUES(v)',
+      [key, value]
+    );
+    return NextResponse.json({ ok: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

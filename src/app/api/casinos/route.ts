@@ -1,36 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { query, queryOne, execute } from '@/lib/mysql';
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin
-    .from('casinos')
-    .select('*')
-    .order('sort_order')
-    .order('id');
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  try {
+    const data = await query('SELECT * FROM casinos ORDER BY sort_order ASC, id ASC');
+    return NextResponse.json(data);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { name, fee_type, fee_rate } = body;
-  if (!name) return NextResponse.json({ error: 'İsim zorunlu' }, { status: 400 });
+  try {
+    const body = await req.json();
+    const { name, fee_type, fee_rate, fee_currency } = body;
+    if (!name) return NextResponse.json({ error: 'İsim zorunlu' }, { status: 400 });
 
-  const { data: maxRow } = await supabaseAdmin
-    .from('casinos')
-    .select('sort_order')
-    .order('sort_order', { ascending: false })
-    .limit(1)
-    .single();
+    const maxRow = await queryOne<{ max_order: number | null }>('SELECT MAX(sort_order) as max_order FROM casinos');
+    const sort_order = (maxRow?.max_order ?? 0) + 1;
 
-  const sort_order = (maxRow?.sort_order ?? 0) + 1;
+    const result = await execute(
+      'INSERT INTO casinos (name, fee_type, fee_rate, fee_currency, sort_order) VALUES (?, ?, ?, ?, ?)',
+      [name, fee_type || 'percent', fee_rate || 0, fee_currency || 'TRY', sort_order]
+    );
 
-  const { data, error } = await supabaseAdmin
-    .from('casinos')
-    .insert({ name, fee_type: fee_type || 'percent', fee_rate: fee_rate || 0, sort_order })
-    .select()
-    .single();
+    const insertedId = result.insertId;
+    const inserted = await queryOne('SELECT * FROM casinos WHERE id = ?', [insertedId]);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+    return NextResponse.json(inserted);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

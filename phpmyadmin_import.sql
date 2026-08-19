@@ -1,0 +1,294 @@
+-- =====================================================
+-- CASINO TAKIP - MYSQL FULL VERI VE TABLO YEDEKLEMESI
+-- Olusturma Tarihi: 2026-08-19T13:26:16.025Z
+-- =====================================================
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE TABLE IF NOT EXISTS `casinos` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `fee_type` ENUM('percent', 'fixed', 'none') DEFAULT 'percent',
+  `fee_rate` DECIMAL(10, 2) DEFAULT 0.00,
+  `fee_currency` VARCHAR(10) DEFAULT 'TRY',
+  `sort_order` INT DEFAULT 0,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `casino_cols` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `casino_id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `amount` DECIMAL(15, 2) DEFAULT 0.00,
+  `currency` VARCHAR(10) DEFAULT 'TRY',
+  `monthly` TINYINT DEFAULT 1,
+  `sort_order` INT DEFAULT 0,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_casino_cols_casino_id` (`casino_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `fee_rows` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `casino_id` INT NOT NULL,
+  `year` INT NOT NULL,
+  `month` INT NOT NULL,
+  `turnover` DECIMAL(15, 2) DEFAULT 0.00,
+  `fee_amount` DECIMAL(15, 2) DEFAULT 0.00,
+  `paid_amount` DECIMAL(15, 2) DEFAULT 0.00,
+  `status` INT DEFAULT 0,
+  `note` TEXT,
+  `debt_items` JSON NULL,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_fee_rows_lookup` (`casino_id`, `year`, `month`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `col_entries` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `col_id` INT NOT NULL,
+  `year` INT NULL,
+  `month` INT NULL,
+  `amount` DECIMAL(15, 2) NULL,
+  `status` INT DEFAULT 0,
+  `note` TEXT,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_col_entries_lookup` (`col_id`, `year`, `month`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `fee_row_id` INT NOT NULL,
+  `paid_amount` DECIMAL(15, 2) DEFAULT 0.00,
+  `note` TEXT,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_transactions_fee_row` (`fee_row_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `expenses` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `year` INT NOT NULL,
+  `month` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `amount` DECIMAL(15, 2) DEFAULT 0.00,
+  `currency` VARCHAR(10) DEFAULT 'TRY',
+  `note` TEXT,
+  `casino_id` INT NULL,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_expenses_lookup` (`year`, `month`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `k` VARCHAR(100) PRIMARY KEY,
+  `v` LONGTEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- casinos (20 kayit)
+-- -----------------------------------------------------
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (13, 'ZOOM-SLOT', 'percent', 6.5, 3, '2026-05-16 13:12:39', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (15, '723-SLOT', 'fixed', 0, 4, '2026-05-16 13:20:12', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (21, 'CRATOS-SLOT', 'percent', 13, 11, '2026-05-16 14:39:02', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (11, 'FORTİS-SLOT', 'percent', 6, 1, '2026-05-16 12:49:51', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (14, '724-SLOT', 'fixed', 0, 5, '2026-05-16 13:13:18', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (12, 'PRESTİGE-SLOT', 'percent', 6, 2, '2026-05-16 12:57:58', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (20, 'ROYAL PLUS', 'percent', 6, 10, '2026-05-16 13:36:23', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (18, 'KOLAY-SLOT', 'percent', 7, 8, '2026-05-16 13:29:45', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (19, 'BEİNCASİNO', 'none', 0, 9, '2026-05-16 13:34:11', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (22, 'BİLYONER - SLOT', 'percent', 12, 12, '2026-05-16 17:50:30', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (16, 'MERİT PARK-SLOT', 'percent', 6, 6, '2026-05-16 13:21:37', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (17, 'EMPİRE-SLOT', 'percent', 6, 7, '2026-05-16 13:27:48', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (25, 'ARKIN SLOT', 'percent', 6, 14, '2026-06-24 03:09:06', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (26, 'MERİT VİP SLOT', 'percent', 8, 15, '2026-06-24 03:10:55', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (23, 'LA CASA SLOT', 'percent', 6, 13, '2026-05-16 17:52:40', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (10, 'ELEXSUZ', 'percent', 6, 0, '2026-05-16 11:32:03', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (27, 'ELEXUSSLOTVİP', 'percent', 6, 16, '2026-08-01 21:17:10', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (28, 'TURKIYE SLOT', 'percent', 12, 17, '2026-08-04 22:27:01', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (29, 'ELEXUS VIP', 'percent', 6, 18, '2026-08-04 22:28:46', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `casinos` (`id`, `name`, `fee_type`, `fee_rate`, `sort_order`, `created_at`, `fee_currency`) VALUES (30, 'PARK SLOT', 'percent', 10, 19, '2026-08-12 12:38:31', 'TRY') ON DUPLICATE KEY UPDATE `id`=`id`;
+
+-- -----------------------------------------------------
+-- fee_rows (66 kayit)
+-- -----------------------------------------------------
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (102, 21, 2026, 4, 132425, 132425, 1, '', 132425, '[{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (58, 12, 2026, 3, 998382, 998382, 1, '', 998382, '[{"name":"FEE","paid":true,"amount":468682,"currency":"TRY","paid_amount":468682},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (66, 14, 2026, 4, 3187800, 3187800, 1, '', 3187800, '[{"name":"SABİT-FEE","paid":true,"amount":70000,"currency":"USD"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (74, 17, 2026, 4, 1261948, 1261948, 1, '', 1261948, '[{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR"},{"name":"DEPOZİTO","paid":true,"amount":10000,"currency":"EUR"},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"},{"name":"FEE","paid":true,"amount":70798,"currency":"TRY","paid_amount":70798}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (59, 12, 2026, 4, 1377146, 1377146, 1, '', 1377146, '[{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":578846,"currency":"TRY","paid_amount":578846},{"name":"RTP 2. TAKSİT","paid":true,"amount":5000,"currency":"EUR","paid_amount":5000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (111, 11, 2026, 4, 31823, 31823, 0, '', 0, '[{"name":"FEE","amount":31823,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (123, 14, 2026, 3, 3187800, 3187800, 1, '', 3187800, '[{"name":"SABİT-FEE","paid":true,"amount":70000,"currency":"USD","paid_amount":70000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (50, 12, 2026, 2, 755665, 755665, 1, '', 755665, '[{"name":"FEE","paid":true,"amount":90415,"currency":"TRY"},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR"},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (42, 10, 2026, 8, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (60, 12, 2026, 5, 1577492, 1577492, 1, '', 1577492, '[{"name":"ARP 2.TAKSİT","paid":true,"amount":5000,"currency":"EUR","paid_amount":5000},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":775892,"currency":"TRY","paid_amount":775892}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (129, 18, 2026, 3, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (78, 17, 2026, 8, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (79, 17, 2026, 9, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (80, 17, 2026, 10, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (81, 17, 2026, 11, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (82, 17, 2026, 12, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (37, 10, 2026, 4, 2094246, 2094246, 1, '', 2094246, '[{"name":"MAKİNA KİRASI","paid":true,"amount":30000,"currency":"EUR","paid_amount":30000},{"name":"RTP 2. TAKSİT","paid":true,"amount":7500,"currency":"EUR","paid_amount":7500},{"name":"FEE","paid":true,"amount":98496,"currency":"TRY","paid_amount":98496}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (76, 17, 2026, 6, 686980, 686980, 1, '', 686980, '[{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":152580,"currency":"TRY","paid_amount":152580}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (33, 10, 2026, 3, 2087458, 2087458, 1, '', 2087458, '[{"name":"MAKİNA KİRASI","paid":true,"amount":30000,"currency":"EUR"},{"name":"FEE","paid":true,"amount":91708,"currency":"TRY","paid_amount":91708},{"name":"RTP 2. TAKSİT","paid":true,"amount":7500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (120, 15, 2026, 3, 1882035, 1882035, 1, '', 1882035, '[{"name":"SABİT-FEE","paid":true,"amount":40500,"currency":"USD","paid_amount":40500}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (41, 10, 2026, 7, 708636.27, 708636.27, 0, '', 0, '[{"name":"FEE","amount":161036.27,"currency":"TRY"},{"name":"MAKİNA KİRASI","amount":10000,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (64, 13, 2026, 2, 1191825, 1191825, 1, '', 1191825, '[{"name":"DEPOZİTO","paid":true,"amount":20000,"currency":"EUR","paid_amount":20000},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (69, 15, 2026, 2, 133050, 133050, 1, '', 133050, '[{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (65, 14, 2026, 2, 133050, 133050, 1, '', 133050, '[{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (68, 14, 2026, 5, 3252900, 3252900, 1, '', 3252900, '[{"name":"SABİT-FEE","paid":true,"amount":70000,"currency":"USD","paid_amount":70000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (72, 16, 2026, 4, 133950, 133950, 0, '', 133050, '[{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (75, 17, 2026, 5, 533615, 533615, 1, '', 533615, '[{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":4215,"currency":"TRY","paid_amount":4215}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (40, 10, 2026, 6, 651172, 651172, 1, 'test', 651172, '[{"name":"FEE","paid":true,"amount":116772,"currency":"TRY","paid_amount":116772},{"name":"KİRA","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (85, 19, 2026, 4, 267900, 267900, 1, '', 267900, '[{"name":"DIGITAL","paid":true,"amount":5000,"currency":"EUR","paid_amount":5000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (36, 10, 2026, 2, 2568778, 2568778, 1, '', 2568778, '[{"name":"MAKİNA KİRASI","paid":true,"amount":30000,"currency":"EUR"},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"},{"name":"DEPOZİTO","paid":true,"amount":15000,"currency":"EUR","paid_amount":15000},{"name":"FEE","paid":true,"amount":40828,"currency":"TRY","paid_amount":40828}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (70, 15, 2026, 4, 1882035, 1882035, 1, '', 1882035, '[{"name":"SABİT-FEE","paid":true,"amount":40500,"currency":"USD"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (71, 15, 2026, 5, 1254690, 1254690, 1, '', 1254690, '[{"name":"SABİT-FEE","paid":true,"amount":27000,"currency":"USD","paid_amount":27000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (87, 20, 2026, 5, 713330, 713330, 1, '', 713330, '[{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR"},{"name":"FEE","paid":true,"amount":183830,"currency":"TRY","paid_amount":183830}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (39, 10, 2026, 5, 1985495.65, 1985495.65, 0, '', 54709, '[{"name":"FEE","paid":true,"amount":54709,"currency":"TRY","paid_amount":54709},{"name":"KİRA","paid":false,"amount":35815,"currency":"EUR","paid_amount":0}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (45, 11, 2026, 3, 954668, 954668, 0, '', 155743, '[{"name":"FEE","paid":true,"amount":23318,"currency":"TRY","paid_amount":23318},{"name":"DEPOZİTO","paid":false,"amount":15000,"currency":"EUR","paid_amount":0},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (130, 18, 2026, 4, 1679175, 1679175, 1, '', 1679175, '[{"name":"FEE","paid":true,"amount":488025,"currency":"TRY","paid_amount":488025},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500},{"name":"DEPOZİTO","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (176, 25, 2026, 5, 840589, 840589, 1, '', 840589, '[{"name":"FEE","paid":true,"amount":36889,"currency":"TRY","paid_amount":36889},{"name":"MAKİNA KİRASI","paid":true,"amount":15000,"currency":"EUR","paid_amount":15000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (210, 25, 2026, 4, 2009250, 2009250, 1, '', 2009250, '[{"name":"DEPOZİTO","paid":true,"amount":20000,"currency":"EUR","paid_amount":20000},{"name":"MAKİNA KİRASI","paid":true,"amount":15000,"currency":"EUR","paid_amount":15000},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (175, 23, 2026, 6, 779615, 779615, 1, '', 779615, '[{"name":"KİRA","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":245415,"currency":"TRY","paid_amount":245415}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (135, 22, 2026, 5, 397125, 397125, 0, '', 0, '[{"name":"SERVER ÜCRETİ","paid":false,"amount":2500,"currency":"EUR","paid_amount":0},{"name":"DIGITAL","amount":5000,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (179, 26, 2026, 6, 132375, 132375, 0, '', 0, '[{"name":"SERVER ÜCRETİ","amount":2500,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (157, 16, 2026, 5, 91717, 91717, 0, '', 0, '[{"name":"FEE","amount":91717,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (167, 16, 2026, 6, 150671, 150671, 0, '', 0, '[{"name":"FEE","amount":150671,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (173, 20, 2026, 6, 772043, 772043, 1, '', 772043, '[{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":235043,"currency":"TRY","paid_amount":235043}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (86, 20, 2026, 4, 1491528, 1491528, 1, '', 1491528, '[{"name":"DEPOZİTO","paid":true,"amount":20000,"currency":"EUR"},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500},{"name":"FEE","paid":true,"amount":51978,"currency":"TRY","paid_amount":51978},{"name":"Kalan Ödeme","paid":true,"amount":5000,"currency":"USD","paid_amount":5000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (192, 15, 2026, 6, 892210, 892210, 1, '', 892210, '[{"name":"FEE","paid":true,"amount":522885,"currency":"TRY","paid_amount":522885},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500},{"name":"DİJİTAL","paid":true,"amount":5000,"currency":"USD","paid_amount":5000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (247, 13, 2026, 7, 44387.2, 44387.2, 0, '', 0, '[{"name":"FEE","amount":44387.2,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (178, 25, 2026, 6, 1112708, 1112708, 1, '', 1112708, '[{"name":"MAKİNA KİRASI","paid":true,"amount":15000,"currency":"EUR","paid_amount":15000},{"name":"FEE","paid":true,"amount":311408,"currency":"TRY","paid_amount":311408}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (148, 12, 2026, 6, 1789426, 1789426, 1, '', 1789426, '[{"name":"RTP","paid":true,"amount":5000,"currency":"EUR","paid_amount":5000},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000},{"name":"FEE","paid":true,"amount":619926,"currency":"TRY","paid_amount":619926},{"name":"DEVREDEN BORÇ","paid":true,"amount":5000,"currency":"USD","paid_amount":5000},{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (165, 18, 2026, 6, 1683744, 1683744, 1, '', 1683744, '[{"name":"MAKİNA KİRASI","paid":true,"amount":15000,"currency":"EUR","paid_amount":15000},{"name":"FEE","paid":true,"amount":865044,"currency":"TRY","paid_amount":865044}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (233, 26, 2026, 7, 100000, 100000, 0, '', 0, '[{"name":"LİSANS ÜCRETİ","amount":100000,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (164, 18, 2026, 5, 1548452, 1548452, 1, '', 1548452, '[{"name":"FEE","paid":true,"amount":746852,"currency":"TRY","paid_amount":746852},{"name":"MAKİNA KİRASI","paid":true,"amount":15000,"currency":"EUR","paid_amount":15000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (243, 29, 2026, 8, 612500, 612500, 1, '', 612500, '[{"name":"SERVER ÜCRETİ","paid":true,"amount":2500,"currency":"EUR","paid_amount":2500},{"name":"DEPOZİTO","paid":true,"amount":10000,"currency":"USD","paid_amount":10000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (155, 14, 2026, 6, 3280200, 3280200, 1, '', 3280200, '[{"name":"SABİT-FEE","paid":true,"amount":70000,"currency":"USD","paid_amount":70000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (251, 23, 2026, 7, 932131.28, 932131.28, 0, '', 0, '[{"name":"FEE","amount":384531.28,"currency":"TRY"},{"name":"MAKİNA KİRASI","amount":10000,"currency":"EUR"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (252, 25, 2026, 7, 1512046.74, 1512046.74, 0, '', 0, '[{"name":"FEE","amount":589746.74,"currency":"TRY"},{"name":"MAKİNA KİRASI","amount":12500,"currency":"EUR"},{"name":"DİJİTAL BAKİYE","amount":5000,"currency":"USD"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (253, 16, 2026, 7, 9511.21, 9511.21, 0, '', 0, '[{"name":"FEE","amount":9511.21,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (255, 21, 2026, 7, 27945.48, 27945.48, 0, '', 0, '[{"name":"FEE","amount":27945.48,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (256, 22, 2026, 7, 49978.85, 49978.85, 0, '', 0, '[{"name":"FEE","amount":49978.85,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (254, 15, 2026, 7, 787642.42, 787642.42, 1, '', 787642.42, '[{"name":"FEE","paid":true,"amount":787642.42,"currency":"TRY","paid_amount":787642.42}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (246, 20, 2026, 7, 132298.54, 132298.54, 1, '', 132298.54, '[{"name":"FEE","paid":true,"amount":132298.54,"currency":"TRY","paid_amount":132298.54}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (257, 14, 2026, 7, 0, 0, 0, '', 0, '[]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (248, 18, 2026, 7, 691180.19, 691180.19, 0, '', 0, '[{"name":"FEE","amount":691180.19,"currency":"TRY"}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (62, 12, 2026, 7, 1007070.73, 1007070.73, 1, '', 1007070.73, '[{"name":"FEE","paid":true,"amount":456270.73,"currency":"TRY","paid_amount":456270.73},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (77, 17, 2026, 7, 639388.42, 639388.42, 1, '', 639388.42, '[{"name":"FEE","paid":true,"amount":88588.42,"currency":"TRY","paid_amount":88588.42},{"name":"MAKİNA KİRASI","paid":true,"amount":10000,"currency":"EUR","paid_amount":10000}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `fee_rows` (`id`, `casino_id`, `year`, `month`, `turnover`, `fee_amount`, `status`, `note`, `paid_amount`, `debt_items`) VALUES (266, 30, 2026, 8, 103001.34, 103001.34, 1, '', 103001.34, '[{"name":"DİJİTAL BAKİYE","paid":true,"amount":2098,"currency":"USD","paid_amount":2098},{"name":"DOMAİN ÜCRETİ","paid":true,"amount":60,"currency":"USD","paid_amount":60}]') ON DUPLICATE KEY UPDATE `id`=`id`;
+
+-- -----------------------------------------------------
+-- transactions (93 kayit)
+-- -----------------------------------------------------
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (10, 33, 52970, '', '2026-05-16 12:40:30') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (11, 33, 1536130, '', '2026-05-16 12:45:00') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (12, 36, 1589100, '', '2026-05-16 12:46:56') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (13, 37, 1589100, '', '2026-05-16 12:47:27') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (14, 36, 132425, '', '2026-05-16 12:49:31') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (15, 45, 132425, '', '2026-05-16 12:51:04') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (16, 45, 23318, '', '2026-05-16 12:51:46') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (17, 50, 620115, '', '2026-05-16 13:02:08') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (18, 45, 6882127.25, '', '2026-05-16 13:02:51') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (19, 50, 0.02, '', '2026-05-16 13:03:23') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (20, 50, 0, '', '2026-05-16 13:03:49') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (21, 50, 132425, '', '2026-05-16 13:07:34') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (22, 58, 529700, '', '2026-05-16 13:11:04') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (23, 59, 529700, '', '2026-05-16 13:11:18') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (24, 64, 1191825, '', '2026-05-16 13:13:00') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (25, 65, 132425, '', '2026-05-16 13:13:45') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (26, 66, 3187800, '', '2026-05-16 13:14:45') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (27, 68, 3187800, '', '2026-05-16 13:15:00') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (28, 69, 132425, '', '2026-05-16 13:20:33') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (29, 70, 1844370, '', '2026-05-16 13:20:58') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (30, 71, 1844370, '', '2026-05-16 13:21:14') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (31, 72, 132425, '', '2026-05-16 13:27:26') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (32, 74, 1191825, '', '2026-05-16 13:28:17') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (35, 86, 1059400, '', '2026-05-16 13:37:00') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (36, 87, 529700, '', '2026-05-16 13:37:13') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (37, 45, 132425, '', '2026-05-16 13:53:52') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (38, 102, 132425, '', '2026-05-16 14:39:22') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (39, 33, 397275, '', '2026-05-16 15:07:17') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (40, 37, 688610, '', '2026-05-16 17:24:11') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (41, 39, 715095, '', '2026-05-16 17:24:35') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (42, 45, 23318, '', '2026-05-16 17:25:52') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (43, 65, 90415, '', '2026-05-16 17:26:55') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (44, 58, 468682, '', '2026-05-16 17:31:03') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (45, 59, 1108546, '', '2026-05-16 17:32:32') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (46, 64, 1191825, '', '2026-05-16 17:33:36') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (47, 120, 1844370, '', '2026-05-16 17:35:56') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (48, 123, 3187800, '', '2026-05-16 17:37:40') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (49, 75, 529700, '', '2026-05-16 17:43:59') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (51, 129, 1679850, '', '2026-05-16 17:47:05') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (52, 130, 1324250, '', '2026-05-16 17:47:46') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (53, 86, 184403, '', '2026-05-16 17:49:22') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (55, 36, 847253, '', '2026-06-22 18:41:05') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (56, 33, 101083, '', '2026-06-22 18:41:13') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (57, 37, 1405636, '', '2026-06-22 18:42:22') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (58, 39, 934475, '', '2026-06-22 18:45:44') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (59, 50, 3125, '', '2026-06-22 18:51:43') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (60, 59, 268600, '', '2026-06-22 18:52:29') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (61, 60, 1574192, '', '2026-06-22 18:54:13') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (62, 69, 625, '', '2026-06-22 19:00:59') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (63, 120, 37665, '', '2026-06-22 19:01:47') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (64, 70, 37665, '', '2026-06-22 19:02:04') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (65, 71, 1254690, '', '2026-06-22 19:03:12') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (66, 65, 625, '', '2026-06-22 19:03:31') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (67, 68, 3252900, '', '2026-06-22 19:04:24') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (68, 72, 625, '', '2026-06-22 19:05:51') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (69, 74, 1168650, '', '2026-06-23 23:21:22') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (70, 75, 3915, '', '2026-06-23 23:23:10') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (71, 76, 529400, '', '2026-06-23 23:23:28') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (72, 130, 884625, '', '2026-06-23 23:24:44') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (73, 164, 1540952, '', '2026-06-23 23:26:56') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (74, 165, 794250, '', '2026-06-23 23:38:54') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (75, 87, 183630, '', '2026-06-24 03:07:15') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (76, 173, 529500, '', '2026-06-24 03:07:29') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (77, 176, 1985625, '', '2026-06-24 03:09:59') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (78, 148, 535800, '', '2026-07-06 12:03:04') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (79, 62, 267900, '', '2026-07-06 12:08:24') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (80, 62, 160740, '', '2026-07-06 12:08:51') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (81, 148, 535800, '', '2026-07-06 12:09:14') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (82, 86, 248175, '', '2026-07-06 12:09:58') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (83, 155, 3409950, '', '2026-07-06 12:33:49') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (84, 175, 13685135.7, '', '2026-07-06 12:47:28') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (85, 176, 60514, '', '2026-07-06 12:47:41') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (86, 210, 15000, '', '2026-07-06 12:48:12') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (87, 210, 1994250, '', '2026-07-06 12:50:12') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (88, 85, 267900, '', '2026-07-06 12:50:59') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (89, 178, 1112708, '', '2026-07-06 19:13:28') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (90, 164, 7500, '', '2026-07-08 14:26:23') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (91, 165, 801600, '', '2026-07-08 14:26:45') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (92, 39, 54709, '', '2026-07-08 14:27:36') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (93, 40, 651172, '', '2026-07-08 14:27:53') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (94, 60, 265800, '', '2026-07-08 14:32:04') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (95, 148, 1253626, '', '2026-07-08 14:32:42') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (96, 76, 686980, '', '2026-07-08 14:38:35') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (97, 155, 137800, '', '2026-07-08 14:43:03') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (98, 173, 537000, '', '2026-07-12 14:22:41') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (99, 192, 892210, '', '2026-07-15 09:07:50') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (100, 165, 882144, '', '2026-08-01 19:18:52') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (101, 243, 612500, '', '2026-08-04 22:29:27') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (102, 62, 1007070.73, '', '2026-08-12 08:19:43') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (103, 254, 787642.42, '', '2026-08-12 08:19:57') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (104, 77, 639388.42, '', '2026-08-12 08:20:10') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (105, 246, 132298.54, '', '2026-08-12 08:20:20') ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `transactions` (`id`, `fee_row_id`, `paid_amount`, `note`, `created_at`) VALUES (106, 266, 103001.34, '', '2026-08-12 12:39:10') ON DUPLICATE KEY UPDATE `id`=`id`;
+
+-- -----------------------------------------------------
+-- expenses (4 kayit)
+-- -----------------------------------------------------
+INSERT INTO `expenses` (`id`, `year`, `month`, `name`, `amount`, `currency`, `note`, `created_at`, `casino_id`) VALUES (4, 2026, 6, 'Vasily', 44000, 'USD', 'Vasily', '2026-06-24 00:28:38', NULL) ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `expenses` (`id`, `year`, `month`, `name`, `amount`, `currency`, `note`, `created_at`, `casino_id`) VALUES (5, 2026, 6, 'MAK.KİRA', 45000, 'EUR', 'MAK.KİRA', '2026-06-24 00:28:58', NULL) ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `expenses` (`id`, `year`, `month`, `name`, `amount`, `currency`, `note`, `created_at`, `casino_id`) VALUES (6, 2026, 6, 'MAAŞ', 17000, 'USD', 'MAAŞ', '2026-06-24 00:29:08', NULL) ON DUPLICATE KEY UPDATE `id`=`id`;
+INSERT INTO `expenses` (`id`, `year`, `month`, `name`, `amount`, `currency`, `note`, `created_at`, `casino_id`) VALUES (8, 2026, 7, 'PARK SLOT - DOMAIN', 58, 'USD', '30 Temmuz', '2026-07-30 10:33:01', NULL) ON DUPLICATE KEY UPDATE `id`=`id`;
+
+-- -----------------------------------------------------
+-- settings (6 kayit)
+-- -----------------------------------------------------
+REPLACE INTO `settings` (`k`, `v`) VALUES ('default_currency', 'TRY');
+REPLACE INTO `settings` (`k`, `v`) VALUES ('debt_presets', '["MAKİNA KİRASI","DEPOZİTO","SERVER ÜCRETİ","RTP","KİRA","BAKIM","FEE","SABİT-FEE","DEVREDEN BORÇ","DİJİTAL"]');
+REPLACE INTO `settings` (`k`, `v`) VALUES ('password', '3535');
+REPLACE INTO `settings` (`k`, `v`) VALUES ('note_10', '{"notes":"test","updatedAt":"2026-08-04T22:45:04.519Z"}');
+REPLACE INTO `settings` (`k`, `v`) VALUES ('note_28', '{"notes":"\t-digital %10\n\t-canlı oyunlarda %12 ","updatedAt":"2026-08-04T22:45:26.300Z"}');
+REPLACE INTO `settings` (`k`, `v`) VALUES ('casino_archive', '[{"id":11,"name":"FORTİS-SLOT","fee_type":"percent","fee_rate":6,"fee_currency":"TRY","archivedAt":"2026-08-07T09:41:15.260Z"},{"id":19,"name":"BEİNCASİNO","fee_type":"none","fee_rate":0,"fee_currency":"TRY","archivedAt":"2026-08-07T09:41:29.594Z"},{"id":27,"name":"ELEXUSSLOTVİP","fee_type":"percent","fee_rate":6,"fee_currency":"TRY","archivedAt":"2026-08-07T09:41:49.705Z"}]');
+
+SET FOREIGN_KEY_CHECKS = 1;

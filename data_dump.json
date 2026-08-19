@@ -1,0 +1,2491 @@
+{
+  "casinos": [
+    {
+      "id": 13,
+      "name": "ZOOM-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6.5,
+      "sort_order": 3,
+      "created_at": "2026-05-16T13:12:39.985204+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 15,
+      "name": "723-SLOT",
+      "fee_type": "fixed",
+      "fee_rate": 0,
+      "sort_order": 4,
+      "created_at": "2026-05-16T13:20:12.201873+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 21,
+      "name": "CRATOS-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 13,
+      "sort_order": 11,
+      "created_at": "2026-05-16T14:39:02.254885+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 11,
+      "name": "FORTİS-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 1,
+      "created_at": "2026-05-16T12:49:51.521152+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 14,
+      "name": "724-SLOT",
+      "fee_type": "fixed",
+      "fee_rate": 0,
+      "sort_order": 5,
+      "created_at": "2026-05-16T13:13:18.408851+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 12,
+      "name": "PRESTİGE-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 2,
+      "created_at": "2026-05-16T12:57:58.380977+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 20,
+      "name": "ROYAL PLUS",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 10,
+      "created_at": "2026-05-16T13:36:23.711842+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 18,
+      "name": "KOLAY-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 7,
+      "sort_order": 8,
+      "created_at": "2026-05-16T13:29:45.870641+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 19,
+      "name": "BEİNCASİNO",
+      "fee_type": "none",
+      "fee_rate": 0,
+      "sort_order": 9,
+      "created_at": "2026-05-16T13:34:11.706519+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 22,
+      "name": "BİLYONER - SLOT",
+      "fee_type": "percent",
+      "fee_rate": 12,
+      "sort_order": 12,
+      "created_at": "2026-05-16T17:50:30.242469+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 16,
+      "name": "MERİT PARK-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 6,
+      "created_at": "2026-05-16T13:21:37.171586+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 17,
+      "name": "EMPİRE-SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 7,
+      "created_at": "2026-05-16T13:27:48.850548+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 25,
+      "name": "ARKIN SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 14,
+      "created_at": "2026-06-24T03:09:06.898791+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 26,
+      "name": "MERİT VİP SLOT",
+      "fee_type": "percent",
+      "fee_rate": 8,
+      "sort_order": 15,
+      "created_at": "2026-06-24T03:10:55.78061+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 23,
+      "name": "LA CASA SLOT",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 13,
+      "created_at": "2026-05-16T17:52:40.18399+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 10,
+      "name": "ELEXSUZ",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 0,
+      "created_at": "2026-05-16T11:32:03.58599+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 27,
+      "name": "ELEXUSSLOTVİP",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 16,
+      "created_at": "2026-08-01T21:17:10.234091+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 28,
+      "name": "TURKIYE SLOT",
+      "fee_type": "percent",
+      "fee_rate": 12,
+      "sort_order": 17,
+      "created_at": "2026-08-04T22:27:01.456558+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 29,
+      "name": "ELEXUS VIP",
+      "fee_type": "percent",
+      "fee_rate": 6,
+      "sort_order": 18,
+      "created_at": "2026-08-04T22:28:46.200532+00:00",
+      "fee_currency": "TRY"
+    },
+    {
+      "id": 30,
+      "name": "PARK SLOT",
+      "fee_type": "percent",
+      "fee_rate": 10,
+      "sort_order": 19,
+      "created_at": "2026-08-12T12:38:31.848665+00:00",
+      "fee_currency": "TRY"
+    }
+  ],
+  "casino_cols": [],
+  "fee_rows": [
+    {
+      "id": 102,
+      "casino_id": 21,
+      "year": 2026,
+      "month": 4,
+      "turnover": 132425,
+      "fee_amount": 132425,
+      "status": 1,
+      "note": "",
+      "paid_amount": 132425,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "casino_id": 12,
+      "year": 2026,
+      "month": 3,
+      "turnover": 998382,
+      "fee_amount": 998382,
+      "status": 1,
+      "note": "",
+      "paid_amount": 998382,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 468682,
+          "currency": "TRY",
+          "paid_amount": 468682
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "casino_id": 14,
+      "year": 2026,
+      "month": 4,
+      "turnover": 3187800,
+      "fee_amount": 3187800,
+      "status": 1,
+      "note": "",
+      "paid_amount": 3187800,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 70000,
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 4,
+      "turnover": 1261948,
+      "fee_amount": 1261948,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1261948,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR"
+        },
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR"
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 70798,
+          "currency": "TRY",
+          "paid_amount": 70798
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "casino_id": 12,
+      "year": 2026,
+      "month": 4,
+      "turnover": 1377146,
+      "fee_amount": 1377146,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1377146,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 578846,
+          "currency": "TRY",
+          "paid_amount": 578846
+        },
+        {
+          "name": "RTP 2. TAKSİT",
+          "paid": true,
+          "amount": 5000,
+          "currency": "EUR",
+          "paid_amount": 5000
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "casino_id": 11,
+      "year": 2026,
+      "month": 4,
+      "turnover": 31823,
+      "fee_amount": 31823,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 31823,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "casino_id": 14,
+      "year": 2026,
+      "month": 3,
+      "turnover": 3187800,
+      "fee_amount": 3187800,
+      "status": 1,
+      "note": "",
+      "paid_amount": 3187800,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 70000,
+          "currency": "USD",
+          "paid_amount": 70000
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "casino_id": 12,
+      "year": 2026,
+      "month": 2,
+      "turnover": 755665,
+      "fee_amount": 755665,
+      "status": 1,
+      "note": "",
+      "paid_amount": 755665,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 90415,
+          "currency": "TRY"
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR"
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 8,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 60,
+      "casino_id": 12,
+      "year": 2026,
+      "month": 5,
+      "turnover": 1577492,
+      "fee_amount": 1577492,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1577492,
+      "debt_items": [
+        {
+          "name": "ARP 2.TAKSİT",
+          "paid": true,
+          "amount": 5000,
+          "currency": "EUR",
+          "paid_amount": 5000
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 775892,
+          "currency": "TRY",
+          "paid_amount": 775892
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "casino_id": 18,
+      "year": 2026,
+      "month": 3,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 78,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 8,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 79,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 9,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 80,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 10,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 81,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 11,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 82,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 12,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 37,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 4,
+      "turnover": 2094246,
+      "fee_amount": 2094246,
+      "status": 1,
+      "note": "",
+      "paid_amount": 2094246,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 30000,
+          "currency": "EUR",
+          "paid_amount": 30000
+        },
+        {
+          "name": "RTP 2. TAKSİT",
+          "paid": true,
+          "amount": 7500,
+          "currency": "EUR",
+          "paid_amount": 7500
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 98496,
+          "currency": "TRY",
+          "paid_amount": 98496
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 6,
+      "turnover": 686980,
+      "fee_amount": 686980,
+      "status": 1,
+      "note": "",
+      "paid_amount": 686980,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 152580,
+          "currency": "TRY",
+          "paid_amount": 152580
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 3,
+      "turnover": 2087458,
+      "fee_amount": 2087458,
+      "status": 1,
+      "note": "",
+      "paid_amount": 2087458,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 30000,
+          "currency": "EUR"
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 91708,
+          "currency": "TRY",
+          "paid_amount": 91708
+        },
+        {
+          "name": "RTP 2. TAKSİT",
+          "paid": true,
+          "amount": 7500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 120,
+      "casino_id": 15,
+      "year": 2026,
+      "month": 3,
+      "turnover": 1882035,
+      "fee_amount": 1882035,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1882035,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 40500,
+          "currency": "USD",
+          "paid_amount": 40500
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 7,
+      "turnover": 708636.27,
+      "fee_amount": 708636.27,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 161036.27,
+          "currency": "TRY"
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "amount": 10000,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "casino_id": 13,
+      "year": 2026,
+      "month": 2,
+      "turnover": 1191825,
+      "fee_amount": 1191825,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1191825,
+      "debt_items": [
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 20000,
+          "currency": "EUR",
+          "paid_amount": 20000
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "casino_id": 15,
+      "year": 2026,
+      "month": 2,
+      "turnover": 133050,
+      "fee_amount": 133050,
+      "status": 1,
+      "note": "",
+      "paid_amount": 133050,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "casino_id": 14,
+      "year": 2026,
+      "month": 2,
+      "turnover": 133050,
+      "fee_amount": 133050,
+      "status": 1,
+      "note": "",
+      "paid_amount": 133050,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "casino_id": 14,
+      "year": 2026,
+      "month": 5,
+      "turnover": 3252900,
+      "fee_amount": 3252900,
+      "status": 1,
+      "note": "",
+      "paid_amount": 3252900,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 70000,
+          "currency": "USD",
+          "paid_amount": 70000
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "casino_id": 16,
+      "year": 2026,
+      "month": 4,
+      "turnover": 133950,
+      "fee_amount": 133950,
+      "status": 0,
+      "note": "",
+      "paid_amount": 133050,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 5,
+      "turnover": 533615,
+      "fee_amount": 533615,
+      "status": 1,
+      "note": "",
+      "paid_amount": 533615,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 4215,
+          "currency": "TRY",
+          "paid_amount": 4215
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 6,
+      "turnover": 651172,
+      "fee_amount": 651172,
+      "status": 1,
+      "note": "test",
+      "paid_amount": 651172,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 116772,
+          "currency": "TRY",
+          "paid_amount": 116772
+        },
+        {
+          "name": "KİRA",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "casino_id": 19,
+      "year": 2026,
+      "month": 4,
+      "turnover": 267900,
+      "fee_amount": 267900,
+      "status": 1,
+      "note": "",
+      "paid_amount": 267900,
+      "debt_items": [
+        {
+          "name": "DIGITAL",
+          "paid": true,
+          "amount": 5000,
+          "currency": "EUR",
+          "paid_amount": 5000
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 2,
+      "turnover": 2568778,
+      "fee_amount": 2568778,
+      "status": 1,
+      "note": "",
+      "paid_amount": 2568778,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 30000,
+          "currency": "EUR"
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        },
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 15000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 40828,
+          "currency": "TRY",
+          "paid_amount": 40828
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "casino_id": 15,
+      "year": 2026,
+      "month": 4,
+      "turnover": 1882035,
+      "fee_amount": 1882035,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1882035,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 40500,
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "casino_id": 15,
+      "year": 2026,
+      "month": 5,
+      "turnover": 1254690,
+      "fee_amount": 1254690,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1254690,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 27000,
+          "currency": "USD",
+          "paid_amount": 27000
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "casino_id": 20,
+      "year": 2026,
+      "month": 5,
+      "turnover": 713330,
+      "fee_amount": 713330,
+      "status": 1,
+      "note": "",
+      "paid_amount": 713330,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR"
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 183830,
+          "currency": "TRY",
+          "paid_amount": 183830
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "casino_id": 10,
+      "year": 2026,
+      "month": 5,
+      "turnover": 1985495.65,
+      "fee_amount": 1985495.65,
+      "status": 0,
+      "note": "",
+      "paid_amount": 54709,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 54709,
+          "currency": "TRY",
+          "paid_amount": 54709
+        },
+        {
+          "name": "KİRA",
+          "paid": false,
+          "amount": 35815,
+          "currency": "EUR",
+          "paid_amount": 0
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "casino_id": 11,
+      "year": 2026,
+      "month": 3,
+      "turnover": 954668,
+      "fee_amount": 954668,
+      "status": 0,
+      "note": "",
+      "paid_amount": 155743,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 23318,
+          "currency": "TRY",
+          "paid_amount": 23318
+        },
+        {
+          "name": "DEPOZİTO",
+          "paid": false,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 0
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "casino_id": 18,
+      "year": 2026,
+      "month": 4,
+      "turnover": 1679175,
+      "fee_amount": 1679175,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1679175,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 488025,
+          "currency": "TRY",
+          "paid_amount": 488025
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        },
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        }
+      ]
+    },
+    {
+      "id": 176,
+      "casino_id": 25,
+      "year": 2026,
+      "month": 5,
+      "turnover": 840589,
+      "fee_amount": 840589,
+      "status": 1,
+      "note": "",
+      "paid_amount": 840589,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 36889,
+          "currency": "TRY",
+          "paid_amount": 36889
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 15000
+        }
+      ]
+    },
+    {
+      "id": 210,
+      "casino_id": 25,
+      "year": 2026,
+      "month": 4,
+      "turnover": 2009250,
+      "fee_amount": 2009250,
+      "status": 1,
+      "note": "",
+      "paid_amount": 2009250,
+      "debt_items": [
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 20000,
+          "currency": "EUR",
+          "paid_amount": 20000
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 15000
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        }
+      ]
+    },
+    {
+      "id": 175,
+      "casino_id": 23,
+      "year": 2026,
+      "month": 6,
+      "turnover": 779615,
+      "fee_amount": 779615,
+      "status": 1,
+      "note": "",
+      "paid_amount": 779615,
+      "debt_items": [
+        {
+          "name": "KİRA",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 245415,
+          "currency": "TRY",
+          "paid_amount": 245415
+        }
+      ]
+    },
+    {
+      "id": 135,
+      "casino_id": 22,
+      "year": 2026,
+      "month": 5,
+      "turnover": 397125,
+      "fee_amount": 397125,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": false,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 0
+        },
+        {
+          "name": "DIGITAL",
+          "amount": 5000,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 179,
+      "casino_id": 26,
+      "year": 2026,
+      "month": 6,
+      "turnover": 132375,
+      "fee_amount": 132375,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "amount": 2500,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 157,
+      "casino_id": 16,
+      "year": 2026,
+      "month": 5,
+      "turnover": 91717,
+      "fee_amount": 91717,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 91717,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 167,
+      "casino_id": 16,
+      "year": 2026,
+      "month": 6,
+      "turnover": 150671,
+      "fee_amount": 150671,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 150671,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 173,
+      "casino_id": 20,
+      "year": 2026,
+      "month": 6,
+      "turnover": 772043,
+      "fee_amount": 772043,
+      "status": 1,
+      "note": "",
+      "paid_amount": 772043,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 235043,
+          "currency": "TRY",
+          "paid_amount": 235043
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "casino_id": 20,
+      "year": 2026,
+      "month": 4,
+      "turnover": 1491528,
+      "fee_amount": 1491528,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1491528,
+      "debt_items": [
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 20000,
+          "currency": "EUR"
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 51978,
+          "currency": "TRY",
+          "paid_amount": 51978
+        },
+        {
+          "name": "Kalan Ödeme",
+          "paid": true,
+          "amount": 5000,
+          "currency": "USD",
+          "paid_amount": 5000
+        }
+      ]
+    },
+    {
+      "id": 192,
+      "casino_id": 15,
+      "year": 2026,
+      "month": 6,
+      "turnover": 892210,
+      "fee_amount": 892210,
+      "status": 1,
+      "note": "",
+      "paid_amount": 892210,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 522885,
+          "currency": "TRY",
+          "paid_amount": 522885
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        },
+        {
+          "name": "DİJİTAL",
+          "paid": true,
+          "amount": 5000,
+          "currency": "USD",
+          "paid_amount": 5000
+        }
+      ]
+    },
+    {
+      "id": 247,
+      "casino_id": 13,
+      "year": 2026,
+      "month": 7,
+      "turnover": 44387.2,
+      "fee_amount": 44387.2,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 44387.2,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 178,
+      "casino_id": 25,
+      "year": 2026,
+      "month": 6,
+      "turnover": 1112708,
+      "fee_amount": 1112708,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1112708,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 15000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 311408,
+          "currency": "TRY",
+          "paid_amount": 311408
+        }
+      ]
+    },
+    {
+      "id": 148,
+      "casino_id": 12,
+      "year": 2026,
+      "month": 6,
+      "turnover": 1789426,
+      "fee_amount": 1789426,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1789426,
+      "debt_items": [
+        {
+          "name": "RTP",
+          "paid": true,
+          "amount": 5000,
+          "currency": "EUR",
+          "paid_amount": 5000
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 619926,
+          "currency": "TRY",
+          "paid_amount": 619926
+        },
+        {
+          "name": "DEVREDEN BORÇ",
+          "paid": true,
+          "amount": 5000,
+          "currency": "USD",
+          "paid_amount": 5000
+        },
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        }
+      ]
+    },
+    {
+      "id": 165,
+      "casino_id": 18,
+      "year": 2026,
+      "month": 6,
+      "turnover": 1683744,
+      "fee_amount": 1683744,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1683744,
+      "debt_items": [
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 15000
+        },
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 865044,
+          "currency": "TRY",
+          "paid_amount": 865044
+        }
+      ]
+    },
+    {
+      "id": 233,
+      "casino_id": 26,
+      "year": 2026,
+      "month": 7,
+      "turnover": 100000,
+      "fee_amount": 100000,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "LİSANS ÜCRETİ",
+          "amount": 100000,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 164,
+      "casino_id": 18,
+      "year": 2026,
+      "month": 5,
+      "turnover": 1548452,
+      "fee_amount": 1548452,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1548452,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 746852,
+          "currency": "TRY",
+          "paid_amount": 746852
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 15000,
+          "currency": "EUR",
+          "paid_amount": 15000
+        }
+      ]
+    },
+    {
+      "id": 243,
+      "casino_id": 29,
+      "year": 2026,
+      "month": 8,
+      "turnover": 612500,
+      "fee_amount": 612500,
+      "status": 1,
+      "note": "",
+      "paid_amount": 612500,
+      "debt_items": [
+        {
+          "name": "SERVER ÜCRETİ",
+          "paid": true,
+          "amount": 2500,
+          "currency": "EUR",
+          "paid_amount": 2500
+        },
+        {
+          "name": "DEPOZİTO",
+          "paid": true,
+          "amount": 10000,
+          "currency": "USD",
+          "paid_amount": 10000
+        }
+      ]
+    },
+    {
+      "id": 155,
+      "casino_id": 14,
+      "year": 2026,
+      "month": 6,
+      "turnover": 3280200,
+      "fee_amount": 3280200,
+      "status": 1,
+      "note": "",
+      "paid_amount": 3280200,
+      "debt_items": [
+        {
+          "name": "SABİT-FEE",
+          "paid": true,
+          "amount": 70000,
+          "currency": "USD",
+          "paid_amount": 70000
+        }
+      ]
+    },
+    {
+      "id": 251,
+      "casino_id": 23,
+      "year": 2026,
+      "month": 7,
+      "turnover": 932131.28,
+      "fee_amount": 932131.28,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 384531.28,
+          "currency": "TRY"
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "amount": 10000,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "id": 252,
+      "casino_id": 25,
+      "year": 2026,
+      "month": 7,
+      "turnover": 1512046.74,
+      "fee_amount": 1512046.74,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 589746.74,
+          "currency": "TRY"
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "amount": 12500,
+          "currency": "EUR"
+        },
+        {
+          "name": "DİJİTAL BAKİYE",
+          "amount": 5000,
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "id": 253,
+      "casino_id": 16,
+      "year": 2026,
+      "month": 7,
+      "turnover": 9511.21,
+      "fee_amount": 9511.21,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 9511.21,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 255,
+      "casino_id": 21,
+      "year": 2026,
+      "month": 7,
+      "turnover": 27945.48,
+      "fee_amount": 27945.48,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 27945.48,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 256,
+      "casino_id": 22,
+      "year": 2026,
+      "month": 7,
+      "turnover": 49978.85,
+      "fee_amount": 49978.85,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 49978.85,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 254,
+      "casino_id": 15,
+      "year": 2026,
+      "month": 7,
+      "turnover": 787642.42,
+      "fee_amount": 787642.42,
+      "status": 1,
+      "note": "",
+      "paid_amount": 787642.42,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 787642.42,
+          "currency": "TRY",
+          "paid_amount": 787642.42
+        }
+      ]
+    },
+    {
+      "id": 246,
+      "casino_id": 20,
+      "year": 2026,
+      "month": 7,
+      "turnover": 132298.54,
+      "fee_amount": 132298.54,
+      "status": 1,
+      "note": "",
+      "paid_amount": 132298.54,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 132298.54,
+          "currency": "TRY",
+          "paid_amount": 132298.54
+        }
+      ]
+    },
+    {
+      "id": 257,
+      "casino_id": 14,
+      "year": 2026,
+      "month": 7,
+      "turnover": 0,
+      "fee_amount": 0,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": []
+    },
+    {
+      "id": 248,
+      "casino_id": 18,
+      "year": 2026,
+      "month": 7,
+      "turnover": 691180.19,
+      "fee_amount": 691180.19,
+      "status": 0,
+      "note": "",
+      "paid_amount": 0,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "amount": 691180.19,
+          "currency": "TRY"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "casino_id": 12,
+      "year": 2026,
+      "month": 7,
+      "turnover": 1007070.73,
+      "fee_amount": 1007070.73,
+      "status": 1,
+      "note": "",
+      "paid_amount": 1007070.73,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 456270.73,
+          "currency": "TRY",
+          "paid_amount": 456270.73
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "casino_id": 17,
+      "year": 2026,
+      "month": 7,
+      "turnover": 639388.42,
+      "fee_amount": 639388.42,
+      "status": 1,
+      "note": "",
+      "paid_amount": 639388.42,
+      "debt_items": [
+        {
+          "name": "FEE",
+          "paid": true,
+          "amount": 88588.42,
+          "currency": "TRY",
+          "paid_amount": 88588.42
+        },
+        {
+          "name": "MAKİNA KİRASI",
+          "paid": true,
+          "amount": 10000,
+          "currency": "EUR",
+          "paid_amount": 10000
+        }
+      ]
+    },
+    {
+      "id": 266,
+      "casino_id": 30,
+      "year": 2026,
+      "month": 8,
+      "turnover": 103001.34,
+      "fee_amount": 103001.34,
+      "status": 1,
+      "note": "",
+      "paid_amount": 103001.34,
+      "debt_items": [
+        {
+          "name": "DİJİTAL BAKİYE",
+          "paid": true,
+          "amount": 2098,
+          "currency": "USD",
+          "paid_amount": 2098
+        },
+        {
+          "name": "DOMAİN ÜCRETİ",
+          "paid": true,
+          "amount": 60,
+          "currency": "USD",
+          "paid_amount": 60
+        }
+      ]
+    }
+  ],
+  "col_entries": [],
+  "transactions": [
+    {
+      "id": 10,
+      "fee_row_id": 33,
+      "paid_amount": 52970,
+      "note": "",
+      "created_at": "2026-05-16T12:40:30.22289+00:00"
+    },
+    {
+      "id": 11,
+      "fee_row_id": 33,
+      "paid_amount": 1536130,
+      "note": "",
+      "created_at": "2026-05-16T12:45:00.96697+00:00"
+    },
+    {
+      "id": 12,
+      "fee_row_id": 36,
+      "paid_amount": 1589100,
+      "note": "",
+      "created_at": "2026-05-16T12:46:56.681792+00:00"
+    },
+    {
+      "id": 13,
+      "fee_row_id": 37,
+      "paid_amount": 1589100,
+      "note": "",
+      "created_at": "2026-05-16T12:47:27.372672+00:00"
+    },
+    {
+      "id": 14,
+      "fee_row_id": 36,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T12:49:31.751697+00:00"
+    },
+    {
+      "id": 15,
+      "fee_row_id": 45,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T12:51:04.074619+00:00"
+    },
+    {
+      "id": 16,
+      "fee_row_id": 45,
+      "paid_amount": 23318,
+      "note": "",
+      "created_at": "2026-05-16T12:51:46.069175+00:00"
+    },
+    {
+      "id": 17,
+      "fee_row_id": 50,
+      "paid_amount": 620115,
+      "note": "",
+      "created_at": "2026-05-16T13:02:08.489805+00:00"
+    },
+    {
+      "id": 18,
+      "fee_row_id": 45,
+      "paid_amount": 6882127.25,
+      "note": "",
+      "created_at": "2026-05-16T13:02:51.062122+00:00"
+    },
+    {
+      "id": 19,
+      "fee_row_id": 50,
+      "paid_amount": 0.02,
+      "note": "",
+      "created_at": "2026-05-16T13:03:23.869119+00:00"
+    },
+    {
+      "id": 20,
+      "fee_row_id": 50,
+      "paid_amount": 0,
+      "note": "",
+      "created_at": "2026-05-16T13:03:49.590288+00:00"
+    },
+    {
+      "id": 21,
+      "fee_row_id": 50,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T13:07:34.176008+00:00"
+    },
+    {
+      "id": 22,
+      "fee_row_id": 58,
+      "paid_amount": 529700,
+      "note": "",
+      "created_at": "2026-05-16T13:11:04.737901+00:00"
+    },
+    {
+      "id": 23,
+      "fee_row_id": 59,
+      "paid_amount": 529700,
+      "note": "",
+      "created_at": "2026-05-16T13:11:18.372226+00:00"
+    },
+    {
+      "id": 24,
+      "fee_row_id": 64,
+      "paid_amount": 1191825,
+      "note": "",
+      "created_at": "2026-05-16T13:13:00.929002+00:00"
+    },
+    {
+      "id": 25,
+      "fee_row_id": 65,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T13:13:45.602349+00:00"
+    },
+    {
+      "id": 26,
+      "fee_row_id": 66,
+      "paid_amount": 3187800,
+      "note": "",
+      "created_at": "2026-05-16T13:14:45.781283+00:00"
+    },
+    {
+      "id": 27,
+      "fee_row_id": 68,
+      "paid_amount": 3187800,
+      "note": "",
+      "created_at": "2026-05-16T13:15:00.239938+00:00"
+    },
+    {
+      "id": 28,
+      "fee_row_id": 69,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T13:20:33.478149+00:00"
+    },
+    {
+      "id": 29,
+      "fee_row_id": 70,
+      "paid_amount": 1844370,
+      "note": "",
+      "created_at": "2026-05-16T13:20:58.409838+00:00"
+    },
+    {
+      "id": 30,
+      "fee_row_id": 71,
+      "paid_amount": 1844370,
+      "note": "",
+      "created_at": "2026-05-16T13:21:14.981739+00:00"
+    },
+    {
+      "id": 31,
+      "fee_row_id": 72,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T13:27:26.873223+00:00"
+    },
+    {
+      "id": 32,
+      "fee_row_id": 74,
+      "paid_amount": 1191825,
+      "note": "",
+      "created_at": "2026-05-16T13:28:17.330105+00:00"
+    },
+    {
+      "id": 35,
+      "fee_row_id": 86,
+      "paid_amount": 1059400,
+      "note": "",
+      "created_at": "2026-05-16T13:37:00.690342+00:00"
+    },
+    {
+      "id": 36,
+      "fee_row_id": 87,
+      "paid_amount": 529700,
+      "note": "",
+      "created_at": "2026-05-16T13:37:13.653624+00:00"
+    },
+    {
+      "id": 37,
+      "fee_row_id": 45,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T13:53:52.038233+00:00"
+    },
+    {
+      "id": 38,
+      "fee_row_id": 102,
+      "paid_amount": 132425,
+      "note": "",
+      "created_at": "2026-05-16T14:39:22.591629+00:00"
+    },
+    {
+      "id": 39,
+      "fee_row_id": 33,
+      "paid_amount": 397275,
+      "note": "",
+      "created_at": "2026-05-16T15:07:17.682046+00:00"
+    },
+    {
+      "id": 40,
+      "fee_row_id": 37,
+      "paid_amount": 688610,
+      "note": "",
+      "created_at": "2026-05-16T17:24:11.99946+00:00"
+    },
+    {
+      "id": 41,
+      "fee_row_id": 39,
+      "paid_amount": 715095,
+      "note": "",
+      "created_at": "2026-05-16T17:24:35.602168+00:00"
+    },
+    {
+      "id": 42,
+      "fee_row_id": 45,
+      "paid_amount": 23318,
+      "note": "",
+      "created_at": "2026-05-16T17:25:52.263404+00:00"
+    },
+    {
+      "id": 43,
+      "fee_row_id": 65,
+      "paid_amount": 90415,
+      "note": "",
+      "created_at": "2026-05-16T17:26:55.389554+00:00"
+    },
+    {
+      "id": 44,
+      "fee_row_id": 58,
+      "paid_amount": 468682,
+      "note": "",
+      "created_at": "2026-05-16T17:31:03.394218+00:00"
+    },
+    {
+      "id": 45,
+      "fee_row_id": 59,
+      "paid_amount": 1108546,
+      "note": "",
+      "created_at": "2026-05-16T17:32:32.935914+00:00"
+    },
+    {
+      "id": 46,
+      "fee_row_id": 64,
+      "paid_amount": 1191825,
+      "note": "",
+      "created_at": "2026-05-16T17:33:36.87497+00:00"
+    },
+    {
+      "id": 47,
+      "fee_row_id": 120,
+      "paid_amount": 1844370,
+      "note": "",
+      "created_at": "2026-05-16T17:35:56.500994+00:00"
+    },
+    {
+      "id": 48,
+      "fee_row_id": 123,
+      "paid_amount": 3187800,
+      "note": "",
+      "created_at": "2026-05-16T17:37:40.264749+00:00"
+    },
+    {
+      "id": 49,
+      "fee_row_id": 75,
+      "paid_amount": 529700,
+      "note": "",
+      "created_at": "2026-05-16T17:43:59.190109+00:00"
+    },
+    {
+      "id": 51,
+      "fee_row_id": 129,
+      "paid_amount": 1679850,
+      "note": "",
+      "created_at": "2026-05-16T17:47:05.677555+00:00"
+    },
+    {
+      "id": 52,
+      "fee_row_id": 130,
+      "paid_amount": 1324250,
+      "note": "",
+      "created_at": "2026-05-16T17:47:46.567301+00:00"
+    },
+    {
+      "id": 53,
+      "fee_row_id": 86,
+      "paid_amount": 184403,
+      "note": "",
+      "created_at": "2026-05-16T17:49:22.945556+00:00"
+    },
+    {
+      "id": 55,
+      "fee_row_id": 36,
+      "paid_amount": 847253,
+      "note": "",
+      "created_at": "2026-06-22T18:41:05.195449+00:00"
+    },
+    {
+      "id": 56,
+      "fee_row_id": 33,
+      "paid_amount": 101083,
+      "note": "",
+      "created_at": "2026-06-22T18:41:13.213386+00:00"
+    },
+    {
+      "id": 57,
+      "fee_row_id": 37,
+      "paid_amount": 1405636,
+      "note": "",
+      "created_at": "2026-06-22T18:42:22.0595+00:00"
+    },
+    {
+      "id": 58,
+      "fee_row_id": 39,
+      "paid_amount": 934475,
+      "note": "",
+      "created_at": "2026-06-22T18:45:44.178158+00:00"
+    },
+    {
+      "id": 59,
+      "fee_row_id": 50,
+      "paid_amount": 3125,
+      "note": "",
+      "created_at": "2026-06-22T18:51:43.868941+00:00"
+    },
+    {
+      "id": 60,
+      "fee_row_id": 59,
+      "paid_amount": 268600,
+      "note": "",
+      "created_at": "2026-06-22T18:52:29.857023+00:00"
+    },
+    {
+      "id": 61,
+      "fee_row_id": 60,
+      "paid_amount": 1574192,
+      "note": "",
+      "created_at": "2026-06-22T18:54:13.309473+00:00"
+    },
+    {
+      "id": 62,
+      "fee_row_id": 69,
+      "paid_amount": 625,
+      "note": "",
+      "created_at": "2026-06-22T19:00:59.078418+00:00"
+    },
+    {
+      "id": 63,
+      "fee_row_id": 120,
+      "paid_amount": 37665,
+      "note": "",
+      "created_at": "2026-06-22T19:01:47.036396+00:00"
+    },
+    {
+      "id": 64,
+      "fee_row_id": 70,
+      "paid_amount": 37665,
+      "note": "",
+      "created_at": "2026-06-22T19:02:04.494027+00:00"
+    },
+    {
+      "id": 65,
+      "fee_row_id": 71,
+      "paid_amount": 1254690,
+      "note": "",
+      "created_at": "2026-06-22T19:03:12.69192+00:00"
+    },
+    {
+      "id": 66,
+      "fee_row_id": 65,
+      "paid_amount": 625,
+      "note": "",
+      "created_at": "2026-06-22T19:03:31.698766+00:00"
+    },
+    {
+      "id": 67,
+      "fee_row_id": 68,
+      "paid_amount": 3252900,
+      "note": "",
+      "created_at": "2026-06-22T19:04:24.559819+00:00"
+    },
+    {
+      "id": 68,
+      "fee_row_id": 72,
+      "paid_amount": 625,
+      "note": "",
+      "created_at": "2026-06-22T19:05:51.568669+00:00"
+    },
+    {
+      "id": 69,
+      "fee_row_id": 74,
+      "paid_amount": 1168650,
+      "note": "",
+      "created_at": "2026-06-23T23:21:22.87499+00:00"
+    },
+    {
+      "id": 70,
+      "fee_row_id": 75,
+      "paid_amount": 3915,
+      "note": "",
+      "created_at": "2026-06-23T23:23:10.868021+00:00"
+    },
+    {
+      "id": 71,
+      "fee_row_id": 76,
+      "paid_amount": 529400,
+      "note": "",
+      "created_at": "2026-06-23T23:23:28.320717+00:00"
+    },
+    {
+      "id": 72,
+      "fee_row_id": 130,
+      "paid_amount": 884625,
+      "note": "",
+      "created_at": "2026-06-23T23:24:44.384628+00:00"
+    },
+    {
+      "id": 73,
+      "fee_row_id": 164,
+      "paid_amount": 1540952,
+      "note": "",
+      "created_at": "2026-06-23T23:26:56.377545+00:00"
+    },
+    {
+      "id": 74,
+      "fee_row_id": 165,
+      "paid_amount": 794250,
+      "note": "",
+      "created_at": "2026-06-23T23:38:54.926481+00:00"
+    },
+    {
+      "id": 75,
+      "fee_row_id": 87,
+      "paid_amount": 183630,
+      "note": "",
+      "created_at": "2026-06-24T03:07:15.74513+00:00"
+    },
+    {
+      "id": 76,
+      "fee_row_id": 173,
+      "paid_amount": 529500,
+      "note": "",
+      "created_at": "2026-06-24T03:07:29.269286+00:00"
+    },
+    {
+      "id": 77,
+      "fee_row_id": 176,
+      "paid_amount": 1985625,
+      "note": "",
+      "created_at": "2026-06-24T03:09:59.563798+00:00"
+    },
+    {
+      "id": 78,
+      "fee_row_id": 148,
+      "paid_amount": 535800,
+      "note": "",
+      "created_at": "2026-07-06T12:03:04.336834+00:00"
+    },
+    {
+      "id": 79,
+      "fee_row_id": 62,
+      "paid_amount": 267900,
+      "note": "",
+      "created_at": "2026-07-06T12:08:24.258202+00:00"
+    },
+    {
+      "id": 80,
+      "fee_row_id": 62,
+      "paid_amount": 160740,
+      "note": "",
+      "created_at": "2026-07-06T12:08:51.324158+00:00"
+    },
+    {
+      "id": 81,
+      "fee_row_id": 148,
+      "paid_amount": 535800,
+      "note": "",
+      "created_at": "2026-07-06T12:09:14.905225+00:00"
+    },
+    {
+      "id": 82,
+      "fee_row_id": 86,
+      "paid_amount": 248175,
+      "note": "",
+      "created_at": "2026-07-06T12:09:58.257673+00:00"
+    },
+    {
+      "id": 83,
+      "fee_row_id": 155,
+      "paid_amount": 3409950,
+      "note": "",
+      "created_at": "2026-07-06T12:33:49.959644+00:00"
+    },
+    {
+      "id": 84,
+      "fee_row_id": 175,
+      "paid_amount": 13685135.7,
+      "note": "",
+      "created_at": "2026-07-06T12:47:28.559467+00:00"
+    },
+    {
+      "id": 85,
+      "fee_row_id": 176,
+      "paid_amount": 60514,
+      "note": "",
+      "created_at": "2026-07-06T12:47:41.070612+00:00"
+    },
+    {
+      "id": 86,
+      "fee_row_id": 210,
+      "paid_amount": 15000,
+      "note": "",
+      "created_at": "2026-07-06T12:48:12.242846+00:00"
+    },
+    {
+      "id": 87,
+      "fee_row_id": 210,
+      "paid_amount": 1994250,
+      "note": "",
+      "created_at": "2026-07-06T12:50:12.802204+00:00"
+    },
+    {
+      "id": 88,
+      "fee_row_id": 85,
+      "paid_amount": 267900,
+      "note": "",
+      "created_at": "2026-07-06T12:50:59.825997+00:00"
+    },
+    {
+      "id": 89,
+      "fee_row_id": 178,
+      "paid_amount": 1112708,
+      "note": "",
+      "created_at": "2026-07-06T19:13:28.862178+00:00"
+    },
+    {
+      "id": 90,
+      "fee_row_id": 164,
+      "paid_amount": 7500,
+      "note": "",
+      "created_at": "2026-07-08T14:26:23.067958+00:00"
+    },
+    {
+      "id": 91,
+      "fee_row_id": 165,
+      "paid_amount": 801600,
+      "note": "",
+      "created_at": "2026-07-08T14:26:45.684978+00:00"
+    },
+    {
+      "id": 92,
+      "fee_row_id": 39,
+      "paid_amount": 54709,
+      "note": "",
+      "created_at": "2026-07-08T14:27:36.659529+00:00"
+    },
+    {
+      "id": 93,
+      "fee_row_id": 40,
+      "paid_amount": 651172,
+      "note": "",
+      "created_at": "2026-07-08T14:27:53.308569+00:00"
+    },
+    {
+      "id": 94,
+      "fee_row_id": 60,
+      "paid_amount": 265800,
+      "note": "",
+      "created_at": "2026-07-08T14:32:04.448808+00:00"
+    },
+    {
+      "id": 95,
+      "fee_row_id": 148,
+      "paid_amount": 1253626,
+      "note": "",
+      "created_at": "2026-07-08T14:32:42.726861+00:00"
+    },
+    {
+      "id": 96,
+      "fee_row_id": 76,
+      "paid_amount": 686980,
+      "note": "",
+      "created_at": "2026-07-08T14:38:35.131691+00:00"
+    },
+    {
+      "id": 97,
+      "fee_row_id": 155,
+      "paid_amount": 137800,
+      "note": "",
+      "created_at": "2026-07-08T14:43:03.840374+00:00"
+    },
+    {
+      "id": 98,
+      "fee_row_id": 173,
+      "paid_amount": 537000,
+      "note": "",
+      "created_at": "2026-07-12T14:22:41.820632+00:00"
+    },
+    {
+      "id": 99,
+      "fee_row_id": 192,
+      "paid_amount": 892210,
+      "note": "",
+      "created_at": "2026-07-15T09:07:50.224328+00:00"
+    },
+    {
+      "id": 100,
+      "fee_row_id": 165,
+      "paid_amount": 882144,
+      "note": "",
+      "created_at": "2026-08-01T19:18:52.523423+00:00"
+    },
+    {
+      "id": 101,
+      "fee_row_id": 243,
+      "paid_amount": 612500,
+      "note": "",
+      "created_at": "2026-08-04T22:29:27.959233+00:00"
+    },
+    {
+      "id": 102,
+      "fee_row_id": 62,
+      "paid_amount": 1007070.73,
+      "note": "",
+      "created_at": "2026-08-12T08:19:43.746395+00:00"
+    },
+    {
+      "id": 103,
+      "fee_row_id": 254,
+      "paid_amount": 787642.42,
+      "note": "",
+      "created_at": "2026-08-12T08:19:57.111908+00:00"
+    },
+    {
+      "id": 104,
+      "fee_row_id": 77,
+      "paid_amount": 639388.42,
+      "note": "",
+      "created_at": "2026-08-12T08:20:10.973346+00:00"
+    },
+    {
+      "id": 105,
+      "fee_row_id": 246,
+      "paid_amount": 132298.54,
+      "note": "",
+      "created_at": "2026-08-12T08:20:20.880892+00:00"
+    },
+    {
+      "id": 106,
+      "fee_row_id": 266,
+      "paid_amount": 103001.34,
+      "note": "",
+      "created_at": "2026-08-12T12:39:10.267018+00:00"
+    }
+  ],
+  "expenses": [
+    {
+      "id": 4,
+      "year": 2026,
+      "month": 6,
+      "name": "Vasily",
+      "amount": 44000,
+      "currency": "USD",
+      "note": "Vasily",
+      "created_at": "2026-06-24T03:28:38.135218",
+      "casino_id": null
+    },
+    {
+      "id": 5,
+      "year": 2026,
+      "month": 6,
+      "name": "MAK.KİRA",
+      "amount": 45000,
+      "currency": "EUR",
+      "note": "MAK.KİRA",
+      "created_at": "2026-06-24T03:28:58.875341",
+      "casino_id": null
+    },
+    {
+      "id": 6,
+      "year": 2026,
+      "month": 6,
+      "name": "MAAŞ",
+      "amount": 17000,
+      "currency": "USD",
+      "note": "MAAŞ",
+      "created_at": "2026-06-24T03:29:08.83289",
+      "casino_id": null
+    },
+    {
+      "id": 8,
+      "year": 2026,
+      "month": 7,
+      "name": "PARK SLOT - DOMAIN",
+      "amount": 58,
+      "currency": "USD",
+      "note": "30 Temmuz",
+      "created_at": "2026-07-30T13:33:01.339079",
+      "casino_id": null
+    }
+  ],
+  "settings": [
+    {
+      "k": "default_currency",
+      "v": "TRY"
+    },
+    {
+      "k": "debt_presets",
+      "v": "[\"MAKİNA KİRASI\",\"DEPOZİTO\",\"SERVER ÜCRETİ\",\"RTP\",\"KİRA\",\"BAKIM\",\"FEE\",\"SABİT-FEE\",\"DEVREDEN BORÇ\",\"DİJİTAL\"]"
+    },
+    {
+      "k": "password",
+      "v": "3535"
+    },
+    {
+      "k": "note_10",
+      "v": "{\"notes\":\"test\",\"updatedAt\":\"2026-08-04T22:45:04.519Z\"}"
+    },
+    {
+      "k": "note_28",
+      "v": "{\"notes\":\"\\t-digital %10\\n\\t-canlı oyunlarda %12 \",\"updatedAt\":\"2026-08-04T22:45:26.300Z\"}"
+    },
+    {
+      "k": "casino_archive",
+      "v": "[{\"id\":11,\"name\":\"FORTİS-SLOT\",\"fee_type\":\"percent\",\"fee_rate\":6,\"fee_currency\":\"TRY\",\"archivedAt\":\"2026-08-07T09:41:15.260Z\"},{\"id\":19,\"name\":\"BEİNCASİNO\",\"fee_type\":\"none\",\"fee_rate\":0,\"fee_currency\":\"TRY\",\"archivedAt\":\"2026-08-07T09:41:29.594Z\"},{\"id\":27,\"name\":\"ELEXUSSLOTVİP\",\"fee_type\":\"percent\",\"fee_rate\":6,\"fee_currency\":\"TRY\",\"archivedAt\":\"2026-08-07T09:41:49.705Z\"}]"
+    }
+  ]
+}

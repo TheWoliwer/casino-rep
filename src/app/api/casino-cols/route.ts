@@ -1,43 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { query, queryOne, execute } from '@/lib/mysql';
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin
-    .from('casino_cols')
-    .select('*')
-    .order('sort_order');
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  try {
+    const data = await query('SELECT * FROM casino_cols ORDER BY sort_order ASC');
+    return NextResponse.json(data);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { casino_id, name, amount, currency, monthly } = body;
-  if (!casino_id || !name) return NextResponse.json({ error: 'casino_id ve name zorunlu' }, { status: 400 });
+  try {
+    const body = await req.json();
+    const { casino_id, name, amount, currency, monthly } = body;
+    if (!casino_id || !name) return NextResponse.json({ error: 'casino_id ve name zorunlu' }, { status: 400 });
 
-  const { data: maxRow } = await supabaseAdmin
-    .from('casino_cols')
-    .select('sort_order')
-    .eq('casino_id', casino_id)
-    .order('sort_order', { ascending: false })
-    .limit(1)
-    .single();
+    const maxRow = await queryOne<{ max_order: number | null }>(
+      'SELECT MAX(sort_order) as max_order FROM casino_cols WHERE casino_id = ?',
+      [casino_id]
+    );
+    const sort_order = (maxRow?.max_order ?? 0) + 1;
 
-  const sort_order = (maxRow?.sort_order ?? 0) + 1;
+    const result = await execute(
+      'INSERT INTO casino_cols (casino_id, name, amount, currency, monthly, sort_order) VALUES (?, ?, ?, ?, ?, ?)',
+      [casino_id, name, amount || 0, currency || 'TRY', monthly ?? 1, sort_order]
+    );
 
-  const { data, error } = await supabaseAdmin
-    .from('casino_cols')
-    .insert({ casino_id, name, amount: amount || 0, currency: currency || 'TRY', monthly: monthly ?? 1, sort_order })
-    .select()
-    .single();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+    const inserted = await queryOne('SELECT * FROM casino_cols WHERE id = ?', [result.insertId]);
+    return NextResponse.json(inserted);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: NextRequest) {
-  const id = req.nextUrl.searchParams.get('id');
-  const { error } = await supabaseAdmin.from('casino_cols').delete().eq('id', id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  try {
+    const id = req.nextUrl.searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'id zorunlu' }, { status: 400 });
+
+    await execute('DELETE FROM casino_cols WHERE id = ?', [id]);
+    return NextResponse.json({ ok: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
