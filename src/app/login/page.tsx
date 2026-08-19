@@ -1,32 +1,27 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 type ResetStep = 'idle' | 'form' | 'success';
 
 export default function LoginPage() {
-  const [password, setPassword] = useState('');
-  const [error, setError]       = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [visible, setVisible]   = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const router   = useRouter();
+  const [error, setError]     = useState('');
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const router = useRouter();
 
   // Reset akışı
-  const [resetOpen, setResetOpen]     = useState(false);
-  const [resetStep, setResetStep]     = useState<ResetStep>('idle');
-  const [resetCode, setResetCode]     = useState('');
-  const [newPass, setNewPass]         = useState('');
+  const [resetOpen, setResetOpen]           = useState(false);
+  const [resetStep, setResetStep]           = useState<ResetStep>('idle');
+  const [resetCode, setResetCode]           = useState('');
+  const [newPass, setNewPass]               = useState('');
   const [newPassConfirm, setNewPassConfirm] = useState('');
-  const [resetError, setResetError]   = useState('');
-  const [resetLoading, setResetLoading] = useState(false);
+  const [resetError, setResetError]         = useState('');
+  const [resetLoading, setResetLoading]     = useState(false);
 
   useEffect(() => {
     router.prefetch('/reports');
-    const t = setTimeout(() => {
-      setVisible(true);
-      setTimeout(() => inputRef.current?.focus(), 300);
-    }, 80);
+    const t = setTimeout(() => setVisible(true), 80);
     return () => clearTimeout(t);
   }, [router]);
 
@@ -37,7 +32,7 @@ export default function LoginPage() {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({}),
     });
     if (res.ok) {
       router.replace('/reports');
@@ -45,8 +40,6 @@ export default function LoginPage() {
       setLoading(false);
       const data = await res.json();
       setError(data.error || 'Hata oluştu');
-      setPassword('');
-      inputRef.current?.focus();
     }
   }
 
@@ -183,34 +176,19 @@ export default function LoginPage() {
               <span className="text-amber-400 text-2xl">♠</span>
             </div>
             <h1 className="text-white text-xl font-bold tracking-tight">Casino Takip</h1>
-            <p className="text-slate-500 text-xs mt-1">Şifrenizi girin</p>
+            <p className="text-slate-500 text-xs mt-1">Sisteme giriş yapın</p>
           </div>
 
           {/* Form kartı */}
-          <form onSubmit={handleSubmit} className="rounded-2xl p-5 space-y-3"
+          <form onSubmit={handleSubmit} className="rounded-2xl p-5"
             style={{
               background: 'rgba(18,18,28,0.9)',
               border: '1px solid rgba(255,255,255,0.07)',
               boxShadow: '0 32px 64px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
             }}>
 
-            <input
-              ref={inputRef}
-              type="password"
-              value={password}
-              onChange={e => { setPassword(e.target.value); setError(''); }}
-              className="w-full px-4 py-3 rounded-xl text-sm text-white outline-none transition-all"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: error ? '1px solid rgba(239,68,68,0.45)' : '1px solid rgba(255,255,255,0.09)',
-                letterSpacing: password ? '0.18em' : 'normal',
-              }}
-              placeholder="••••••••"
-              autoComplete="current-password"
-            />
-
             {error && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
                 <span className="text-red-400 text-xs">⚠</span>
                 <p className="text-red-400 text-xs">{error}</p>
               </div>
@@ -218,27 +196,17 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={loading || !password}
+              disabled={loading}
               className="w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.97] disabled:opacity-40"
               style={{ background: '#fbbf24', color: '#0f0f17' }}>
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
-                  Kontrol ediliyor...
+                  Giriş yapılıyor...
                 </span>
               ) : 'Giriş Yap'}
             </button>
           </form>
-
-          {/* Şifremi unuttum linki */}
-          <div className="text-center mt-3">
-            <button
-              onClick={openReset}
-              className="text-slate-500 text-xs hover:text-amber-400 transition-colors underline underline-offset-2"
-            >
-              Şifremi unuttum
-            </button>
-          </div>
 
           <p className="text-center text-slate-700 text-[10px] mt-3">
             Oturum 15 dakika sonra otomatik kapanır
