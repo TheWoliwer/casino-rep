@@ -1,12 +1,21 @@
 import { NextResponse } from 'next/server';
-import { createSession, COOKIE } from '@/lib/auth';
+import { SignJWT } from 'jose';
+
+export const runtime = 'edge';
+
+const COOKIE = 'ct_session';
 
 export async function POST() {
-  const token = await createSession();
+  const secret = new TextEncoder().encode(process.env.SESSION_SECRET!);
+  const token = await new SignJWT({ admin: true })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime('15m')
+    .sign(secret);
+
   const res = NextResponse.json({ ok: true });
   res.cookies.set(COOKIE, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     sameSite: 'lax',
     maxAge: 60 * 15,
     path: '/',
