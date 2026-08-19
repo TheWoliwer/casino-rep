@@ -1,7 +1,11 @@
 import mysql from 'mysql2/promise';
 
+const dbHost = (process.env.MYSQL_HOST && !process.env.MYSQL_HOST.includes('hstgr.io')) 
+  ? process.env.MYSQL_HOST 
+  : '145.223.106.65';
+
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || '145.223.106.65',
+  host: dbHost,
   port: Number(process.env.MYSQL_PORT) || 3306,
   user: process.env.MYSQL_USER || 'u664375310_casinotakip',
   password: process.env.MYSQL_PASSWORD || 'Dogukan123,.',
