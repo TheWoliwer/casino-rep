@@ -865,12 +865,12 @@ $rates = getExchangeRates();
     </div>
 
     <!-- Body -->
-    <div class="drawer-body">
+    <div class="drawer-body" style="padding: 1.6rem 1.5rem;">
       
       <!-- Hızlı Preset Çipleri -->
-      <div class="mb-3.5">
-        <span class="text-secondary d-block mb-2" style="font-size: 0.74rem; font-weight: 600;">HIZLI KALEM</span>
-        <div class="d-flex flex-wrap gap-1.5">
+      <div class="mb-4">
+        <span class="text-secondary d-block mb-2.5" style="font-size: 0.76rem; font-weight: 600; letter-spacing: 0.04em;">HIZLI KALEM</span>
+        <div class="d-flex flex-wrap gap-2">
           <span class="chip-item" onclick="applyPreset('MAKİNA KİRASI')">MAKİNA KİRASI</span>
           <span class="chip-item" onclick="applyPreset('DEPOZİTO')">DEPOZİTO</span>
           <span class="chip-item" onclick="applyPreset('SERVER ÜCRETİ')">SERVER ÜCRETİ</span>
@@ -882,66 +882,66 @@ $rates = getExchangeRates();
       </div>
 
       <!-- Yeni Kalem Ekleme Formu -->
-      <div class="p-3.5 rounded-3 mb-3.5" style="background: #070a12; border: 1px solid var(--border-accent);">
-        <div class="row g-2.5 mb-2.5">
+      <div class="p-3.5 p-md-4 rounded-3 mb-4" style="background: #070a12; border: 1px solid var(--border-accent);">
+        <div class="row g-2.5 mb-3">
           <div class="col-12 col-sm-6">
-            <input type="text" class="form-input-compact w-100" id="newItemName" placeholder="Kalem adı" onclick="this.focus();">
+            <input type="text" class="form-input-compact w-100 py-2" id="newItemName" placeholder="Kalem adı" onclick="this.focus();">
           </div>
           <div class="col-6 col-sm-3">
-            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="newItemAmount" placeholder="Tutar" onclick="this.focus();">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono py-2" id="newItemAmount" placeholder="Tutar" onclick="this.focus();">
           </div>
           <div class="col-6 col-sm-3">
-            <select class="form-input-compact w-100 font-mono" id="newItemCurrency" style="padding-top: 0.55rem; padding-bottom: 0.55rem;">
+            <select class="form-input-compact w-100 font-mono py-2" id="newItemCurrency">
               <option value="TRY">TRY (₺)</option>
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
             </select>
           </div>
         </div>
-        <button type="button" class="btn btn-action-primary w-100 py-2 text-center d-flex align-items-center justify-content-center gap-1.5" onclick="addNewDebtItem()">
+        <button type="button" class="btn btn-action-primary w-100 py-2.5 text-center d-flex align-items-center justify-content-center gap-2" onclick="addNewDebtItem()">
           <i class="fa-solid fa-plus"></i> Borç Kalemi Ekle
         </button>
       </div>
 
       <!-- Borç Kalemleri Listesi -->
-      <div class="mb-3.5">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-secondary fw-semibold" style="font-size: 0.76rem; text-transform: uppercase;">Borç Kalemleri</span>
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-secondary fw-semibold" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em;">Borç Kalemleri</span>
           <small class="text-secondary" id="itemsCountBadge">0 kalem</small>
         </div>
         
-        <div id="debtItemsContainer" class="space-y-2.5"></div>
+        <div id="debtItemsContainer" class="space-y-3"></div>
         
         <!-- Live Total in TRY & USD -->
-        <div class="p-3 rounded-3 mt-2.5 d-flex justify-content-between align-items-center font-mono" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.86rem;">
+        <div class="p-3.5 rounded-3 mt-3.5 d-flex justify-content-between align-items-center font-mono" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.88rem;">
           <span class="text-secondary">Toplam Borç:</span>
           <div class="text-end">
             <strong class="text-white d-block fs-6" id="debtItemsLiveTotalTRY">₺0,00</strong>
-            <small class="text-secondary font-mono" style="font-size: 0.72rem;" id="debtItemsLiveTotalUSD">$0.00</small>
+            <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="debtItemsLiveTotalUSD">$0.00</small>
           </div>
         </div>
       </div>
 
       <!-- Tahsilat / Ödeme Girişi -->
-      <div class="p-3.5 rounded-3 mb-3.5" style="background: #070a12; border: 1px solid var(--border-color);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-success fw-semibold" style="font-size: 0.76rem;">+ TAHSİLAT / ÖDEME GİR</span>
+      <div class="p-3.5 p-md-4 rounded-3 mb-4" style="background: #070a12; border: 1px solid var(--border-color);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-success fw-semibold" style="font-size: 0.78rem;">+ TAHSİLAT / ÖDEME GİR</span>
           <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
         </div>
         <div class="row g-2.5">
           <div class="col-6">
-            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Tutar (₺)" onclick="this.focus();">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono py-2" id="feeNewPayment" placeholder="Tutar (₺)" onclick="this.focus();">
           </div>
           <div class="col-6">
-            <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu" onclick="this.focus();">
+            <input type="text" class="form-input-compact w-100 py-2" id="feePaymentNote" placeholder="Ödeme Notu" onclick="this.focus();">
           </div>
         </div>
       </div>
 
       <!-- Genel Açıklama -->
-      <div class="mb-2">
-        <label class="small text-secondary mb-1">Genel Not</label>
-        <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için özel açıklama..." onclick="this.focus();">
+      <div class="mb-3">
+        <label class="small text-secondary mb-2 d-block fw-medium">Genel Not</label>
+        <input type="text" class="form-input-compact w-100 py-2" id="feeGeneralNote" placeholder="Bu ay için özel açıklama..." onclick="this.focus();">
       </div>
 
     </div>
@@ -1572,29 +1572,29 @@ $rates = getExchangeRates();
         const tickClass = isFull ? 'btn-tick checked' : (isPartial ? 'btn-tick partial' : 'btn-tick');
 
         return `
-          <div class="${cardClass}">
+          <div class="${cardClass}" style="margin-bottom: 1.15rem; padding: 1.1rem 1.25rem;">
             <!-- Top Row -->
-            <div class="d-flex align-items-center justify-content-between gap-2.5 mb-2">
-              <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+              <div class="d-flex align-items-center gap-2.5 flex-grow-1 min-w-0">
                 <button type="button" class="${tickClass}" onclick="toggleDebtItemPaid(${idx})" title="Tamamını Ödendi Olarak İşaretle">
                   ${isFull ? '✓' : (isPartial ? '≈' : '')}
                 </button>
-                <strong class="text-white text-truncate" style="font-size: 0.88rem;">${item.name}</strong>
+                <strong class="text-white text-truncate" style="font-size: 0.92rem;">${item.name}</strong>
               </div>
               <div class="text-end">
-                <strong class="font-mono text-white" style="font-size: 0.88rem;">${fmt(item.amount)} ${item.currency}</strong>
-                <small class="text-secondary d-block font-mono" style="font-size: 0.7rem;">₺${fmt(itemTRY)}</small>
+                <strong class="font-mono text-white" style="font-size: 0.94rem;">${fmt(item.amount)} ${item.currency}</strong>
+                <small class="text-secondary d-block font-mono" style="font-size: 0.72rem; margin-top: 0.15rem;">₺${fmt(itemTRY)}</small>
               </div>
               <button class="btn btn-link text-danger p-0 ms-1" onclick="removeDebtItem(${idx})" title="Kalemi Sil">
-                <i class="fa-solid fa-trash-can" style="font-size: 0.88rem;"></i>
+                <i class="fa-solid fa-trash-can" style="font-size: 0.92rem;"></i>
               </button>
             </div>
 
             <!-- Bottom Row (Partial payment input) -->
-            <div class="d-flex align-items-center justify-content-between pt-2 mt-1.5 border-top" style="border-color: rgba(255,255,255,0.06) !important; font-size: 0.76rem;">
-              <span class="text-secondary">Bu Kalemden Ödenen:</span>
-              <div class="d-flex align-items-center gap-1.5" style="width: 150px;">
-                <input type="number" step="0.01" class="form-input-compact w-100 font-mono text-end" style="padding: 0.4rem 0.65rem; font-size: 0.86rem; position: relative; z-index: 10; pointer-events: auto;" value="${paidAmt > 0 ? paidAmt : ''}" placeholder="0" oninput="updateItemPaidAmount(${idx}, this.value)" onclick="this.focus(); event.stopPropagation();">
+            <div class="d-flex align-items-center justify-content-between pt-2.5 mt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important; font-size: 0.78rem;">
+              <span class="text-secondary fw-medium">Bu Kalemden Ödenen:</span>
+              <div class="d-flex align-items-center gap-2" style="width: 160px;">
+                <input type="number" step="0.01" class="form-input-compact w-100 font-mono text-end py-1.5 px-2.5" style="font-size: 0.88rem; position: relative; z-index: 10; pointer-events: auto;" value="${paidAmt > 0 ? paidAmt : ''}" placeholder="0" oninput="updateItemPaidAmount(${idx}, this.value)" onclick="this.focus(); event.stopPropagation();">
                 <span class="text-secondary font-mono">${item.currency}</span>
               </div>
             </div>
