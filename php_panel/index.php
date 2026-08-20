@@ -290,9 +290,12 @@ $rates = getExchangeRates();
       background-color: #070a12;
       border: 1px solid var(--border-accent);
       color: #fff;
-      font-size: 0.84rem;
-      border-radius: 8px;
-      padding: 0.45rem 0.75rem;
+      font-size: 0.88rem;
+      border-radius: 9px;
+      padding: 0.55rem 0.85rem;
+      position: relative;
+      z-index: 5;
+      pointer-events: auto;
     }
     .form-input-compact:focus {
       background-color: #070a12;
@@ -316,10 +319,10 @@ $rates = getExchangeRates();
 
     /* Preset Chips */
     .chip-item {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
+      padding: 0.35rem 0.7rem;
+      border-radius: 8px;
       background: #121a2d;
       border: 1px solid var(--border-accent);
       color: #94a3b8;
@@ -340,17 +343,18 @@ $rates = getExchangeRates();
       top: 0;
       right: 0;
       bottom: 0;
-      width: 540px;
+      width: 580px;
       min-width: 320px;
       max-width: 100vw;
       background-color: var(--bg-drawer);
       border-left: 1px solid var(--border-accent);
       box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85);
-      z-index: 1070;
+      z-index: 1090;
       transform: translateX(100%);
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
+      pointer-events: auto;
     }
     .external-right-drawer.open {
       transform: translateX(0);
@@ -398,7 +402,7 @@ $rates = getExchangeRates();
     }
 
     .drawer-header {
-      padding: 1rem 1.25rem;
+      padding: 1.15rem 1.4rem;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
@@ -406,17 +410,17 @@ $rates = getExchangeRates();
       background: #080c16;
     }
     .drawer-body {
-      padding: 1.15rem;
+      padding: 1.4rem 1.4rem;
       overflow-y: auto;
       flex: 1;
     }
     .drawer-footer {
-      padding: 0.9rem 1.25rem;
+      padding: 1.1rem 1.4rem;
       border-top: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 0.65rem;
+      gap: 0.75rem;
       background: #080c16;
     }
 
@@ -424,9 +428,12 @@ $rates = getExchangeRates();
     .debt-item-card {
       background: #070a12;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.75rem 0.9rem;
+      border-radius: 12px;
+      padding: 0.95rem 1.15rem;
+      margin-bottom: 0.85rem;
       transition: all 0.15s ease;
+      position: relative;
+      z-index: 5;
     }
     .debt-item-card.is-paid {
       background: rgba(34, 197, 94, 0.05);
@@ -438,13 +445,13 @@ $rates = getExchangeRates();
     }
 
     .btn-tick {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 700;
       border: 1px solid var(--border-accent);
       background: transparent;
@@ -659,7 +666,7 @@ $rates = getExchangeRates();
   <!-- ═════════════════════════════════════════════════════ -->
   <!-- PROFİL MODALI (RESPONSIVE FULLSCREEN ON MOBILE)       -->
   <!-- ═════════════════════════════════════════════════════ -->
-  <div class="modal fade" id="profileModal" tabindex="-1">
+  <div class="modal fade" id="profileModal" tabindex="-1" data-bs-focus="false">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 1080px;">
       <div class="modal-content modal-content-compact">
         <!-- Modal Header -->
@@ -851,9 +858,9 @@ $rates = getExchangeRates();
     <div class="drawer-body">
       
       <!-- Hızlı Preset Çipleri -->
-      <div class="mb-3">
-        <span class="text-secondary d-block mb-1.5" style="font-size: 0.72rem; font-weight: 600;">HIZLI KALEM</span>
-        <div class="d-flex flex-wrap gap-1">
+      <div class="mb-3.5">
+        <span class="text-secondary d-block mb-2" style="font-size: 0.74rem; font-weight: 600;">HIZLI KALEM</span>
+        <div class="d-flex flex-wrap gap-1.5">
           <span class="chip-item" onclick="applyPreset('MAKİNA KİRASI')">MAKİNA KİRASI</span>
           <span class="chip-item" onclick="applyPreset('DEPOZİTO')">DEPOZİTO</span>
           <span class="chip-item" onclick="applyPreset('SERVER ÜCRETİ')">SERVER ÜCRETİ</span>
@@ -865,58 +872,58 @@ $rates = getExchangeRates();
       </div>
 
       <!-- Yeni Kalem Ekleme Formu -->
-      <div class="p-2.5 p-md-3 rounded-3 mb-3" style="background: #070a12; border: 1px solid var(--border-accent);">
-        <div class="row g-2 mb-2">
+      <div class="p-3.5 rounded-3 mb-3.5" style="background: #070a12; border: 1px solid var(--border-accent);">
+        <div class="row g-2.5 mb-2.5">
           <div class="col-12 col-sm-6">
-            <input type="text" class="form-input-compact w-100" id="newItemName" placeholder="Kalem adı">
+            <input type="text" class="form-input-compact w-100" id="newItemName" placeholder="Kalem adı" onclick="this.focus();">
           </div>
           <div class="col-6 col-sm-3">
-            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="newItemAmount" placeholder="Tutar">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="newItemAmount" placeholder="Tutar" onclick="this.focus();">
           </div>
           <div class="col-6 col-sm-3">
-            <select class="form-input-compact w-100 font-mono" id="newItemCurrency">
+            <select class="form-input-compact w-100 font-mono" id="newItemCurrency" style="padding-top: 0.55rem; padding-bottom: 0.55rem;">
               <option value="TRY">TRY (₺)</option>
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
             </select>
           </div>
         </div>
-        <button type="button" class="btn btn-action-primary w-100 py-1.5 text-center d-flex align-items-center justify-content-center gap-1" onclick="addNewDebtItem()">
+        <button type="button" class="btn btn-action-primary w-100 py-2 text-center d-flex align-items-center justify-content-center gap-1.5" onclick="addNewDebtItem()">
           <i class="fa-solid fa-plus"></i> Borç Kalemi Ekle
         </button>
       </div>
 
       <!-- Borç Kalemleri Listesi -->
-      <div class="mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-1.5">
-          <span class="text-secondary fw-semibold" style="font-size: 0.74rem; text-transform: uppercase;">Borç Kalemleri</span>
+      <div class="mb-3.5">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-secondary fw-semibold" style="font-size: 0.76rem; text-transform: uppercase;">Borç Kalemleri</span>
           <small class="text-secondary" id="itemsCountBadge">0 kalem</small>
         </div>
         
-        <div id="debtItemsContainer" class="space-y-2"></div>
+        <div id="debtItemsContainer" class="space-y-2.5"></div>
         
         <!-- Live Total in TRY & USD -->
-        <div class="p-2.5 rounded-3 mt-2 d-flex justify-content-between align-items-center font-mono" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.82rem;">
+        <div class="p-3 rounded-3 mt-2.5 d-flex justify-content-between align-items-center font-mono" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.86rem;">
           <span class="text-secondary">Toplam Borç:</span>
           <div class="text-end">
-            <strong class="text-white d-block" id="debtItemsLiveTotalTRY">₺0,00</strong>
-            <small class="text-secondary font-mono" style="font-size: 0.7rem;" id="debtItemsLiveTotalUSD">$0.00</small>
+            <strong class="text-white d-block fs-6" id="debtItemsLiveTotalTRY">₺0,00</strong>
+            <small class="text-secondary font-mono" style="font-size: 0.72rem;" id="debtItemsLiveTotalUSD">$0.00</small>
           </div>
         </div>
       </div>
 
       <!-- Tahsilat / Ödeme Girişi -->
-      <div class="p-2.5 p-md-3 rounded-3 mb-3" style="background: #070a12; border: 1px solid var(--border-color);">
-        <div class="d-flex justify-content-between align-items-center mb-1.5">
-          <span class="text-success fw-semibold" style="font-size: 0.74rem;">+ TAHSİLAT / ÖDEME GİR</span>
-          <small class="text-secondary font-mono" style="font-size: 0.72rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
+      <div class="p-3.5 rounded-3 mb-3.5" style="background: #070a12; border: 1px solid var(--border-color);">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-success fw-semibold" style="font-size: 0.76rem;">+ TAHSİLAT / ÖDEME GİR</span>
+          <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
         </div>
-        <div class="row g-2">
+        <div class="row g-2.5">
           <div class="col-6">
-            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Tutar (₺)">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Tutar (₺)" onclick="this.focus();">
           </div>
           <div class="col-6">
-            <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu">
+            <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu" onclick="this.focus();">
           </div>
         </div>
       </div>
@@ -924,7 +931,7 @@ $rates = getExchangeRates();
       <!-- Genel Açıklama -->
       <div class="mb-2">
         <label class="small text-secondary mb-1">Genel Not</label>
-        <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için özel açıklama...">
+        <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için özel açıklama..." onclick="this.focus();">
       </div>
 
     </div>
@@ -1336,7 +1343,7 @@ $rates = getExchangeRates();
       renderProfileMatrixTable();
       renderProfileTimeline();
 
-      new bootstrap.Modal(document.getElementById('profileModal')).show();
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('profileModal'), { focus: false }).show();
     }
 
     function renderProfileMatrixYears() {
@@ -1549,28 +1556,28 @@ $rates = getExchangeRates();
         return `
           <div class="${cardClass}">
             <!-- Top Row -->
-            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+            <div class="d-flex align-items-center justify-content-between gap-2.5 mb-2">
               <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
                 <button type="button" class="${tickClass}" onclick="toggleDebtItemPaid(${idx})" title="Tamamını Ödendi Olarak İşaretle">
                   ${isFull ? '✓' : (isPartial ? '≈' : '')}
                 </button>
-                <strong class="text-white text-truncate" style="font-size: 0.84rem;">${item.name}</strong>
+                <strong class="text-white text-truncate" style="font-size: 0.88rem;">${item.name}</strong>
               </div>
               <div class="text-end">
-                <strong class="font-mono text-white" style="font-size: 0.86rem;">${fmt(item.amount)} ${item.currency}</strong>
-                <small class="text-secondary d-block font-mono" style="font-size: 0.68rem;">₺${fmt(itemTRY)}</small>
+                <strong class="font-mono text-white" style="font-size: 0.88rem;">${fmt(item.amount)} ${item.currency}</strong>
+                <small class="text-secondary d-block font-mono" style="font-size: 0.7rem;">₺${fmt(itemTRY)}</small>
               </div>
               <button class="btn btn-link text-danger p-0 ms-1" onclick="removeDebtItem(${idx})" title="Kalemi Sil">
-                <i class="fa-solid fa-trash-can" style="font-size: 0.85rem;"></i>
+                <i class="fa-solid fa-trash-can" style="font-size: 0.88rem;"></i>
               </button>
             </div>
 
             <!-- Bottom Row (Partial payment input) -->
-            <div class="d-flex align-items-center justify-content-between pt-1.5 border-top" style="border-color: rgba(255,255,255,0.06) !important; font-size: 0.74rem;">
+            <div class="d-flex align-items-center justify-content-between pt-2 mt-1.5 border-top" style="border-color: rgba(255,255,255,0.06) !important; font-size: 0.76rem;">
               <span class="text-secondary">Bu Kalemden Ödenen:</span>
-              <div class="d-flex align-items-center gap-1" style="width: 140px;">
-                <input type="number" step="0.01" class="form-input-compact w-100 py-0.5 font-mono text-end" style="font-size: 0.76rem;" value="${paidAmt > 0 ? paidAmt : ''}" placeholder="0" onchange="updateItemPaidAmount(${idx}, this.value)">
-                <span class="text-secondary font-mono" style="font-size: 0.72rem;">${item.currency}</span>
+              <div class="d-flex align-items-center gap-1.5" style="width: 150px;">
+                <input type="number" step="0.01" class="form-input-compact w-100 font-mono text-end" style="padding: 0.4rem 0.65rem; font-size: 0.86rem; position: relative; z-index: 10; pointer-events: auto;" value="${paidAmt > 0 ? paidAmt : ''}" placeholder="0" oninput="updateItemPaidAmount(${idx}, this.value)" onclick="this.focus(); event.stopPropagation();">
+                <span class="text-secondary font-mono">${item.currency}</span>
               </div>
             </div>
           </div>
