@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config.php';
+checkAuth();
 $rates = getExchangeRates();
 ?>
 <!DOCTYPE html>
@@ -8,6 +9,9 @@ $rates = getExchangeRates();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Casino Takip & Finansal Raporlar</title>
+  
+  <!-- Favicon: Spade ♠ -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%2338bdf8%22>♠</text></svg>">
   
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -472,6 +476,10 @@ $rates = getExchangeRates();
         <button class="btn-action-outline" style="padding: 0.42rem 0.75rem;" onclick="loadData()" title="Yenile">
           <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
         </button>
+
+        <a href="logout.php" class="btn-action-outline" style="padding: 0.42rem 0.75rem;" title="Çıkış Yap">
+          <i class="fa-solid fa-right-from-bracket text-danger"></i>
+        </a>
       </div>
 
     </div>

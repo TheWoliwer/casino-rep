@@ -3,6 +3,12 @@
 // Casino Takip - Veritabanı ve Sistem Yapılandırması
 // =====================================================
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+define('PANEL_PASSWORD', '3535');
+
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'u664375310_casinotakip');
 define('DB_USER', 'u664375310_casinotakip');
@@ -22,7 +28,6 @@ function getDB() {
         try {
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
-            // Dış IP ile de deneme imkanı
             try {
                 $dsnFallback = "mysql:host=127.0.0.1;dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
                 $pdo = new PDO($dsnFallback, DB_USER, DB_PASS, $options);
@@ -32,6 +37,21 @@ function getDB() {
         }
     }
     return $pdo;
+}
+
+function checkAuth() {
+    if (empty($_SESSION['casino_logged_in'])) {
+        header('Location: login.php');
+        exit;
+    }
+}
+
+function checkApiAuth() {
+    if (empty($_SESSION['casino_logged_in'])) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Yetkisiz erişim. Lütfen giriş yapın.']);
+        exit;
+    }
 }
 
 // TCMB Döviz Kurlarını Çek
