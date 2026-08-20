@@ -26,7 +26,7 @@ $rates = getExchangeRates();
       --bg-surface: #0f1626;
       --bg-card: #131c31;
       --bg-card-hover: #18233d;
-      --bg-drawer: #0f172a;
+      --bg-drawer: #0d1424;
       --border-color: #1c273c;
       --border-accent: #26354f;
       --accent: #38bdf8;
@@ -62,7 +62,7 @@ $rates = getExchangeRates();
     }
 
     .main-container {
-      max-width: 1200px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 2rem 1.25rem;
     }
@@ -295,18 +295,19 @@ $rates = getExchangeRates();
     }
 
     /* ═════════════════════════════════════════════════════ */
-    /* SAĞ DIŞ ÇEKMECE / EXTERNAL RIGHT DRAWER               */
+    /* RESIZABLE EXTERNAL RIGHT DRAWER                      */
     /* ═════════════════════════════════════════════════════ */
     .external-right-drawer {
       position: fixed;
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
-      max-width: 92vw;
+      width: 580px;
+      min-width: 440px;
+      max-width: 95vw;
       background-color: var(--bg-drawer);
       border-left: 1px solid var(--border-accent);
-      box-shadow: -15px 0 45px rgba(0, 0, 0, 0.75);
+      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85);
       z-index: 1070;
       transform: translateX(100%);
       transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -316,6 +317,37 @@ $rates = getExchangeRates();
     .external-right-drawer.open {
       transform: translateX(0);
     }
+    .external-right-drawer.is-resizing {
+      transition: none !important;
+      user-select: none;
+    }
+
+    /* Sol Sürükleme Tutamacı (Resize Handle) */
+    .drawer-resizer {
+      position: absolute;
+      top: 0;
+      left: -6px;
+      bottom: 0;
+      width: 12px;
+      cursor: ew-resize;
+      z-index: 1080;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .drawer-resizer::after {
+      content: '';
+      width: 3px;
+      height: 40px;
+      background: var(--border-accent);
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .drawer-resizer:hover::after, .external-right-drawer.is-resizing .drawer-resizer::after {
+      background: #38bdf8;
+      height: 80px;
+      box-shadow: 0 0 8px #38bdf8;
+    }
 
     .drawer-header {
       padding: 1.25rem 1.5rem;
@@ -323,7 +355,7 @@ $rates = getExchangeRates();
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #0d1322;
+      background: #090e1a;
     }
     .drawer-body {
       padding: 1.5rem;
@@ -337,34 +369,34 @@ $rates = getExchangeRates();
       align-items: center;
       justify-content: flex-end;
       gap: 0.75rem;
-      background: #0d1322;
+      background: #090e1a;
     }
 
     /* Debt Item Card */
     .debt-item-card {
       background: #090d16;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.75rem 0.9rem;
+      border-radius: 12px;
+      padding: 0.9rem 1.1rem;
       transition: all 0.15s ease;
     }
     .debt-item-card.is-paid {
       background: rgba(34, 197, 94, 0.05);
-      border-color: rgba(34, 197, 94, 0.3);
+      border-color: rgba(34, 197, 94, 0.35);
     }
     .debt-item-card.is-partial {
       background: rgba(56, 189, 248, 0.05);
-      border-color: rgba(56, 189, 248, 0.3);
+      border-color: rgba(56, 189, 248, 0.35);
     }
 
     .btn-tick {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 700;
       border: 1px solid var(--border-accent);
       background: transparent;
@@ -554,7 +586,7 @@ $rates = getExchangeRates();
   <!-- PROFİL MODALI                                         -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="modal fade" id="profileModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 1080px;">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 1100px;">
       <div class="modal-content modal-content-compact">
         <!-- Modal Header -->
         <div class="modal-header modal-header-compact d-flex align-items-center justify-content-between">
@@ -623,7 +655,7 @@ $rates = getExchangeRates();
             <div class="tab-pane fade show active" id="tabTable">
               <div class="d-flex align-items-center justify-content-between mb-2.5">
                 <div class="d-flex gap-1" id="profMatrixYearButtons"></div>
-                <span class="text-secondary" style="font-size: 0.76rem;"><i class="fa-solid fa-arrow-pointer text-info me-1"></i> Satıra tıkla, sağ ekrandaki panelde detaylı düzenle</span>
+                <span class="text-secondary" style="font-size: 0.76rem;"><i class="fa-solid fa-arrow-pointer text-info me-1"></i> Satıra tıkla, sağ ekrandaki çekmecede düzenle</span>
               </div>
 
               <div class="table-responsive rounded-3 border" style="border-color: var(--border-color) !important; max-height: 56vh;">
@@ -710,10 +742,12 @@ $rates = getExchangeRates();
   </div>
 
   <!-- ═════════════════════════════════════════════════════ -->
-  <!-- SAĞ TARAFTA AÇILAN GELİŞMİŞ BORÇ & TAHSİLAT PANELİ   -->
-  <!-- Next.js FeeModal ile Birebir Aynı Tasarım & Mantık    -->
+  <!-- SAĞ TARAFTA AÇILAN RESIZABLE / GENİŞLETİLEBİLİR ÇEKMECE -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="external-right-drawer" id="externalRightDrawer">
+    <!-- Sol Kenar Sürükleme Tutamacı (Resize Handle) -->
+    <div class="drawer-resizer" id="drawerResizer" title="Genişletmek / Daraltmak için sola/sağa sürükleyin"></div>
+
     <!-- Header -->
     <div class="drawer-header">
       <div class="d-flex align-items-center gap-2">
@@ -721,13 +755,22 @@ $rates = getExchangeRates();
           <i class="fa-solid fa-pen-to-square"></i>
         </span>
         <div>
-          <h6 class="fw-bold text-white m-0" style="font-size: 0.92rem;" id="drawerTitle">Ay Düzenle</h6>
-          <small class="text-secondary" style="font-size: 0.7rem;">Borç Kalemleri & Tahsilat Girişi</small>
+          <h6 class="fw-bold text-white m-0" style="font-size: 0.94rem;" id="drawerTitle">Ay Düzenle</h6>
+          <small class="text-secondary" style="font-size: 0.72rem;">Borç Kalemleri & Tahsilat Girişi</small>
         </div>
       </div>
-      <button type="button" class="btn btn-link text-secondary p-0" onclick="closeDrawer()" title="Kapat">
-        <i class="fa-solid fa-xmark fs-5"></i>
-      </button>
+
+      <!-- Quick Width Switchers & Close -->
+      <div class="d-flex align-items-center gap-2">
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary py-0 px-2" style="font-size: 0.68rem;" onclick="setDrawerWidth(500)" title="Standart">500px</button>
+          <button type="button" class="btn btn-outline-secondary py-0 px-2" style="font-size: 0.68rem;" onclick="setDrawerWidth(680)" title="Geniş">680px</button>
+          <button type="button" class="btn btn-outline-secondary py-0 px-2" style="font-size: 0.68rem;" onclick="setDrawerWidth(880)" title="Ekstra Geniş">880px</button>
+        </div>
+        <button type="button" class="btn btn-link text-secondary p-0 ms-1" onclick="closeDrawer()" title="Kapat">
+          <i class="fa-solid fa-xmark fs-5"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Body -->
@@ -735,7 +778,7 @@ $rates = getExchangeRates();
       
       <!-- Hızlı Preset Çipleri -->
       <div class="mb-3.5">
-        <span class="text-secondary d-block mb-1.5" style="font-size: 0.74rem; font-weight: 600;">HIZLI KALEM</span>
+        <span class="text-secondary d-block mb-1.5" style="font-size: 0.76rem; font-weight: 600;">HIZLI KALEM</span>
         <div class="d-flex flex-wrap gap-1.5">
           <span class="chip-item" onclick="applyPreset('MAKİNA KİRASI')">MAKİNA KİRASI</span>
           <span class="chip-item" onclick="applyPreset('DEPOZİTO')">DEPOZİTO</span>
@@ -747,54 +790,54 @@ $rates = getExchangeRates();
         </div>
       </div>
 
-      <!-- Yeni Kalem Ekleme Formu (Next.js ile Birebir) -->
-      <div class="p-3 rounded-3 mb-3.5" style="background: #090d16; border: 1px solid var(--border-accent);">
-        <div class="row g-2 mb-2">
-          <div class="col-6">
+      <!-- Yeni Kalem Ekleme Formu -->
+      <div class="p-3.5 rounded-3 mb-4" style="background: #090d16; border: 1px solid var(--border-accent);">
+        <div class="row g-2.5 mb-2.5">
+          <div class="col-md-6 col-12">
             <input type="text" class="form-input-compact w-100" id="newItemName" placeholder="Kalem adı">
           </div>
-          <div class="col-3">
+          <div class="col-md-3 col-6">
             <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="newItemAmount" placeholder="Tutar">
           </div>
-          <div class="col-3">
-            <select class="form-input-compact w-100 font-mono" id="newItemCurrency">
+          <div class="col-md-3 col-6">
+            <select class="form-input-compact w-100 font-mono" id="newItemCurrency" style="padding: 0.5rem 0.5rem;">
               <option value="TRY">TRY (₺)</option>
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
             </select>
           </div>
         </div>
-        <button type="button" class="btn btn-action-primary w-100 py-1.5 text-center d-flex align-items-center justify-content-center gap-1" onclick="addNewDebtItem()">
+        <button type="button" class="btn btn-action-primary w-100 py-2 text-center d-flex align-items-center justify-content-center gap-1.5" onclick="addNewDebtItem()">
           <i class="fa-solid fa-plus"></i> Borç Kalemi Ekle
         </button>
       </div>
 
       <!-- Borç Kalemleri Listesi -->
-      <div class="mb-3.5">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-secondary fw-semibold" style="font-size: 0.76rem; text-transform: uppercase;">Borç Kalemleri</span>
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2.5">
+          <span class="text-secondary fw-semibold" style="font-size: 0.78rem; text-transform: uppercase;">Borç Kalemleri</span>
           <small class="text-secondary" id="itemsCountBadge">0 kalem</small>
         </div>
         
-        <div id="debtItemsContainer" class="space-y-2"></div>
+        <div id="debtItemsContainer" class="space-y-2.5"></div>
         
         <!-- Live Total in TRY & USD -->
-        <div class="p-2.5 rounded-3 mt-2.5 d-flex justify-content-between align-items-center font-mono" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.84rem;">
+        <div class="p-3 rounded-3 mt-3 d-flex justify-content-between align-items-center font-mono" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.88rem;">
           <span class="text-secondary">Toplam Borç:</span>
           <div class="text-end">
-            <strong class="text-white d-block" id="debtItemsLiveTotalTRY">₺0,00</strong>
-            <small class="text-secondary font-mono" style="font-size: 0.72rem;" id="debtItemsLiveTotalUSD">$0.00</small>
+            <strong class="text-white d-block fs-6" id="debtItemsLiveTotalTRY">₺0,00</strong>
+            <small class="text-secondary font-mono" style="font-size: 0.75rem;" id="debtItemsLiveTotalUSD">$0.00</small>
           </div>
         </div>
       </div>
 
       <!-- Tahsilat / Ödeme Girişi -->
-      <div class="p-3 rounded-3 mb-3.5" style="background: #090d16; border: 1px solid var(--border-color);">
+      <div class="p-3.5 rounded-3 mb-4" style="background: #090d16; border: 1px solid var(--border-color);">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-success fw-semibold" style="font-size: 0.76rem;">+ TAHSİLAT / ÖDEME GİR</span>
-          <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
+          <span class="text-success fw-semibold" style="font-size: 0.78rem;">+ TAHSİLAT / ÖDEME GİR</span>
+          <small class="text-secondary font-mono" style="font-size: 0.76rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
         </div>
-        <div class="row g-2">
+        <div class="row g-2.5">
           <div class="col-6">
             <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Ödenen Tutar (₺)">
           </div>
@@ -814,7 +857,7 @@ $rates = getExchangeRates();
 
     <!-- Footer -->
     <div class="drawer-footer">
-      <button type="button" class="btn-action-outline px-3" onclick="closeDrawer()">Vazgeç</button>
+      <button type="button" class="btn-action-outline px-3.5" onclick="closeDrawer()">Vazgeç</button>
       <button type="button" class="btn-action-primary px-4" onclick="saveFeeRowData()">Kaydet</button>
     </div>
   </div>
@@ -1225,8 +1268,40 @@ $rates = getExchangeRates();
     }
 
     // ═════════════════════════════════════════════════════
-    // GELİŞMİŞ BORÇ & TAHSİLAT DRAWER MANTIĞI
+    // GELİŞMİŞ BORÇ & TAHSİLAT DRAWER VE RESIZE MANTIĞI
     // ═════════════════════════════════════════════════════
+    function setDrawerWidth(px) {
+      document.getElementById('externalRightDrawer').style.width = px + 'px';
+    }
+
+    // Resizer Event Listeners
+    const drawer = document.getElementById('externalRightDrawer');
+    const resizer = document.getElementById('drawerResizer');
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      drawer.classList.add('is-resizing');
+      document.body.style.cursor = 'ew-resize';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth >= 420 && newWidth <= window.innerWidth * 0.95) {
+        drawer.style.width = `${newWidth}px`;
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        drawer.classList.remove('is-resizing');
+        document.body.style.cursor = 'default';
+      }
+    });
+
     function openMonthDrawer(month) {
       currentEditingMonth = month;
       const casinoId = currentActiveProfile.casino.id;
@@ -1293,7 +1368,6 @@ $rates = getExchangeRates();
       item.paid = newPaid;
       item.paid_amount = newPaid ? item.amount : 0;
       
-      // Auto recalculate overall payment input
       recalcOverallPayment();
       renderDebtItems();
     }
@@ -1346,26 +1420,26 @@ $rates = getExchangeRates();
         return `
           <div class="${cardClass}">
             <!-- Top Row -->
-            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-              <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-2.5">
+              <div class="d-flex align-items-center gap-2.5 flex-grow-1 min-w-0">
                 <button type="button" class="${tickClass}" onclick="toggleDebtItemPaid(${idx})" title="Tamamını Ödendi Olarak İşaretle">
                   ${isFull ? '✓' : (isPartial ? '≈' : '')}
                 </button>
-                <strong class="text-white text-truncate" style="font-size: 0.85rem;">${item.name}</strong>
+                <strong class="text-white text-truncate" style="font-size: 0.88rem;">${item.name}</strong>
               </div>
               <div class="text-end">
-                <strong class="font-mono text-white" style="font-size: 0.88rem;">${fmt(item.amount)} ${item.currency}</strong>
-                <small class="text-secondary d-block font-mono" style="font-size: 0.7rem;">₺${fmt(itemTRY)}</small>
+                <strong class="font-mono text-white" style="font-size: 0.92rem;">${fmt(item.amount)} ${item.currency}</strong>
+                <small class="text-secondary d-block font-mono" style="font-size: 0.72rem;">₺${fmt(itemTRY)}</small>
               </div>
               <button class="btn btn-link text-danger p-0 ms-1" onclick="removeDebtItem(${idx})" title="Kalemi Sil">
-                <i class="fa-solid fa-trash-can" style="font-size: 0.85rem;"></i>
+                <i class="fa-solid fa-trash-can" style="font-size: 0.9rem;"></i>
               </button>
             </div>
 
             <!-- Bottom Row (Partial payment input) -->
-            <div class="d-flex align-items-center justify-content-between pt-1.5 border-top" style="border-color: rgba(255,255,255,0.06) !important; font-size: 0.75rem;">
+            <div class="d-flex align-items-center justify-content-between pt-2 border-top" style="border-color: rgba(255,255,255,0.06) !important; font-size: 0.78rem;">
               <span class="text-secondary">Bu Kalemden Ödenen:</span>
-              <div class="d-flex align-items-center gap-1.5" style="width: 140px;">
+              <div class="d-flex align-items-center gap-1.5" style="width: 150px;">
                 <input type="number" step="0.01" class="form-input-compact w-100 py-1 font-mono text-end" value="${paidAmt > 0 ? paidAmt : ''}" placeholder="0" onchange="updateItemPaidAmount(${idx}, this.value)">
                 <span class="text-secondary font-mono">${item.currency}</span>
               </div>
