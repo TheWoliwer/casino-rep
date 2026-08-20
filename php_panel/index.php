@@ -499,26 +499,36 @@ $rates = getExchangeRates();
       </div>
 
       <!-- Right: Action Buttons & Menu Dropdown -->
-      <div class="d-flex align-items-center gap-1.5">
-        <!-- Live Currency Rates (Desktop only) -->
-        <div class="d-none d-lg-flex align-items-center gap-2 px-2.5 py-1 rounded-3" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.72rem;">
-          <span class="text-secondary">USD:</span> <strong class="text-white font-mono" id="rateUSD">₺<?= number_format($rates['usd'], 2) ?></strong>
-          <span class="text-secondary opacity-30">|</span>
-          <span class="text-secondary">EUR:</span> <strong class="text-white font-mono" id="rateEUR">₺<?= number_format($rates['eur'], 2) ?></strong>
+      <div class="d-flex align-items-center gap-2">
+        <!-- Live Currency Rates (Desktop & Tablet) -->
+        <div class="d-none d-lg-flex align-items-center gap-3 px-3 py-1.5 rounded-pill me-2" style="background: #090e1c; border: 1px solid var(--border-accent); font-size: 0.76rem; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          <div class="d-flex align-items-center gap-1.5">
+            <span class="badge rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background: rgba(34,197,94,0.15); color: #22c55e; font-size: 0.68rem; font-weight: 700;">$</span>
+            <span class="text-secondary fw-semibold" style="font-size: 0.72rem;">USD:</span>
+            <strong class="text-white font-mono" id="rateUSD">₺<?= number_format($rates['usd'], 2) ?></strong>
+          </div>
+          
+          <span style="color: #243450; font-size: 0.8rem;">|</span>
+
+          <div class="d-flex align-items-center gap-1.5">
+            <span class="badge rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 18px; height: 18px; background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.68rem; font-weight: 700;">€</span>
+            <span class="text-secondary fw-semibold" style="font-size: 0.72rem;">EUR:</span>
+            <strong class="text-white font-mono" id="rateEUR">₺<?= number_format($rates['eur'], 2) ?></strong>
+          </div>
         </div>
 
-        <button class="btn-action-primary d-flex align-items-center gap-1" onclick="openAddCasinoModal()">
+        <button class="btn-action-primary d-flex align-items-center gap-1.5" onclick="openAddCasinoModal()">
           <span>+</span> <span class="d-none d-sm-inline">Casino Ekle</span>
         </button>
 
-        <button class="btn-action-outline d-flex align-items-center gap-1" onclick="openArchiveModal()">
+        <button class="btn-action-outline d-flex align-items-center gap-1.5" onclick="openArchiveModal()">
           <span>📦</span> <span class="d-none d-sm-inline">Arşiv</span>
           <span class="badge ms-0.5" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.65rem;" id="badgeArchive">0</span>
         </button>
 
         <!-- Dropdown Menu for Mobile & Extra Actions -->
         <div class="dropdown">
-          <button class="btn-action-outline dropdown-toggle px-2" data-bs-toggle="dropdown" aria-expanded="false" title="Menü">
+          <button class="btn-action-outline dropdown-toggle px-2.5" data-bs-toggle="dropdown" aria-expanded="false" title="Menü">
             <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" style="background: #0e1424; border-color: var(--border-accent); font-size: 0.82rem;">
