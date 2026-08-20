@@ -1219,7 +1219,7 @@ $rates = getExchangeRates();
         const progressBg = row.rate >= 100 ? '#22c55e' : row.rate > 50 ? '#38bdf8' : '#f43f5e';
 
         return `
-          <tr onclick="openProfileModal(${c.id})">
+          <tr onclick="goToCasinoDetail(${c.id})">
             <td>
               <div class="d-flex align-items-center gap-1.5 flex-wrap">
                 <span class="fw-semibold text-white">${c.name}</span>
@@ -1252,8 +1252,12 @@ $rates = getExchangeRates();
                 <span class="fw-semibold font-mono" style="color: ${rateColor}; font-size: 0.78rem; width: 35px;">%${row.rate.toFixed(0)}</span>
               </div>
             </td>
-            <td class="text-center text-secondary opacity-40">
-              →
+            <td class="text-center">
+              <button class="btn btn-link text-info p-0 text-decoration-none" onclick="event.stopPropagation(); goToCasinoDetail(${c.id})" title="Detaylı Rapor">
+                <span class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 26px; height: 26px; background: rgba(56,189,248,0.12); color: #38bdf8; font-size: 0.75rem;">
+                  <i class="fa-solid fa-arrow-right"></i>
+                </span>
+              </button>
             </td>
           </tr>
         `;
@@ -1266,7 +1270,7 @@ $rates = getExchangeRates();
         const progressBg = row.rate >= 100 ? '#22c55e' : row.rate > 50 ? '#38bdf8' : '#f43f5e';
 
         return `
-          <div class="casino-mobile-card" onclick="openProfileModal(${c.id})">
+          <div class="casino-mobile-card" onclick="goToCasinoDetail(${c.id})">
             <!-- Header Row -->
             <div class="d-flex align-items-center justify-content-between mb-2">
               <span class="fw-bold text-white fs-6">${c.name}</span>
@@ -1298,9 +1302,9 @@ $rates = getExchangeRates();
               <div class="progress-bar-container flex-grow-1 me-2" style="width: auto;">
                 <div class="progress-bar-fill" style="width: ${Math.min(100, row.rate)}%; background: ${progressBg};"></div>
               </div>
-              <div class="d-flex align-items-center gap-1">
+              <div class="d-flex align-items-center gap-1.5">
                 <span class="fw-bold font-mono" style="color: ${rateColor}; font-size: 0.76rem;">%${row.rate.toFixed(0)}</span>
-                <span class="text-secondary opacity-50" style="font-size: 0.75rem;">→</span>
+                <span class="text-info" style="font-size: 0.78rem;"><i class="fa-solid fa-arrow-right"></i></span>
               </div>
             </div>
           </div>
@@ -1313,6 +1317,10 @@ $rates = getExchangeRates();
       document.getElementById('footCollected').innerHTML = `$${fmtUSD(toUSD(totals.collected))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totals.collected)}</span>`;
       document.getElementById('footOutstanding').innerHTML = `$${fmtUSD(toUSD(totals.outstanding))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totals.outstanding)}</span>`;
       document.getElementById('footRate').innerText = `%${overallRate.toFixed(1)}`;
+    }
+
+    function goToCasinoDetail(id) {
+      window.location.href = `casino.php?id=${id}&year=${currentYear}`;
     }
 
     // ═════════════════════════════════════════════════════
