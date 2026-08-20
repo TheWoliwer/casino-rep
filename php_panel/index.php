@@ -402,7 +402,7 @@ $rates = getExchangeRates();
     }
 
     .drawer-header {
-      padding: 1.15rem 1.4rem;
+      padding: 1rem 1.4rem;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
@@ -410,12 +410,12 @@ $rates = getExchangeRates();
       background: #080c16;
     }
     .drawer-body {
-      padding: 1.4rem 1.4rem;
+      padding: 1.5rem 1.4rem;
       overflow-y: auto;
       flex: 1;
     }
     .drawer-footer {
-      padding: 1.1rem 1.4rem;
+      padding: 1rem 1.4rem;
       border-top: 1px solid var(--border-color);
       display: flex;
       align-items: center;
@@ -424,13 +424,49 @@ $rates = getExchangeRates();
       background: #080c16;
     }
 
+    /* Explicit Spacing Utilities for Drawer */
+    .drawer-section {
+      margin-bottom: 24px !important;
+    }
+    .drawer-box {
+      background: #070a12;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 18px !important;
+      margin-bottom: 22px !important;
+    }
+    .drawer-box-accent {
+      background: #070a12;
+      border: 1px solid var(--border-accent);
+      border-radius: 12px;
+      padding: 16px 18px !important;
+      margin-bottom: 22px !important;
+    }
+    .drawer-label {
+      font-size: 0.70rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-slate);
+      margin-bottom: 12px !important;
+      display: block;
+    }
+    .drawer-total-card {
+      background: #070a12;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 18px !important;
+      margin-top: 16px !important;
+      margin-bottom: 22px !important;
+    }
+
     /* Debt Item Card */
     .debt-item-card {
       background: #070a12;
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 0.95rem 1.15rem;
-      margin-bottom: 0.85rem;
+      padding: 14px 16px !important;
+      margin-bottom: 14px !important;
       transition: all 0.15s ease;
       position: relative;
       z-index: 5;
@@ -865,12 +901,12 @@ $rates = getExchangeRates();
     </div>
 
     <!-- Body -->
-    <div class="drawer-body" style="padding: 1.25rem 1.25rem;">
+    <div class="drawer-body">
       
       <!-- Hızlı Preset Çipleri -->
-      <div class="mb-3.5">
+      <div class="drawer-section">
         <div class="d-flex align-items-center justify-content-between mb-2">
-          <span class="text-secondary fw-semibold" style="font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase;">Hızlı Kalem</span>
+          <span class="drawer-label mb-0">Hızlı Kalem</span>
           <button type="button" class="btn btn-link text-secondary p-0 text-decoration-none" onclick="togglePresetSettings()" title="Hızlı Kalemleri ve Para Birimini Düzenle" id="btnTogglePresets">
             <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width: 24px; height: 24px; background: rgba(56,189,248,0.1); color: #38bdf8; font-size: 0.75rem; transition: all 0.15s;">
               <i class="fa-solid fa-gear"></i>
@@ -879,32 +915,32 @@ $rates = getExchangeRates();
         </div>
 
         <!-- Preset Chips Container -->
-        <div class="d-flex flex-wrap gap-1.5 mb-2" id="presetChipsContainer"></div>
+        <div class="d-flex flex-wrap gap-2 mt-2" id="presetChipsContainer"></div>
 
         <!-- Preset Ayarları Paneli (Açılır / Kapanır) -->
-        <div id="presetSettingsPanel" class="p-3 rounded-3 mt-2 mb-2 d-none" style="background: #080d1a; border: 1px solid rgba(56,189,248,0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+        <div id="presetSettingsPanel" class="p-3 rounded-3 mt-3 d-none" style="background: #080d1a; border: 1px solid rgba(56,189,248,0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
           <!-- Varsayılan Para Birimi -->
-          <div class="mb-2.5">
-            <span class="text-warning d-block mb-1.5 fw-bold" style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;">Varsayılan Para Birimi</span>
-            <div class="d-flex gap-1.5" id="defaultCurrencyButtons">
+          <div class="mb-3">
+            <span class="text-warning d-block mb-2 fw-bold" style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;">Varsayılan Para Birimi</span>
+            <div class="d-flex gap-2" id="defaultCurrencyButtons">
               <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold py-1" style="font-size: 0.75rem;" onclick="setDefaultCurrency('TRY')" id="btnCurTRY">TRY (₺)</button>
               <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold py-1" style="font-size: 0.75rem;" onclick="setDefaultCurrency('USD')" id="btnCurUSD">USD ($)</button>
               <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold py-1" style="font-size: 0.75rem;" onclick="setDefaultCurrency('EUR')" id="btnCurEUR">EUR (€)</button>
             </div>
           </div>
 
-          <hr style="border-color: rgba(255,255,255,0.08); margin: 0.6rem 0;">
+          <hr style="border-color: rgba(255,255,255,0.08); margin: 10px 0;">
 
           <!-- Etiket Yönetimi -->
           <div>
-            <span class="text-warning d-block mb-1.5 fw-bold" style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;">Etiket Yönetimi (Ekle / Sil / Düzenle)</span>
+            <span class="text-warning d-block mb-2 fw-bold" style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;">Etiket Yönetimi (Ekle / Sil / Düzenle)</span>
             
-            <div class="space-y-1 mb-2.5" id="presetEditList" style="max-height: 180px; overflow-y: auto;"></div>
+            <div class="space-y-1 mb-3" id="presetEditList" style="max-height: 180px; overflow-y: auto;"></div>
 
             <!-- Yeni Etiket Ekle Formu -->
-            <div class="d-flex gap-1.5 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
+            <div class="d-flex gap-2 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
               <input type="text" class="form-input-compact flex-grow-1 py-1 px-2" style="font-size: 0.78rem;" id="newPresetInput" placeholder="Yeni etiket adı..." onkeydown="if(event.key==='Enter') addPresetTag();">
-              <button type="button" class="btn btn-action-primary py-1 px-2.5" style="font-size: 0.75rem;" onclick="addPresetTag()">
+              <button type="button" class="btn btn-action-primary py-1 px-3" style="font-size: 0.75rem;" onclick="addPresetTag()">
                 <i class="fa-solid fa-plus"></i> Ekle
               </button>
             </div>
@@ -913,8 +949,8 @@ $rates = getExchangeRates();
       </div>
 
       <!-- Yeni Kalem Ekleme Formu -->
-      <div class="p-3 rounded-3 mb-3.5" style="background: #070a12; border: 1px solid var(--border-accent);">
-        <div class="row g-2 mb-2.5">
+      <div class="drawer-box-accent">
+        <div class="row g-2 mb-3">
           <div class="col-12 col-sm-6">
             <input type="text" class="form-input-compact w-100 py-1.5" style="font-size: 0.8rem;" id="newItemName" placeholder="Kalem adı" onclick="this.focus();">
           </div>
@@ -929,35 +965,35 @@ $rates = getExchangeRates();
             </select>
           </div>
         </div>
-        <button type="button" class="btn btn-action-primary w-100 py-1.5 text-center d-flex align-items-center justify-content-center gap-1.5" style="font-size: 0.78rem;" onclick="addNewDebtItem()">
+        <button type="button" class="btn btn-action-primary w-100 py-2 text-center d-flex align-items-center justify-content-center gap-1.5" style="font-size: 0.78rem;" onclick="addNewDebtItem()">
           <i class="fa-solid fa-plus" style="font-size: 0.75rem;"></i> Borç Kalemi Ekle
         </button>
       </div>
 
       <!-- Borç Kalemleri Listesi -->
-      <div class="mb-3.5">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-secondary fw-semibold" style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;">Borç Kalemleri</span>
-          <small class="text-secondary" style="font-size: 0.7rem;" id="itemsCountBadge">0 kalem</small>
+      <div class="drawer-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="drawer-label mb-0">Borç Kalemleri</span>
+          <small class="text-secondary" style="font-size: 0.72rem;" id="itemsCountBadge">0 kalem</small>
         </div>
         
-        <div id="debtItemsContainer" class="space-y-2"></div>
+        <div id="debtItemsContainer"></div>
         
         <!-- Live Total in TRY & USD -->
-        <div class="p-2.5 rounded-3 mt-2.5 d-flex justify-content-between align-items-center font-mono" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.82rem;">
-          <span class="text-secondary" style="font-size: 0.75rem;">Toplam Borç:</span>
+        <div class="drawer-total-card d-flex justify-content-between align-items-center font-mono">
+          <span class="text-secondary" style="font-size: 0.78rem;">Toplam Borç:</span>
           <div class="text-end">
-            <strong class="text-white d-block" style="font-size: 0.9rem;" id="debtItemsLiveTotalTRY">₺0,00</strong>
-            <small class="text-secondary font-mono" style="font-size: 0.68rem;" id="debtItemsLiveTotalUSD">$0.00</small>
+            <strong class="text-white d-block" style="font-size: 0.94rem;" id="debtItemsLiveTotalTRY">₺0,00</strong>
+            <small class="text-secondary font-mono" style="font-size: 0.70rem;" id="debtItemsLiveTotalUSD">$0.00</small>
           </div>
         </div>
       </div>
 
       <!-- Tahsilat / Ödeme Girişi -->
-      <div class="p-3 rounded-3 mb-3.5" style="background: #070a12; border: 1px solid var(--border-color);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-success fw-semibold" style="font-size: 0.68rem; letter-spacing: 0.05em;">+ TAHSİLAT / ÖDEME GİR</span>
-          <small class="text-secondary font-mono" style="font-size: 0.7rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
+      <div class="drawer-box">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-success fw-bold" style="font-size: 0.70rem; letter-spacing: 0.05em; text-transform: uppercase;">+ TAHSİLAT / ÖDEME GİR</span>
+          <small class="text-secondary font-mono" style="font-size: 0.72rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
         </div>
         <div class="row g-2">
           <div class="col-6">
@@ -970,8 +1006,8 @@ $rates = getExchangeRates();
       </div>
 
       <!-- Genel Açıklama -->
-      <div class="mb-2">
-        <label class="text-secondary mb-1.5 d-block fw-medium" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">Genel Not</label>
+      <div class="drawer-section mb-0">
+        <label class="drawer-label">Genel Not</label>
         <input type="text" class="form-input-compact w-100 py-1.5" style="font-size: 0.8rem;" id="feeGeneralNote" placeholder="Bu ay için özel açıklama..." onclick="this.focus();">
       </div>
 
