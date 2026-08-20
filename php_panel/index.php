@@ -204,8 +204,8 @@ $rates = getExchangeRates();
       background: #38bdf8;
       color: #090d16;
       font-weight: 700;
-      font-size: 0.8rem;
-      padding: 0.45rem 1rem;
+      font-size: 0.82rem;
+      padding: 0.5rem 1.1rem;
       border-radius: 8px;
       border: none;
       transition: all 0.15s;
@@ -220,8 +220,8 @@ $rates = getExchangeRates();
       background: transparent;
       color: #94a3b8;
       font-weight: 500;
-      font-size: 0.8rem;
-      padding: 0.42rem 0.9rem;
+      font-size: 0.82rem;
+      padding: 0.48rem 1rem;
       border-radius: 8px;
       border: 1px solid var(--border-accent);
       transition: all 0.15s;
@@ -280,7 +280,7 @@ $rates = getExchangeRates();
     .chip-item {
       font-size: 0.72rem;
       font-weight: 600;
-      padding: 0.3rem 0.7rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 8px;
       background: #151e33;
       border: 1px solid var(--border-accent);
@@ -295,19 +295,19 @@ $rates = getExchangeRates();
     }
 
     /* ═════════════════════════════════════════════════════ */
-    /* SAĞ DIŞ ÇEKMECE / EXTERNAL RIGHT DRAWER (YAN PANEL)   */
+    /* SAĞ DIŞ ÇEKMECE / EXTERNAL RIGHT DRAWER               */
     /* ═════════════════════════════════════════════════════ */
     .external-right-drawer {
       position: fixed;
       top: 0;
       right: 0;
       bottom: 0;
-      width: 440px;
-      max-width: 90vw;
+      width: 480px;
+      max-width: 92vw;
       background-color: var(--bg-drawer);
       border-left: 1px solid var(--border-accent);
       box-shadow: -15px 0 45px rgba(0, 0, 0, 0.75);
-      z-index: 1070; /* Above modal backdrop */
+      z-index: 1070;
       transform: translateX(100%);
       transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
@@ -338,6 +338,50 @@ $rates = getExchangeRates();
       justify-content: flex-end;
       gap: 0.75rem;
       background: #0d1322;
+    }
+
+    /* Debt Item Card */
+    .debt-item-card {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      transition: all 0.15s ease;
+    }
+    .debt-item-card.is-paid {
+      background: rgba(34, 197, 94, 0.05);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+    .debt-item-card.is-partial {
+      background: rgba(56, 189, 248, 0.05);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-tick {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid var(--border-accent);
+      background: transparent;
+      color: transparent;
+      transition: all 0.15s;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-tick.checked {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #fff;
+    }
+    .btn-tick.partial {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
     }
 
     .matrix-row-selected {
@@ -507,7 +551,7 @@ $rates = getExchangeRates();
   </main>
 
   <!-- ═════════════════════════════════════════════════════ -->
-  <!-- PROFİL MODALI (TAM BOYUTLU, FERAH, GENİŞ TABLO)      -->
+  <!-- PROFİL MODALI                                         -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="modal fade" id="profileModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 1080px;">
@@ -575,11 +619,11 @@ $rates = getExchangeRates();
 
           <div class="tab-content pt-1">
             
-            <!-- ══ TAB 1: TAM BOYUTLU EXCEL TABLOSU (SIKIŞIKLIK YOK) ══ -->
+            <!-- ══ TAB 1: TAM BOYUTLU EXCEL TABLOSU ══ -->
             <div class="tab-pane fade show active" id="tabTable">
               <div class="d-flex align-items-center justify-content-between mb-2.5">
                 <div class="d-flex gap-1" id="profMatrixYearButtons"></div>
-                <span class="text-secondary" style="font-size: 0.76rem;"><i class="fa-solid fa-arrow-pointer text-info me-1"></i> Satıra tıkla, sağ ekrandaki panelde düzenle</span>
+                <span class="text-secondary" style="font-size: 0.76rem;"><i class="fa-solid fa-arrow-pointer text-info me-1"></i> Satıra tıkla, sağ ekrandaki panelde detaylı düzenle</span>
               </div>
 
               <div class="table-responsive rounded-3 border" style="border-color: var(--border-color) !important; max-height: 56vh;">
@@ -666,77 +710,109 @@ $rates = getExchangeRates();
   </div>
 
   <!-- ═════════════════════════════════════════════════════ -->
-  <!-- SAĞ TARAFTA AÇILAN HARİCİ YAN ÇEKMECE (DRAWER)        -->
-  <!-- Pop-up'ın içinde değil, ekranın sağında açılır!       -->
+  <!-- SAĞ TARAFTA AÇILAN GELİŞMİŞ BORÇ & TAHSİLAT PANELİ   -->
+  <!-- Next.js FeeModal ile Birebir Aynı Tasarım & Mantık    -->
   <!-- ═════════════════════════════════════════════════════ -->
   <div class="external-right-drawer" id="externalRightDrawer">
-    <!-- Drawer Header -->
+    <!-- Header -->
     <div class="drawer-header">
       <div class="d-flex align-items-center gap-2">
         <span class="rounded-2 p-1.5 px-2 bg-info bg-opacity-10 text-info">
           <i class="fa-solid fa-pen-to-square"></i>
         </span>
-        <h6 class="fw-bold text-white m-0" style="font-size: 0.92rem;" id="drawerTitle">Ay Düzenle</h6>
+        <div>
+          <h6 class="fw-bold text-white m-0" style="font-size: 0.92rem;" id="drawerTitle">Ay Düzenle</h6>
+          <small class="text-secondary" style="font-size: 0.7rem;">Borç Kalemleri & Tahsilat Girişi</small>
+        </div>
       </div>
       <button type="button" class="btn btn-link text-secondary p-0" onclick="closeDrawer()" title="Kapat">
         <i class="fa-solid fa-xmark fs-5"></i>
       </button>
     </div>
 
-    <!-- Drawer Body -->
+    <!-- Body -->
     <div class="drawer-body">
-      <!-- Quick Presets -->
+      
+      <!-- Hızlı Preset Çipleri -->
       <div class="mb-3.5">
-        <span class="text-secondary d-block mb-2" style="font-size: 0.74rem; font-weight: 600;">HIZLI KALEM EKLE</span>
+        <span class="text-secondary d-block mb-1.5" style="font-size: 0.74rem; font-weight: 600;">HIZLI KALEM</span>
         <div class="d-flex flex-wrap gap-1.5">
-          <span class="chip-item" onclick="quickAddPreset('MAKİNA KİRASI')">+ Makina</span>
-          <span class="chip-item" onclick="quickAddPreset('DEPOZİTO')">+ Depozito</span>
-          <span class="chip-item" onclick="quickAddPreset('SERVER ÜCRETİ')">+ Server</span>
-          <span class="chip-item" onclick="quickAddPreset('RTP')">+ RTP</span>
-          <span class="chip-item" onclick="quickAddPreset('KİRA')">+ Kira</span>
-          <span class="chip-item" onclick="quickAddPreset('SABİT-FEE')">+ Sabit-Fee</span>
-          <span class="chip-item" onclick="quickAddPreset('FEE')">+ Fee</span>
+          <span class="chip-item" onclick="applyPreset('MAKİNA KİRASI')">MAKİNA KİRASI</span>
+          <span class="chip-item" onclick="applyPreset('DEPOZİTO')">DEPOZİTO</span>
+          <span class="chip-item" onclick="applyPreset('SERVER ÜCRETİ')">SERVER ÜCRETİ</span>
+          <span class="chip-item" onclick="applyPreset('RTP')">RTP</span>
+          <span class="chip-item" onclick="applyPreset('KİRA')">KİRA</span>
+          <span class="chip-item" onclick="applyPreset('SABİT-FEE')">SABİT-FEE</span>
+          <span class="chip-item" onclick="applyPreset('FEE')">FEE</span>
         </div>
       </div>
 
-      <!-- Debt Items List -->
-      <div class="mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="text-secondary fw-semibold" style="font-size: 0.76rem;">BORÇ KALEMLERİ</span>
-          <button class="btn-badge-profil py-0.5" onclick="addDebtItemRow()">+ Kalem Ekle</button>
+      <!-- Yeni Kalem Ekleme Formu (Next.js ile Birebir) -->
+      <div class="p-3 rounded-3 mb-3.5" style="background: #090d16; border: 1px solid var(--border-accent);">
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <input type="text" class="form-input-compact w-100" id="newItemName" placeholder="Kalem adı">
+          </div>
+          <div class="col-3">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="newItemAmount" placeholder="Tutar">
+          </div>
+          <div class="col-3">
+            <select class="form-input-compact w-100 font-mono" id="newItemCurrency">
+              <option value="TRY">TRY (₺)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+            </select>
+          </div>
         </div>
+        <button type="button" class="btn btn-action-primary w-100 py-1.5 text-center d-flex align-items-center justify-content-center gap-1" onclick="addNewDebtItem()">
+          <i class="fa-solid fa-plus"></i> Borç Kalemi Ekle
+        </button>
+      </div>
+
+      <!-- Borç Kalemleri Listesi -->
+      <div class="mb-3.5">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-secondary fw-semibold" style="font-size: 0.76rem; text-transform: uppercase;">Borç Kalemleri</span>
+          <small class="text-secondary" id="itemsCountBadge">0 kalem</small>
+        </div>
+        
         <div id="debtItemsContainer" class="space-y-2"></div>
         
+        <!-- Live Total in TRY & USD -->
         <div class="p-2.5 rounded-3 mt-2.5 d-flex justify-content-between align-items-center font-mono" style="background: #090d16; border: 1px solid var(--border-color); font-size: 0.84rem;">
-          <span class="text-secondary">Kalemler Toplamı:</span>
-          <strong class="text-white" id="debtItemsLiveTotal">₺0,00</strong>
+          <span class="text-secondary">Toplam Borç:</span>
+          <div class="text-end">
+            <strong class="text-white d-block" id="debtItemsLiveTotalTRY">₺0,00</strong>
+            <small class="text-secondary font-mono" style="font-size: 0.72rem;" id="debtItemsLiveTotalUSD">$0.00</small>
+          </div>
         </div>
       </div>
 
-      <!-- Payment Input -->
+      <!-- Tahsilat / Ödeme Girişi -->
       <div class="p-3 rounded-3 mb-3.5" style="background: #090d16; border: 1px solid var(--border-color);">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <span class="text-success fw-semibold" style="font-size: 0.76rem;">+ TAHSİLAT / ÖDEME GİR</span>
-          <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="feeCurrentPaidAmount">Ödenen: ₺0,00</small>
+          <small class="text-secondary font-mono" style="font-size: 0.74rem;" id="feeCurrentPaidAmount">Mevcut: ₺0,00</small>
         </div>
         <div class="row g-2">
           <div class="col-6">
-            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Tutar (₺)">
+            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" id="feeNewPayment" placeholder="Ödenen Tutar (₺)">
           </div>
           <div class="col-6">
-            <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu">
+            <input type="text" class="form-input-compact w-100" id="feePaymentNote" placeholder="Ödeme Notu (Örn: Havale)">
           </div>
         </div>
       </div>
 
-      <!-- Note -->
+      <!-- Genel Açıklama -->
       <div class="mb-2">
         <label class="small text-secondary mb-1">Genel Not</label>
-        <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için özel not...">
+        <input type="text" class="form-input-compact w-100" id="feeGeneralNote" placeholder="Bu ay için özel açıklama...">
       </div>
+
     </div>
 
-    <!-- Drawer Footer -->
+    <!-- Footer -->
     <div class="drawer-footer">
       <button type="button" class="btn-action-outline px-3" onclick="closeDrawer()">Vazgeç</button>
       <button type="button" class="btn-action-primary px-4" onclick="saveFeeRowData()">Kaydet</button>
@@ -871,7 +947,7 @@ $rates = getExchangeRates();
   <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Core Script -->
+  <!-- Core Dashboard Application Script -->
   <script>
     const MONTHS = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
     
@@ -894,6 +970,11 @@ $rates = getExchangeRates();
     }
     function toUSD(tryAmount) {
       return rates.usd ? (Number(tryAmount) || 0) / rates.usd : Number(tryAmount) || 0;
+    }
+    function toTRY(amount, currency) {
+      if (currency === 'USD') return (Number(amount) || 0) * rates.usd;
+      if (currency === 'EUR') return (Number(amount) || 0) * rates.eur;
+      return Number(amount) || 0;
     }
 
     async function loadData() {
@@ -981,7 +1062,7 @@ $rates = getExchangeRates();
 
       const overallRate = totals.scopedTotal > 0 ? (totals.collected / totals.scopedTotal) * 100 : 0;
 
-      // KPI Cards
+      // Cards
       document.getElementById('cardTotalUSD').innerText = '$' + fmtUSD(toUSD(totals.scopedTotal));
       document.getElementById('cardTotalTRY').innerText = '₺' + fmt(totals.scopedTotal);
 
@@ -1144,26 +1225,30 @@ $rates = getExchangeRates();
     }
 
     // ═════════════════════════════════════════════════════
-    // SAĞ ÇEKMECEDE AY DÜZENLEME (EKRANIN SAĞINDA AÇILIR)
+    // GELİŞMİŞ BORÇ & TAHSİLAT DRAWER MANTIĞI
     // ═════════════════════════════════════════════════════
     function openMonthDrawer(month) {
       currentEditingMonth = month;
       const casinoId = currentActiveProfile.casino.id;
       const year = currentProfileMatrixYear;
 
-      document.getElementById('drawerTitle').innerHTML = `${MONTHS[month]} ${year} Borç & Tahsilat`;
-      document.getElementById('feeNewPayment').value = '';
+      document.getElementById('drawerTitle').innerHTML = `${MONTHS[month]} ${year} Düzenle`;
+      document.getElementById('newItemName').value = '';
+      document.getElementById('newItemAmount').value = '';
+      document.getElementById('newItemCurrency').value = 'TRY';
       document.getElementById('feePaymentNote').value = '';
 
       const existing = (currentActiveProfile.fee_rows || []).find(r => r.year === year && r.month === month);
       currentDebtItems = existing && existing.debt_items ? JSON.parse(JSON.stringify(existing.debt_items)) : [];
       document.getElementById('feeGeneralNote').value = existing ? existing.note || '' : '';
-      document.getElementById('feeCurrentPaidAmount').innerText = 'Ödenen: ₺' + fmt(existing ? existing.paid_amount : 0);
+      
+      const currentPaid = existing ? Number(existing.paid_amount) || 0 : 0;
+      document.getElementById('feeCurrentPaidAmount').innerText = 'Mevcut: ₺' + fmt(currentPaid);
+      document.getElementById('feeNewPayment').value = currentPaid > 0 ? currentPaid.toFixed(2) : '';
 
       renderDebtItems();
       renderProfileMatrixTable();
 
-      // Open Right Drawer
       document.getElementById('externalRightDrawer').classList.add('open');
     }
 
@@ -1173,58 +1258,132 @@ $rates = getExchangeRates();
       renderProfileMatrixTable();
     }
 
-    function renderDebtItems() {
-      const container = document.getElementById('debtItemsContainer');
-      if (currentDebtItems.length === 0) {
-        container.innerHTML = '<p class="text-secondary text-center py-3 m-0" style="font-size: 0.76rem;">Henüz borç kalemi yok.</p>';
-        updateDebtItemsLiveTotal();
+    function applyPreset(preset) {
+      document.getElementById('newItemName').value = preset;
+      document.getElementById('newItemAmount').focus();
+    }
+
+    function addNewDebtItem() {
+      const name = document.getElementById('newItemName').value.trim();
+      const amount = parseFloat(document.getElementById('newItemAmount').value) || 0;
+      const currency = document.getElementById('newItemCurrency').value;
+
+      if (!name || amount <= 0) {
+        Swal.fire({ icon: 'warning', title: 'Lütfen kalem adı ve geçerli bir tutar girin', timer: 1200, showConfirmButton: false });
         return;
       }
-      container.innerHTML = currentDebtItems.map((item, idx) => `
-        <div class="row g-2 align-items-center p-2 rounded-3 mb-2" style="background: #090d16; border: 1px solid var(--border-color);">
-          <div class="col-5">
-            <input type="text" class="form-input-compact w-100" value="${item.name || ''}" placeholder="Kalem Adı" oninput="currentDebtItems[${idx}].name = this.value">
-          </div>
-          <div class="col-4">
-            <input type="number" step="0.01" class="form-input-compact w-100 font-mono" value="${item.amount || ''}" placeholder="Tutar" oninput="currentDebtItems[${idx}].amount = parseFloat(this.value) || 0; updateDebtItemsLiveTotal();">
-          </div>
-          <div class="col-2">
-            <select class="form-input-compact w-100" onchange="currentDebtItems[${idx}].currency = this.value; updateDebtItemsLiveTotal();">
-              <option value="TRY" ${item.currency === 'TRY' ? 'selected' : ''}>TRY</option>
-              <option value="USD" ${item.currency === 'USD' ? 'selected' : ''}>USD</option>
-              <option value="EUR" ${item.currency === 'EUR' ? 'selected' : ''}>EUR</option>
-            </select>
-          </div>
-          <div class="col-1 text-end">
-            <button class="btn btn-link text-danger btn-sm p-0" onclick="currentDebtItems.splice(${idx}, 1); renderDebtItems();"><i class="fa-solid fa-xmark"></i></button>
-          </div>
-        </div>
-      `).join('');
-      updateDebtItemsLiveTotal();
+
+      currentDebtItems.push({
+        name: name,
+        amount: amount,
+        currency: currency,
+        paid: false,
+        paid_amount: 0
+      });
+
+      document.getElementById('newItemName').value = '';
+      document.getElementById('newItemAmount').value = '';
+      
+      renderDebtItems();
     }
 
-    function updateDebtItemsLiveTotal() {
+    function toggleDebtItemPaid(idx) {
+      const item = currentDebtItems[idx];
+      const newPaid = !item.paid;
+      item.paid = newPaid;
+      item.paid_amount = newPaid ? item.amount : 0;
+      
+      // Auto recalculate overall payment input
+      recalcOverallPayment();
+      renderDebtItems();
+    }
+
+    function updateItemPaidAmount(idx, val) {
+      const item = currentDebtItems[idx];
+      const pa = parseFloat(val) || 0;
+      item.paid_amount = pa;
+      item.paid = pa >= item.amount && item.amount > 0;
+      
+      recalcOverallPayment();
+      renderDebtItems();
+    }
+
+    function removeDebtItem(idx) {
+      currentDebtItems.splice(idx, 1);
+      recalcOverallPayment();
+      renderDebtItems();
+    }
+
+    function recalcOverallPayment() {
+      let totalPaidTRY = 0;
+      currentDebtItems.forEach(i => {
+        const pa = i.paid_amount !== undefined ? i.paid_amount : (i.paid ? i.amount : 0);
+        totalPaidTRY += toTRY(pa, i.currency);
+      });
+      document.getElementById('feeNewPayment').value = totalPaidTRY > 0 ? totalPaidTRY.toFixed(2) : '';
+    }
+
+    function renderDebtItems() {
+      const container = document.getElementById('debtItemsContainer');
+      document.getElementById('itemsCountBadge').innerText = `${currentDebtItems.length} kalem`;
+
+      if (currentDebtItems.length === 0) {
+        container.innerHTML = '<p class="text-secondary text-center py-3 m-0" style="font-size: 0.78rem;">Henüz borç kalemi eklenmemiş.</p>';
+        updateDebtTotals();
+        return;
+      }
+
+      container.innerHTML = currentDebtItems.map((item, idx) => {
+        const itemTRY = toTRY(item.amount, item.currency);
+        const itemUSD = toUSD(itemTRY);
+        const paidAmt = item.paid_amount !== undefined ? item.paid_amount : (item.paid ? item.amount : 0);
+        const isFull = paidAmt >= item.amount && item.amount > 0;
+        const isPartial = paidAmt > 0 && paidAmt < item.amount;
+        
+        const cardClass = isFull ? 'debt-item-card is-paid' : (isPartial ? 'debt-item-card is-partial' : 'debt-item-card');
+        const tickClass = isFull ? 'btn-tick checked' : (isPartial ? 'btn-tick partial' : 'btn-tick');
+
+        return `
+          <div class="${cardClass}">
+            <!-- Top Row -->
+            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
+                <button type="button" class="${tickClass}" onclick="toggleDebtItemPaid(${idx})" title="Tamamını Ödendi Olarak İşaretle">
+                  ${isFull ? '✓' : (isPartial ? '≈' : '')}
+                </button>
+                <strong class="text-white text-truncate" style="font-size: 0.85rem;">${item.name}</strong>
+              </div>
+              <div class="text-end">
+                <strong class="font-mono text-white" style="font-size: 0.88rem;">${fmt(item.amount)} ${item.currency}</strong>
+                <small class="text-secondary d-block font-mono" style="font-size: 0.7rem;">₺${fmt(itemTRY)}</small>
+              </div>
+              <button class="btn btn-link text-danger p-0 ms-1" onclick="removeDebtItem(${idx})" title="Kalemi Sil">
+                <i class="fa-solid fa-trash-can" style="font-size: 0.85rem;"></i>
+              </button>
+            </div>
+
+            <!-- Bottom Row (Partial payment input) -->
+            <div class="d-flex align-items-center justify-content-between pt-1.5 border-top" style="border-color: rgba(255,255,255,0.06) !important; font-size: 0.75rem;">
+              <span class="text-secondary">Bu Kalemden Ödenen:</span>
+              <div class="d-flex align-items-center gap-1.5" style="width: 140px;">
+                <input type="number" step="0.01" class="form-input-compact w-100 py-1 font-mono text-end" value="${paidAmt > 0 ? paidAmt : ''}" placeholder="0" onchange="updateItemPaidAmount(${idx}, this.value)">
+                <span class="text-secondary font-mono">${item.currency}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updateDebtTotals();
+    }
+
+    function updateDebtTotals() {
       let totalTRY = 0;
       currentDebtItems.forEach(item => {
-        let amt = Number(item.amount) || 0;
-        if (item.currency === 'USD') amt *= rates.usd;
-        if (item.currency === 'EUR') amt *= rates.eur;
-        totalTRY += amt;
+        totalTRY += toTRY(item.amount, item.currency);
       });
-      document.getElementById('debtItemsLiveTotal').innerText = '₺' + fmt(totalTRY);
-    }
-
-    function addDebtItemRow() {
-      currentDebtItems.push({ name: 'FEE', amount: 0, currency: 'TRY', paid: false });
-      renderDebtItems();
-    }
-
-    function quickAddPreset(presetName) {
-      let curr = 'EUR';
-      if (presetName === 'FEE') curr = 'TRY';
-      if (presetName === 'SABİT-FEE') curr = 'USD';
-      currentDebtItems.push({ name: presetName, amount: 0, currency: curr, paid: false });
-      renderDebtItems();
+      document.getElementById('debtItemsLiveTotalTRY').innerText = '₺' + fmt(totalTRY);
+      document.getElementById('debtItemsLiveTotalUSD').innerText = '$' + fmtUSD(toUSD(totalTRY));
     }
 
     async function saveFeeRowData() {
@@ -1233,20 +1392,19 @@ $rates = getExchangeRates();
       const year = currentProfileMatrixYear;
       const month = currentEditingMonth;
       const note = document.getElementById('feeGeneralNote').value;
-      const newPayment = parseFloat(document.getElementById('feeNewPayment').value) || 0;
+      const paymentInput = parseFloat(document.getElementById('feeNewPayment').value) || 0;
       const paymentNote = document.getElementById('feePaymentNote').value;
 
       let totalTRY = 0;
       currentDebtItems.forEach(item => {
-        let amt = Number(item.amount) || 0;
-        if (item.currency === 'USD') amt *= rates.usd;
-        if (item.currency === 'EUR') amt *= rates.eur;
-        totalTRY += amt;
+        totalTRY += toTRY(item.amount, item.currency);
       });
 
       const existing = (currentActiveProfile.fee_rows || []).find(r => r.year === year && r.month === month);
-      let paid_amount = existing ? Number(existing.paid_amount) || 0 : 0;
+      const prevPaid = existing ? Number(existing.paid_amount) || 0 : 0;
+      const addedPayment = Math.max(0, paymentInput - prevPaid);
 
+      // Save fee_row
       await fetch('api.php?action=save_fee_row', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1254,14 +1412,15 @@ $rates = getExchangeRates();
           casino_id, year, month,
           turnover: totalTRY,
           fee_amount: totalTRY,
-          paid_amount,
-          status: paid_amount >= totalTRY && totalTRY > 0 ? 1 : 0,
+          paid_amount: paymentInput,
+          status: paymentInput >= totalTRY && totalTRY > 0 ? 1 : 0,
           note,
           debt_items: currentDebtItems
         })
       });
 
-      if (newPayment > 0) {
+      // If new incremental payment made, log transaction
+      if (addedPayment > 0) {
         const res = await fetch(`api.php?action=get_profile&casino_id=${casino_id}`);
         const freshProfile = await res.json();
         const updatedRow = (freshProfile.fee_rows || []).find(r => r.year === year && r.month === month);
@@ -1271,7 +1430,7 @@ $rates = getExchangeRates();
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               fee_row_id: updatedRow.id,
-              paid_amount: newPayment,
+              paid_amount: addedPayment,
               note: paymentNote
             })
           });
@@ -1280,7 +1439,7 @@ $rates = getExchangeRates();
 
       Swal.fire({ icon: 'success', title: 'Kaydedildi', timer: 700, showConfirmButton: false });
       
-      // Update profile data in modal without closing
+      // Update profile modal data
       const res = await fetch(`api.php?action=get_profile&casino_id=${casino_id}`);
       const data = await res.json();
       if (data.success) {
