@@ -363,6 +363,39 @@ try {
             echo json_encode(['success' => true]);
             break;
 
+        // -----------------------------------------------------
+        // Preset Etiketleri & Varsayılan Para Birimi
+        // -----------------------------------------------------
+        case 'get_presets':
+            $stmt = $pdo->prepare("SELECT k, v FROM settings WHERE k IN ('ct_presets', 'ct_default_currency')");
+            $stmt->execute();
+            $rows = $stmt->fetchAll();
+            $presets = ['MAKİNA KİRASI', 'DEPOZİTO', 'SERVER ÜCRETİ', 'RTP', 'KİRA', 'SABİT-FEE', 'FEE'];
+            $currency = 'TRY';
+            foreach ($rows as $r) {
+                if ($r['k'] === 'ct_presets' && !empty($r['v'])) {
+                    $decoded = json_decode($r['v'], true);
+                    if (is_array($decoded) && count($decoded) > 0) $presets = $decoded;
+                }
+                if ($r['k'] === 'ct_default_currency' && !empty($r['v'])) {
+                    $currency = $r['v'];
+                }
+            }
+            echo json_encode(['success' => true, 'presets' => $presets, 'default_currency' => $currency], JSON_UNESCAPED_UNICODE);
+            break;
+
+        case 'save_presets':
+            if (isset($input['presets']) && is_array($input['presets'])) {
+                $stmt = $pdo->prepare("INSERT INTO settings (k, v) VALUES ('ct_presets', ?) ON DUPLICATE KEY UPDATE v = VALUES(v)");
+                $stmt->execute([json_encode($input['presets'], JSON_UNESCAPED_UNICODE)]);
+            }
+            if (isset($input['default_currency'])) {
+                $stmt = $pdo->prepare("INSERT INTO settings (k, v) VALUES ('ct_default_currency', ?) ON DUPLICATE KEY UPDATE v = VALUES(v)");
+                $stmt->execute([$input['default_currency']]);
+            }
+            echo json_encode(['success' => true]);
+            break;
+
         default:
             throw new Exception('Bilinmeyen eylem');
     }

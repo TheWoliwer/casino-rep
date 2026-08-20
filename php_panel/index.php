@@ -869,15 +869,46 @@ $rates = getExchangeRates();
       
       <!-- Hızlı Preset Çipleri -->
       <div class="mb-4">
-        <span class="text-secondary d-block mb-2.5" style="font-size: 0.76rem; font-weight: 600; letter-spacing: 0.04em;">HIZLI KALEM</span>
-        <div class="d-flex flex-wrap gap-2">
-          <span class="chip-item" onclick="applyPreset('MAKİNA KİRASI')">MAKİNA KİRASI</span>
-          <span class="chip-item" onclick="applyPreset('DEPOZİTO')">DEPOZİTO</span>
-          <span class="chip-item" onclick="applyPreset('SERVER ÜCRETİ')">SERVER ÜCRETİ</span>
-          <span class="chip-item" onclick="applyPreset('RTP')">RTP</span>
-          <span class="chip-item" onclick="applyPreset('KİRA')">KİRA</span>
-          <span class="chip-item" onclick="applyPreset('SABİT-FEE')">SABİT-FEE</span>
-          <span class="chip-item" onclick="applyPreset('FEE')">FEE</span>
+        <div class="d-flex align-items-center justify-content-between mb-2.5">
+          <span class="text-secondary fw-semibold" style="font-size: 0.76rem; letter-spacing: 0.04em;">HIZLI KALEM</span>
+          <button type="button" class="btn btn-link text-secondary p-0 text-decoration-none" onclick="togglePresetSettings()" title="Hızlı Kalemleri ve Para Birimini Düzenle" id="btnTogglePresets">
+            <span class="d-inline-flex align-items-center justify-content-center rounded-2" style="width: 26px; height: 26px; background: rgba(56,189,248,0.1); color: #38bdf8; font-size: 0.8rem; transition: all 0.15s;">
+              <i class="fa-solid fa-gear"></i>
+            </span>
+          </button>
+        </div>
+
+        <!-- Preset Chips Container -->
+        <div class="d-flex flex-wrap gap-2 mb-2" id="presetChipsContainer"></div>
+
+        <!-- Preset Ayarları Paneli (Açılır / Kapanır) -->
+        <div id="presetSettingsPanel" class="p-3 rounded-3 mt-2.5 mb-2 d-none" style="background: #080d1a; border: 1px solid rgba(56,189,248,0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+          <!-- Varsayılan Para Birimi -->
+          <div class="mb-3">
+            <span class="text-warning d-block mb-1.5 fw-bold" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">Varsayılan Para Birimi</span>
+            <div class="d-flex gap-2" id="defaultCurrencyButtons">
+              <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold" onclick="setDefaultCurrency('TRY')" id="btnCurTRY">TRY (₺)</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold" onclick="setDefaultCurrency('USD')" id="btnCurUSD">USD ($)</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold" onclick="setDefaultCurrency('EUR')" id="btnCurEUR">EUR (€)</button>
+            </div>
+          </div>
+
+          <hr style="border-color: rgba(255,255,255,0.08); margin: 0.8rem 0;">
+
+          <!-- Etiket Yönetimi -->
+          <div>
+            <span class="text-warning d-block mb-2 fw-bold" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">Etiket Yönetimi (Ekle / Sil / Düzenle)</span>
+            
+            <div class="space-y-1.5 mb-3" id="presetEditList" style="max-height: 200px; overflow-y: auto;"></div>
+
+            <!-- Yeni Etiket Ekle Formu -->
+            <div class="d-flex gap-1.5 pt-2 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
+              <input type="text" class="form-input-compact flex-grow-1 py-1.5 px-2.5" id="newPresetInput" placeholder="Yeni etiket adı..." onkeydown="if(event.key==='Enter') addPresetTag();">
+              <button type="button" class="btn btn-action-primary py-1.5 px-3" onclick="addPresetTag()">
+                <i class="fa-solid fa-plus"></i> Ekle
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1487,6 +1518,147 @@ $rates = getExchangeRates();
       renderProfileMatrixTable();
     }
 
+    let presetList = ['MAKİNA KİRASI', 'DEPOZİTO', 'SERVER ÜCRETİ', 'RTP', 'KİRA', 'SABİT-FEE', 'FEE'];
+    let defaultCurrency = 'TRY';
+    let editingPresetIdx = null;
+
+    async function loadPresets() {
+      try {
+        const res = await fetch('api.php?action=get_presets');
+        const data = await res.json();
+        if (data.success) {
+          if (Array.isArray(data.presets) && data.presets.length > 0) {
+            presetList = data.presets;
+          }
+          if (data.default_currency) {
+            defaultCurrency = data.default_currency;
+          }
+        }
+      } catch (e) {
+        try {
+          const local = localStorage.getItem('ct_presets');
+          if (local) presetList = JSON.parse(local);
+          const cur = localStorage.getItem('ct_default_currency');
+          if (cur) defaultCurrency = cur;
+        } catch (err) {}
+      }
+      applyDefaultCurrencyUI();
+      renderPresetChips();
+    }
+
+    async function savePresetsData() {
+      renderPresetChips();
+      renderPresetEditList();
+      try {
+        localStorage.setItem('ct_presets', JSON.stringify(presetList));
+        localStorage.setItem('ct_default_currency', defaultCurrency);
+      } catch(e) {}
+      
+      await fetch('api.php?action=save_presets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ presets: presetList, default_currency: defaultCurrency })
+      }).catch(() => {});
+    }
+
+    function applyDefaultCurrencyUI() {
+      const select = document.getElementById('newItemCurrency');
+      if (select) select.value = defaultCurrency;
+      
+      ['TRY', 'USD', 'EUR'].forEach(c => {
+        const btn = document.getElementById(`btnCur${c}`);
+        if (btn) {
+          if (c === defaultCurrency) {
+            btn.className = 'btn btn-sm btn-info flex-grow-1 font-mono fw-bold text-dark';
+          } else {
+            btn.className = 'btn btn-sm btn-outline-secondary flex-grow-1 font-mono fw-bold';
+          }
+        }
+      });
+    }
+
+    function setDefaultCurrency(curr) {
+      defaultCurrency = curr;
+      applyDefaultCurrencyUI();
+      savePresetsData();
+    }
+
+    function togglePresetSettings() {
+      const panel = document.getElementById('presetSettingsPanel');
+      panel.classList.toggle('d-none');
+      editingPresetIdx = null;
+      renderPresetEditList();
+    }
+
+    function renderPresetChips() {
+      const container = document.getElementById('presetChipsContainer');
+      if (!container) return;
+      container.innerHTML = presetList.map(p => `
+        <span class="chip-item" onclick="applyPreset('${p.replace(/'/g, "\\'")}')">${p}</span>
+      `).join('');
+    }
+
+    function renderPresetEditList() {
+      const list = document.getElementById('presetEditList');
+      if (!list) return;
+      list.innerHTML = presetList.map((p, idx) => {
+        if (editingPresetIdx === idx) {
+          return `
+            <div class="d-flex align-items-center gap-1.5 p-1 rounded bg-black bg-opacity-40">
+              <input type="text" class="form-input-compact flex-grow-1 py-1 px-2" id="editPresetInput_${idx}" value="${p}" onkeydown="if(event.key==='Enter') commitEditPreset(${idx}); if(event.key==='Escape') { editingPresetIdx=null; renderPresetEditList(); }">
+              <button type="button" class="btn btn-sm btn-success py-1 px-2" onclick="commitEditPreset(${idx})"><i class="fa-solid fa-check"></i></button>
+              <button type="button" class="btn btn-sm btn-secondary py-1 px-2" onclick="editingPresetIdx=null; renderPresetEditList();"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          `;
+        }
+        return `
+          <div class="d-flex align-items-center justify-content-between p-1.5 px-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem;">
+            <span class="text-white fw-medium text-truncate">${p}</span>
+            <div class="d-flex align-items-center gap-1">
+              <button type="button" class="btn btn-link text-info p-0 px-1" onclick="editingPresetIdx=${idx}; renderPresetEditList();" title="Düzenle">
+                <i class="fa-solid fa-pen" style="font-size: 0.75rem;"></i>
+              </button>
+              <button type="button" class="btn btn-link text-danger p-0 px-1" onclick="deletePresetTag(${idx})" title="Sil">
+                <i class="fa-solid fa-trash-can" style="font-size: 0.75rem;"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (editingPresetIdx !== null) {
+        setTimeout(() => {
+          const input = document.getElementById(`editPresetInput_${editingPresetIdx}`);
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function addPresetTag() {
+      const input = document.getElementById('newPresetInput');
+      const name = (input.value || '').trim().toUpperCase();
+      if (!name || presetList.includes(name)) return;
+      presetList.push(name);
+      input.value = '';
+      savePresetsData();
+    }
+
+    function deletePresetTag(idx) {
+      presetList.splice(idx, 1);
+      if (editingPresetIdx === idx) editingPresetIdx = null;
+      savePresetsData();
+    }
+
+    function commitEditPreset(idx) {
+      const input = document.getElementById(`editPresetInput_${idx}`);
+      const name = (input.value || '').trim().toUpperCase();
+      if (name) {
+        presetList[idx] = name;
+      }
+      editingPresetIdx = null;
+      savePresetsData();
+    }
+
     function applyPreset(preset) {
       document.getElementById('newItemName').value = preset;
       document.getElementById('newItemAmount').focus();
@@ -1935,6 +2107,7 @@ $rates = getExchangeRates();
 
     document.addEventListener('DOMContentLoaded', () => {
       loadData();
+      loadPresets();
     });
   </script>
 </body>
