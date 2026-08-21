@@ -1405,15 +1405,31 @@ if (!$casino) {
         return;
       }
 
-      container.innerHTML = all.map(e => `
-        <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2" style="background: #0e1424; border: 1px solid var(--border-color); font-size: 0.84rem;">
-          <div>
-            <strong class="font-mono" style="color: ${e.kind === 'payment' ? 'var(--success)' : '#38bdf8'}; font-size: 0.92rem;">${e.kind === 'payment' ? '+' : ''}₺${fmt(e.amount)}</strong>
-            <small class="text-secondary d-block" style="font-size: 0.76rem;">${e.note}</small>
+      container.innerHTML = all.map(e => {
+        const isPayment = e.kind === 'payment';
+        return `
+          <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2.5" style="background: #0e1424; border: 1px solid var(--border-color); transition: all 0.15s;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 34px; height: 34px; background: ${isPayment ? 'rgba(34,197,94,0.12)' : 'rgba(56,189,248,0.12)'}; font-size: 0.9rem;">
+                ${isPayment ? '💰' : '📝'}
+              </div>
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <strong class="font-mono" style="color: ${isPayment ? 'var(--success)' : '#38bdf8'}; font-size: 0.88rem;">${isPayment ? '+' : ''}₺${fmt(e.amount)}</strong>
+                  ${rates && rates.usd ? `<small class="text-secondary font-mono" style="font-size: 0.7rem;">$${fmtUSD(e.amount / rates.usd)}</small>` : ''}
+                </div>
+                <small class="text-secondary d-block mt-0.5" style="font-size: 0.74rem; line-height: 1.35;">${e.note}</small>
+              </div>
+            </div>
+            <div class="text-end ps-2 flex-shrink-0">
+              <span class="text-secondary font-mono d-block" style="font-size: 0.72rem;">${new Date(e.date).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+              <small class="badge rounded-pill mt-0.5" style="background: ${isPayment ? 'rgba(34,197,94,0.15)' : 'rgba(56,189,248,0.15)'}; color: ${isPayment ? '#22c55e' : '#38bdf8'}; font-size: 0.62rem; padding: 0.2rem 0.5rem;">
+                ${isPayment ? 'Tahsilat' : 'Borç'}
+              </small>
+            </div>
           </div>
-          <small class="text-secondary font-mono" style="font-size: 0.72rem;">${new Date(e.date).toLocaleDateString('tr-TR')}</small>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function saveNotes() {

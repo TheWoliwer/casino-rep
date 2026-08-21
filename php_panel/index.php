@@ -734,45 +734,45 @@ $rates = getExchangeRates();
         </div>
 
         <!-- Modal Body -->
-        <div class="modal-body p-3 p-md-4">
-          <!-- Summary 3-Column Card -->
-          <div class="row g-2 g-md-3 text-center mb-3 mb-md-4">
+        <div class="modal-body p-3.5 p-md-4">
+          <!-- 3 Mini Summary Badges -->
+          <div class="row g-2.5 mb-3.5 text-center">
             <div class="col-4">
-              <div class="p-2 p-md-3 rounded-3" style="background: #070a12; border: 1px solid var(--border-color);">
-                <div class="text-secondary" style="font-size: 0.7rem;">Beklenen</div>
-                <strong class="text-white font-mono" style="font-size: 0.95rem;" id="profTotalUSD">$0.00</strong>
-                <div class="text-secondary font-mono" style="font-size: 0.68rem;" id="profTotalTRY">₺0,00</div>
+              <div class="p-3 rounded-3" style="background: #070a12; border: 1px solid var(--border-color);">
+                <div class="text-secondary fw-semibold mb-1" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;">Beklenen</div>
+                <strong class="text-white font-mono d-block" style="font-size: 0.96rem;" id="profExpectedUSD">$0.00</strong>
+                <small class="text-secondary font-mono" style="font-size: 0.7rem;" id="profExpectedTRY">₺0,00</small>
               </div>
             </div>
             <div class="col-4">
-              <div class="p-2 p-md-3 rounded-3" style="background: #070a12; border: 1px solid var(--border-color);">
-                <div class="text-secondary" style="font-size: 0.7rem;">Tahsil Edilen</div>
-                <strong class="font-mono" style="color: var(--success); font-size: 0.95rem;" id="profCollectedUSD">$0.00</strong>
-                <div class="text-secondary font-mono" style="font-size: 0.68rem;" id="profCollectedTRY">₺0,00</div>
+              <div class="p-3 rounded-3" style="background: #070a12; border: 1px solid var(--border-color);">
+                <div class="text-secondary fw-semibold mb-1" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;">Tahsil Edilen</div>
+                <strong class="font-mono d-block" style="color: var(--success); font-size: 0.96rem;" id="profCollectedUSD">$0.00</strong>
+                <small class="text-secondary font-mono" style="font-size: 0.7rem;" id="profCollectedTRY">₺0,00</small>
               </div>
             </div>
             <div class="col-4">
-              <div class="p-2 p-md-3 rounded-3" style="background: #070a12; border: 1px solid var(--border-color);">
-                <div class="text-secondary" style="font-size: 0.7rem;">Bekleyen</div>
-                <strong class="font-mono" style="color: var(--danger); font-size: 0.95rem;" id="profOutstandingUSD">$0.00</strong>
-                <div class="text-secondary font-mono" style="font-size: 0.68rem;" id="profOutstandingTRY">₺0,00</div>
+              <div class="p-3 rounded-3" style="background: #070a12; border: 1px solid var(--border-color);">
+                <div class="text-secondary fw-semibold mb-1" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;">Bekleyen</div>
+                <strong class="font-mono d-block" style="color: var(--danger); font-size: 0.96rem;" id="profOutstandingUSD">$0.00</strong>
+                <small class="text-secondary font-mono" style="font-size: 0.7rem;" id="profOutstandingTRY">₺0,00</small>
               </div>
             </div>
           </div>
 
           <!-- Tab Navigation -->
-          <ul class="nav nav-pills mb-2.5 gap-1.5 border-bottom pb-2" style="font-size: 0.78rem;">
+          <ul class="nav nav-pills mb-3.5 gap-2 border-bottom pb-3" style="font-size: 0.82rem;">
             <li class="nav-item">
-              <button class="nav-link active py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabTable">📊 Tablo</button>
+              <button class="nav-link active py-2 px-3.5 rounded-3 fw-semibold" data-bs-toggle="pill" data-bs-target="#tabTable">📊 Tablo</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabTimeline">🕒 Hareketler</button>
+              <button class="nav-link py-2 px-3.5 rounded-3 fw-semibold" data-bs-toggle="pill" data-bs-target="#tabTimeline">🕒 Hareketler</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabInfo">ℹ️ Bilgiler</button>
+              <button class="nav-link py-2 px-3.5 rounded-3 fw-semibold" data-bs-toggle="pill" data-bs-target="#tabInfo">ℹ️ Bilgiler</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link py-1 px-3 rounded-2" data-bs-toggle="pill" data-bs-target="#tabNotes">📝 Notlar</button>
+              <button class="nav-link py-2 px-3.5 rounded-3 fw-semibold" data-bs-toggle="pill" data-bs-target="#tabNotes">📝 Notlar</button>
             </li>
           </ul>
 
@@ -780,12 +780,12 @@ $rates = getExchangeRates();
             
             <!-- ══ TAB 1: AY TABLOSU ══ -->
             <div class="tab-pane fade show active" id="tabTable">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <div class="d-flex gap-1" id="profMatrixYearButtons"></div>
-                <span class="text-secondary" style="font-size: 0.7rem;">* Satıra tıkla ve ayı düzenle</span>
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex gap-1.5" id="profMatrixYearButtons"></div>
+                <span class="text-secondary" style="font-size: 0.72rem;">* Satıra tıkla ve ayı düzenle</span>
               </div>
 
-              <div class="table-responsive rounded-2 border" style="border-color: var(--border-color) !important; max-height: 52vh;">
+              <div class="table-responsive rounded-3 border" style="border-color: var(--border-color) !important; max-height: 52vh;">
                 <table class="table-rep w-100" id="profileMatrixTable">
                   <thead class="sticky-top" style="background: #0e1424; z-index: 2;" id="profileMatrixHead"></thead>
                   <tbody id="profileMatrixBody"></tbody>
@@ -796,16 +796,16 @@ $rates = getExchangeRates();
 
             <!-- ══ TAB 2: TIMELINE ══ -->
             <div class="tab-pane fade" id="tabTimeline">
-              <div class="row g-2 mb-3">
-                <div class="col-4">
-                  <select class="form-input-compact w-100 py-1" id="timelineTypeFilter" onchange="renderProfileTimeline()">
-                    <option value="all">Tümü</option>
-                    <option value="payment">Ödemeler (+)</option>
-                    <option value="entry">Borç Girişleri (-)</option>
+              <div class="row g-2.5 mb-3.5">
+                <div class="col-12 col-sm-4">
+                  <select class="form-input-compact w-100 py-2 px-2.5" style="font-size: 0.8rem;" id="timelineTypeFilter" onchange="renderProfileTimeline()">
+                    <option value="all">Tümü (Tüm Hareketler)</option>
+                    <option value="payment">💰 Ödemeler (+)</option>
+                    <option value="entry">📝 Borç Girişleri (-)</option>
                   </select>
                 </div>
-                <div class="col-8">
-                  <input type="text" class="form-input-compact w-100 py-1" id="timelineSearch" placeholder="Arama yap..." oninput="renderProfileTimeline()">
+                <div class="col-12 col-sm-8">
+                  <input type="text" class="form-input-compact w-100 py-2 px-3" style="font-size: 0.8rem;" id="timelineSearch" placeholder="🔍 Not veya açıklama içinde ara..." oninput="renderProfileTimeline()">
                 </div>
               </div>
               <div id="profileTimelineContainer" style="max-height: 48vh; overflow-y: auto;"></div>
@@ -2001,15 +2001,31 @@ $rates = getExchangeRates();
         return;
       }
 
-      container.innerHTML = all.map(e => `
-        <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 mb-1.5" style="background: #070a12; border: 1px solid var(--border-color); font-size: 0.78rem;">
-          <div>
-            <strong class="font-mono" style="color: ${e.kind === 'payment' ? 'var(--success)' : '#38bdf8'}; font-size: 0.86rem;">${e.kind === 'payment' ? '+' : ''}₺${fmt(e.amount)}</strong>
-            <small class="text-secondary d-block" style="font-size: 0.7rem;">${e.note}</small>
+      container.innerHTML = all.map(e => {
+        const isPayment = e.kind === 'payment';
+        return `
+          <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2.5" style="background: #070a12; border: 1px solid var(--border-color); transition: all 0.15s;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 34px; height: 34px; background: ${isPayment ? 'rgba(34,197,94,0.12)' : 'rgba(56,189,248,0.12)'}; font-size: 0.9rem;">
+                ${isPayment ? '💰' : '📝'}
+              </div>
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <strong class="font-mono" style="color: ${isPayment ? 'var(--success)' : '#38bdf8'}; font-size: 0.88rem;">${isPayment ? '+' : ''}₺${fmt(e.amount)}</strong>
+                  ${rates && rates.usd ? `<small class="text-secondary font-mono" style="font-size: 0.7rem;">$${fmtUSD(e.amount / rates.usd)}</small>` : ''}
+                </div>
+                <small class="text-secondary d-block mt-0.5" style="font-size: 0.74rem; line-height: 1.35;">${e.note}</small>
+              </div>
+            </div>
+            <div class="text-end ps-2 flex-shrink-0">
+              <span class="text-secondary font-mono d-block" style="font-size: 0.72rem;">${new Date(e.date).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+              <small class="badge rounded-pill mt-0.5" style="background: ${isPayment ? 'rgba(34,197,94,0.15)' : 'rgba(56,189,248,0.15)'}; color: ${isPayment ? '#22c55e' : '#38bdf8'}; font-size: 0.62rem; padding: 0.2rem 0.5rem;">
+                ${isPayment ? 'Tahsilat' : 'Borç'}
+              </small>
+            </div>
           </div>
-          <small class="text-secondary font-mono" style="font-size: 0.68rem;">${new Date(e.date).toLocaleDateString('tr-TR')}</small>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function saveProfileNote() {
