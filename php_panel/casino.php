@@ -839,6 +839,10 @@ if (!$casino) {
       renderDetailTable();
     }
 
+    function render() {
+      renderDetailTable();
+    }
+
     function renderDetailTable() {
       const thead = document.getElementById('detailTableHead');
       const tbody = document.getElementById('detailTableBody');

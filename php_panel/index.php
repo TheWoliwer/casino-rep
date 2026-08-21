@@ -1406,12 +1406,20 @@ $rates = getExchangeRates();
       const collected = feeRows.reduce((s, r) => s + (Number(r.paid_amount) || 0), 0);
       const outstanding = Math.max(0, total - collected);
 
-      document.getElementById('profTotalUSD').innerText = '$' + fmtUSD(toUSD(total));
-      document.getElementById('profTotalTRY').innerText = '₺' + fmt(total);
-      document.getElementById('profCollectedUSD').innerText = '$' + fmtUSD(toUSD(collected));
-      document.getElementById('profCollectedTRY').innerText = '₺' + fmt(collected);
-      document.getElementById('profOutstandingUSD').innerText = '$' + fmtUSD(toUSD(outstanding));
-      document.getElementById('profOutstandingTRY').innerText = '₺' + fmt(outstanding);
+      const elExpUSD = document.getElementById('profExpectedUSD') || document.getElementById('profTotalUSD');
+      const elExpTRY = document.getElementById('profExpectedTRY') || document.getElementById('profTotalTRY');
+      if (elExpUSD) elExpUSD.innerText = '$' + fmtUSD(toUSD(total));
+      if (elExpTRY) elExpTRY.innerText = '₺' + fmt(total);
+      
+      const elColUSD = document.getElementById('profCollectedUSD');
+      const elColTRY = document.getElementById('profCollectedTRY');
+      if (elColUSD) elColUSD.innerText = '$' + fmtUSD(toUSD(collected));
+      if (elColTRY) elColTRY.innerText = '₺' + fmt(collected);
+
+      const elOutUSD = document.getElementById('profOutstandingUSD');
+      const elOutTRY = document.getElementById('profOutstandingTRY');
+      if (elOutUSD) elOutUSD.innerText = '$' + fmtUSD(toUSD(outstanding));
+      if (elOutTRY) elOutTRY.innerText = '₺' + fmt(outstanding);
 
       currentProfileMatrixYear = currentYear;
       closeDrawer();
@@ -1956,12 +1964,20 @@ $rates = getExchangeRates();
         const collected = feeRows.reduce((s, r) => s + (Number(r.paid_amount) || 0), 0);
         const outstanding = Math.max(0, total - collected);
 
-        document.getElementById('profTotalUSD').innerText = '$' + fmtUSD(toUSD(total));
-        document.getElementById('profTotalTRY').innerText = '₺' + fmt(total);
-        document.getElementById('profCollectedUSD').innerText = '$' + fmtUSD(toUSD(collected));
-        document.getElementById('profCollectedTRY').innerText = '₺' + fmt(collected);
-        document.getElementById('profOutstandingUSD').innerText = '$' + fmtUSD(toUSD(outstanding));
-        document.getElementById('profOutstandingTRY').innerText = '₺' + fmt(outstanding);
+        const elExpUSD = document.getElementById('profExpectedUSD') || document.getElementById('profTotalUSD');
+        const elExpTRY = document.getElementById('profExpectedTRY') || document.getElementById('profTotalTRY');
+        if (elExpUSD) elExpUSD.innerText = '$' + fmtUSD(toUSD(total));
+        if (elExpTRY) elExpTRY.innerText = '₺' + fmt(total);
+        
+        const elColUSD = document.getElementById('profCollectedUSD');
+        const elColTRY = document.getElementById('profCollectedTRY');
+        if (elColUSD) elColUSD.innerText = '$' + fmtUSD(toUSD(collected));
+        if (elColTRY) elColTRY.innerText = '₺' + fmt(collected);
+
+        const elOutUSD = document.getElementById('profOutstandingUSD');
+        const elOutTRY = document.getElementById('profOutstandingTRY');
+        if (elOutUSD) elOutUSD.innerText = '$' + fmtUSD(toUSD(outstanding));
+        if (elOutTRY) elOutTRY.innerText = '₺' + fmt(outstanding);
 
         renderProfileMatrixTable();
         renderProfileTimeline();
