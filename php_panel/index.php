@@ -553,10 +553,6 @@ $rates = getExchangeRates();
           </div>
         </div>
 
-        <a href="report_generator.php" class="btn-action-gold d-flex align-items-center gap-1.5 text-decoration-none" title="Çoklu Ay Fee Raporu Oluşturucu">
-          <span>📄</span> <span class="d-none d-md-inline">Rapor Oluşturucu</span>
-        </a>
-
         <button class="btn-action-primary d-flex align-items-center gap-1.5" onclick="openAddCasinoModal()">
           <span>+</span> <span class="d-none d-sm-inline">Casino Ekle</span>
         </button>
@@ -574,12 +570,12 @@ $rates = getExchangeRates();
           <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" style="background: #0e1424; border-color: var(--border-accent); font-size: 0.82rem;">
             <li>
               <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="report_generator.php">
-                <span class="text-warning">📄</span> Fee Raporu Oluşturucu
+                <i class="fa-solid fa-file-invoice-dollar text-warning"></i> Fee Raporu Oluşturucu
               </a>
             </li>
             <li>
               <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="#" onclick="openExpensesModal()">
-                <span>💸</span> Aylık Giderler
+                <i class="fa-solid fa-money-bill-trend-up text-danger"></i> Aylık Giderler
               </a>
             </li>
             <li>

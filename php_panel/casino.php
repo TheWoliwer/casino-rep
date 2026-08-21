@@ -464,10 +464,6 @@ if (!$casino) {
 
       <!-- Right: Actions -->
       <div class="d-flex align-items-center gap-2">
-        <a href="report_generator.php" class="btn-action-outline text-warning text-decoration-none">
-          <i class="fa-solid fa-file-invoice"></i> <span class="d-none d-sm-inline">Rapor Oluşturucu</span>
-        </a>
-
         <button class="btn-action-outline" onclick="exportExcel()">
           <i class="fa-solid fa-file-excel text-success"></i> <span class="d-none d-sm-inline">Excel</span>
         </button>
@@ -475,6 +471,31 @@ if (!$casino) {
         <a href="index.php" class="btn-action-outline">
           <i class="fa-solid fa-arrow-left"></i> <span class="d-none d-sm-inline">Raporlara Dön</span>
         </a>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown">
+          <button class="btn-action-outline dropdown-toggle px-2.5" data-bs-toggle="dropdown" aria-expanded="false" title="Menü">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" style="background: #0e1424; border-color: var(--border-accent); font-size: 0.82rem;">
+            <li>
+              <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="report_generator.php">
+                <i class="fa-solid fa-file-invoice-dollar text-warning"></i> Fee Raporu Oluşturucu
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="index.php">
+                <i class="fa-solid fa-table-list text-info"></i> Tüm Casinolar
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" style="border-color: var(--border-color);"></li>
+            <li>
+              <a class="dropdown-item py-2 text-danger d-flex align-items-center gap-2" href="logout.php">
+                <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
     </div>
