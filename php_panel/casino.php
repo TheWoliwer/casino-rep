@@ -464,6 +464,10 @@ if (!$casino) {
 
       <!-- Right: Actions -->
       <div class="d-flex align-items-center gap-2">
+        <a href="report_generator.php" class="btn-action-outline text-warning text-decoration-none">
+          <i class="fa-solid fa-file-invoice"></i> <span class="d-none d-sm-inline">Rapor Oluşturucu</span>
+        </a>
+
         <button class="btn-action-outline" onclick="exportExcel()">
           <i class="fa-solid fa-file-excel text-success"></i> <span class="d-none d-sm-inline">Excel</span>
         </button>
