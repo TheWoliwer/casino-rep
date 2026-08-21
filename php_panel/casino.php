@@ -566,19 +566,8 @@ if (!$casino) {
       <div class="tab-pane fade show active" id="tab12Month">
         <div class="table-panel">
           <div class="table-responsive">
-            <table class="table-rep">
-              <thead>
-                <tr>
-                  <th style="width: 100px;">AY</th>
-                  <th class="text-end">FEE (₺)</th>
-                  <th class="text-end">BORÇ TUTARI (₺)</th>
-                  <th class="text-end">ÖDENEN (₺)</th>
-                  <th class="text-end">KALAN (₺)</th>
-                  <th class="text-center" style="width: 110px;">DURUM</th>
-                  <th>NOT</th>
-                  <th class="text-center" style="width: 70px;"></th>
-                </tr>
-              </thead>
+            <table class="table-rep w-100" id="detailTable">
+              <thead class="sticky-top" style="background: #0e1424; z-index: 2;" id="detailTableHead"></thead>
               <tbody id="detailTableBody">
                 <tr>
                   <td colspan="8" class="text-center py-5 text-secondary">
@@ -586,17 +575,7 @@ if (!$casino) {
                   </td>
                 </tr>
               </tbody>
-              <tfoot>
-                <tr>
-                  <td class="text-white">TOPLAM</td>
-                  <td class="text-end font-mono" id="footFee">-</td>
-                  <td class="text-end font-mono" id="footTurnover">-</td>
-                  <td class="text-end font-mono" style="color: var(--success);" id="footPaid">-</td>
-                  <td class="text-end font-mono" style="color: var(--danger);" id="footOutstanding">-</td>
-                  <td class="text-center font-mono" style="color: #38bdf8;" id="footRate">%0.0</td>
-                  <td colspan="2"></td>
-                </tr>
-              </tfoot>
+              <tfoot class="sticky-bottom" style="background: #0e1424; z-index: 2; border-top: 2px solid var(--border-accent);" id="detailTableFoot"></tfoot>
             </table>
           </div>
         </div>
@@ -857,72 +836,147 @@ if (!$casino) {
         b.classList.toggle('active', b.innerText == y);
       });
       document.getElementById('bannerSubTitle').innerText = `${y} Yılı Finansal Raporu · ` + (profileData?.casino?.fee_type === 'percent' ? '%' + profileData?.casino?.fee_rate + ' Fee' : (profileData?.casino?.fee_type === 'fixed' ? 'Sabit Fee' : 'Fee Yok'));
-      render();
+      renderDetailTable();
     }
 
-    function render() {
-      if (!profileData) return;
-
-      const feeRowsForYear = (profileData.fee_rows || []).filter(r => r.year === currentYear);
-      const rowByMonth = new Map(feeRowsForYear.map(r => [r.month, r]));
-
-      let totalFee = 0;
-      let totalTurnover = 0;
-      let totalPaid = 0;
-
+    function renderDetailTable() {
+      const thead = document.getElementById('detailTableHead');
       const tbody = document.getElementById('detailTableBody');
-      let html = '';
+      const tfoot = document.getElementById('detailTableFoot');
+      if (!thead || !tbody || !tfoot || !profileData) return;
 
+      const casino = profileData.casino;
+      const feeLabel = casino.fee_type === 'percent' ? `FEE %${casino.fee_rate}` : (casino.fee_type === 'fixed' ? 'FEE (SABİT)' : 'BORÇ');
+      
+      const rowsForYear = (profileData.fee_rows || []).filter(r => r.year === currentYear);
+      const rowByMonth = new Map(rowsForYear.map(r => [r.month, r]));
+
+      const norm = (s) => (s || '').trim().toUpperCase();
+      const isFeeName = (s) => { const n = norm(s); return n === 'BORÇ' || n.includes('FEE'); };
+
+      // Kolonlar: seçili yıldaki borç kalemi adlarının birleşimi (FEE/BORÇ hariç — o ayrı kolonda)
+      const itemColumns = [];
       for (let m = 1; m <= 12; m++) {
         const r = rowByMonth.get(m);
-        const feeAmount = r ? Number(r.fee_amount) || 0 : 0;
-        const turnover = r ? Number(r.turnover) || 0 : 0;
-        const paidAmount = r ? Number(r.paid_amount) || 0 : 0;
-        const outstanding = Math.max(0, turnover - paidAmount);
-        const note = r ? r.note || '' : '';
-
-        totalFee += feeAmount;
-        totalTurnover += turnover;
-        totalPaid += paidAmount;
-
-        let statusBadge = '<span class="text-secondary opacity-30">—</span>';
-        if (turnover > 0 || paidAmount > 0) {
-          if (turnover > 0 && paidAmount >= turnover) {
-            statusBadge = '<span class="badge" style="background: rgba(34,197,94,0.15); color: #22c55e; font-size: 0.72rem; padding: 0.3rem 0.6rem;">✓ ALINDI</span>';
-          } else if (paidAmount > 0) {
-            statusBadge = '<span class="badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 0.72rem; padding: 0.3rem 0.6rem;">≈ KISMİ</span>';
-          } else {
-            statusBadge = '<span class="badge" style="background: rgba(244,63,94,0.15); color: #f43f5e; font-size: 0.72rem; padding: 0.3rem 0.6rem;">✗ ALINMADI</span>';
-          }
+        for (const it of (r?.debt_items || [])) {
+          if (isFeeName(it.name)) continue;
+          const n = norm(it.name);
+          if (!itemColumns.includes(n)) itemColumns.push(n);
         }
+      }
 
-        const isSelected = currentEditingMonth === m;
+      function feeCellOf(row) {
+        if (!row) return null;
+        const items = row.debt_items || [];
+        if (items.length === 0) {
+          if ((row.turnover || 0) === 0 && (row.paid_amount || 0) === 0) return null;
+          return { amount: row.turnover || 0, paid: row.paid_amount || 0, currency: 'TRY' };
+        }
+        const fi = items.filter(it => isFeeName(it.name));
+        if (fi.length === 0) return null;
+        return {
+          amount: fi.reduce((s, it) => s + (Number(it.amount) || 0), 0),
+          paid: fi.reduce((s, it) => s + (Number(it.paid_amount) || (it.paid ? Number(it.amount) : 0)), 0),
+          currency: fi[0].currency || 'TRY',
+        };
+      }
 
-        html += `
-          <tr class="${isSelected ? 'matrix-row-selected' : ''}" onclick="openMonthDrawer(${m})">
-            <td class="fw-semibold text-white">${MONTHS[m]}</td>
-            <td class="text-end font-mono">${feeAmount > 0 ? '₺' + fmt(feeAmount) : '—'}</td>
-            <td class="text-end font-mono">${turnover > 0 ? '₺' + fmt(turnover) : '—'}</td>
-            <td class="text-end font-mono" style="color: var(--success);">${paidAmount > 0 ? '₺' + fmt(paidAmount) : '—'}</td>
-            <td class="text-end font-mono" style="color: ${outstanding > 0 ? 'var(--danger)' : '#64748b'};">${outstanding > 0 ? '₺' + fmt(outstanding) : (turnover > 0 ? '₺0,00' : '—')}</td>
-            <td class="text-center">${statusBadge}</td>
-            <td class="text-secondary text-truncate" style="max-width: 160px; font-size: 0.78rem;">${note}</td>
-            <td class="text-center text-info opacity-75"><i class="fa-solid fa-pen-to-square"></i> Düzenle</td>
-          </tr>
+      function itemCellOf(row, colName) {
+        if (!row) return null;
+        const its = (row.debt_items || []).filter(it => !isFeeName(it.name) && norm(it.name) === colName);
+        if (its.length === 0) return null;
+        return {
+          amount: its.reduce((s, it) => s + (Number(it.amount) || 0), 0),
+          paid: its.reduce((s, it) => s + (Number(it.paid_amount) || (it.paid ? Number(it.amount) : 0)), 0),
+          currency: its[0].currency || 'TRY',
+        };
+      }
+
+      const curSym = (c) => c === 'TRY' ? '₺' : (c === 'EUR' ? '€' : (c === 'USD' ? '$' : c));
+
+      function renderCell(cell) {
+        if (!cell || cell.amount === 0) return '<span class="text-secondary opacity-30">—</span>';
+        const done = cell.paid >= cell.amount && cell.amount > 0;
+        const some = cell.paid > 0 && cell.paid < cell.amount;
+        const statusColor = done ? '#22c55e' : (some ? '#38bdf8' : '#f43f5e');
+        const statusText = done ? 'ALINDI' : (some ? 'KISMİ' : 'ALINMADI');
+        return `
+          <div>
+            <p class="font-mono fw-bold text-white m-0 text-nowrap" style="font-size: 0.8rem;">${fmt(cell.amount)} ${curSym(cell.currency)}</p>
+            <small class="fw-bold tracking-wide" style="font-size: 0.68rem; color: ${statusColor};">${statusText}</small>
+          </div>
         `;
       }
 
-      tbody.innerHTML = html;
+      // 1. Thead
+      thead.innerHTML = `
+        <tr>
+          <th style="width: 85px; color: #f59e0b; background: #0e1424;">${currentYear}</th>
+          <th class="text-end" style="color: #cbd5e1; background: #0e1424;">${feeLabel}</th>
+          ${itemColumns.map(name => `<th class="text-end" style="color: #cbd5e1; background: #0e1424;">${name}</th>`).join('')}
+        </tr>
+      `;
+
+      // 2. Tbody
+      let bodyHtml = '';
+      let feeColTotalTRY = 0;
+      const itemColTotalsTRY = {};
+      itemColumns.forEach(c => itemColTotalsTRY[c] = 0);
+
+      let totalTurnoverAll = 0;
+      let totalPaidAll = 0;
+
+      for (let m = 1; m <= 12; m++) {
+        const r = rowByMonth.get(m);
+        const isSelected = currentEditingMonth === m;
+        const fc = feeCellOf(r);
+        if (fc) feeColTotalTRY += toTRY(fc.amount, fc.currency);
+
+        if (r) {
+          totalTurnoverAll += (Number(r.turnover) || 0);
+          totalPaidAll += (Number(r.paid_amount) || 0);
+        }
+
+        let rowCells = `<td class="text-end">${renderCell(fc)}</td>`;
+        for (const colName of itemColumns) {
+          const ic = itemCellOf(r, colName);
+          if (ic) itemColTotalsTRY[colName] += toTRY(ic.amount, ic.currency);
+          rowCells += `<td class="text-end">${renderCell(ic)}</td>`;
+        }
+
+        bodyHtml += `
+          <tr class="${isSelected ? 'matrix-row-selected' : ''}" onclick="openMonthDrawer(${m})" style="cursor: pointer;">
+            <td class="fw-semibold text-white uppercase text-nowrap">${MONTHS[m]}</td>
+            ${rowCells}
+          </tr>
+        `;
+      }
+      tbody.innerHTML = bodyHtml;
+
+      // 3. Tfoot
+      tfoot.innerHTML = `
+        <tr style="background: #0e1424;">
+          <td class="fw-bold text-white uppercase text-nowrap" style="font-size: 0.74rem;">TOPLAM (₺)</td>
+          <td class="text-end font-mono fw-bold text-white">
+            ${feeColTotalTRY > 0 ? '₺' + fmt(feeColTotalTRY) : '<span class="text-secondary opacity-30">—</span>'}
+          </td>
+          ${itemColumns.map(name => `
+            <td class="text-end font-mono fw-bold text-white">
+              ${itemColTotalsTRY[name] > 0 ? '₺' + fmt(itemColTotalsTRY[name]) : '<span class="text-secondary opacity-30">—</span>'}
+            </td>
+          `).join('')}
+        </tr>
+      `;
 
       // KPI Cards
-      const totalOutstanding = Math.max(0, totalTurnover - totalPaid);
-      const overallRate = totalTurnover > 0 ? (totalPaid / totalTurnover) * 100 : 0;
+      const totalOutstanding = Math.max(0, totalTurnoverAll - totalPaidAll);
+      const overallRate = totalTurnoverAll > 0 ? (totalPaidAll / totalTurnoverAll) * 100 : 0;
 
-      document.getElementById('cardTotalUSD').innerText = '$' + fmtUSD(toUSD(totalTurnover));
-      document.getElementById('cardTotalTRY').innerText = '₺' + fmt(totalTurnover);
+      document.getElementById('cardTotalUSD').innerText = '$' + fmtUSD(toUSD(totalTurnoverAll));
+      document.getElementById('cardTotalTRY').innerText = '₺' + fmt(totalTurnoverAll);
 
-      document.getElementById('cardCollectedUSD').innerText = '$' + fmtUSD(toUSD(totalPaid));
-      document.getElementById('cardCollectedTRY').innerText = '₺' + fmt(totalPaid);
+      document.getElementById('cardCollectedUSD').innerText = '$' + fmtUSD(toUSD(totalPaidAll));
+      document.getElementById('cardCollectedTRY').innerText = '₺' + fmt(totalPaidAll);
 
       document.getElementById('cardOutstandingUSD').innerText = '$' + fmtUSD(toUSD(totalOutstanding));
       document.getElementById('cardOutstandingTRY').innerText = '₺' + fmt(totalOutstanding);
@@ -930,13 +984,6 @@ if (!$casino) {
       document.getElementById('cardRatePercent').innerText = '%' + overallRate.toFixed(1);
       document.getElementById('cardProgressBar').style.width = Math.min(100, overallRate) + '%';
       document.getElementById('cardProgressBar').style.background = overallRate >= 100 ? '#22c55e' : overallRate > 50 ? '#38bdf8' : '#f43f5e';
-
-      // Footer
-      document.getElementById('footFee').innerText = '₺' + fmt(totalFee);
-      document.getElementById('footTurnover').innerHTML = `$${fmtUSD(toUSD(totalTurnover))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totalTurnover)}</span>`;
-      document.getElementById('footPaid').innerHTML = `$${fmtUSD(toUSD(totalPaid))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totalPaid)}</span>`;
-      document.getElementById('footOutstanding').innerHTML = `$${fmtUSD(toUSD(totalOutstanding))}<br><span class="text-secondary fw-normal font-mono" style="font-size: 0.7rem;">₺${fmt(totalOutstanding)}</span>`;
-      document.getElementById('footRate').innerText = `%${overallRate.toFixed(1)}`;
 
       renderTimeline();
     }
