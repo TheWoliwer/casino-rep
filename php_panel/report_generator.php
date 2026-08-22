@@ -7,7 +7,7 @@ $rates = getExchangeRates();
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Çoklu Ay Fee Raporu Oluşturucu - Casino Takip</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♠</text></svg>">
 
@@ -59,10 +59,10 @@ $rates = getExchangeRates();
 
     /* Header Nav */
     .report-nav {
-      background: rgba(14, 20, 36, 0.95);
+      background: rgba(14, 20, 36, 0.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
-      padding: 0.75rem 1.25rem;
+      padding: 0.6rem 1rem;
       z-index: 100;
     }
 
@@ -71,14 +71,15 @@ $rates = getExchangeRates();
       color: #cbd5e1;
       border: 1px solid var(--border-accent);
       border-radius: 8px;
-      padding: 0.4rem 0.85rem;
-      font-size: 0.8rem;
+      padding: 0.38rem 0.75rem;
+      font-size: 0.78rem;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      white-space: nowrap;
     }
     .btn-nav-back:hover {
       background: #334155;
@@ -90,13 +91,14 @@ $rates = getExchangeRates();
       color: #0f172a;
       border: none;
       border-radius: 8px;
-      padding: 0.45rem 0.95rem;
-      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.78rem;
       font-weight: 700;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      white-space: nowrap;
     }
     .btn-action-gold:hover {
       background: #f59e0b;
@@ -108,13 +110,14 @@ $rates = getExchangeRates();
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 0.45rem 0.95rem;
-      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.78rem;
       font-weight: 700;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      white-space: nowrap;
     }
     .btn-action-whatsapp:hover {
       background: #20bd5a;
@@ -126,13 +129,14 @@ $rates = getExchangeRates();
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 0.45rem 0.95rem;
-      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.78rem;
       font-weight: 700;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      white-space: nowrap;
     }
     .btn-action-telegram:hover {
       background: #1d8cc2;
@@ -144,13 +148,14 @@ $rates = getExchangeRates();
       color: var(--text-muted);
       border: 1px solid var(--border-accent);
       border-radius: 8px;
-      padding: 0.45rem 0.85rem;
-      font-size: 0.8rem;
+      padding: 0.38rem 0.75rem;
+      font-size: 0.78rem;
       font-weight: 600;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      white-space: nowrap;
     }
     .btn-action-outline:hover {
       background: rgba(255,255,255,0.05);
@@ -158,9 +163,50 @@ $rates = getExchangeRates();
       border-color: #475569;
     }
 
+    /* Mobile Tab Bar */
+    .mobile-view-switcher {
+      background: #090e1a;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.4rem 0.75rem;
+      display: none;
+      position: sticky;
+      top: 53px;
+      z-index: 90;
+    }
+    .view-switch-btn {
+      flex: 1;
+      padding: 0.45rem 0.5rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .view-switch-btn.active {
+      background: #1e293b;
+      color: #fff;
+      border-color: var(--border-accent);
+    }
+    .view-switch-btn.active-preview {
+      background: rgba(251, 191, 36, 0.15);
+      color: var(--gold);
+      border-color: rgba(251, 191, 36, 0.4);
+    }
+
+    @media (max-width: 1199px) {
+      .mobile-view-switcher { display: flex; }
+      .mobile-view-editor .col-preview-wrapper { display: none !important; }
+      .mobile-view-preview .col-editor-wrapper { display: none !important; }
+      .mobile-view-preview .col-preview-wrapper { display: block !important; width: 100% !important; }
+      .col-editor-wrapper { max-height: none !important; height: auto !important; }
+    }
+
     /* Editor Side Panel */
     .editor-container {
-      padding: 1.5rem;
+      padding: 1rem;
       max-width: 820px;
       margin: 0 auto;
     }
@@ -168,18 +214,18 @@ $rates = getExchangeRates();
     .panel-box {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.25rem 1.4rem;
-      margin-bottom: 1.25rem;
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1rem;
       box-shadow: 0 4px 20px rgba(0,0,0,0.25);
     }
     .panel-box-title {
       color: #38bdf8;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -188,21 +234,21 @@ $rates = getExchangeRates();
     .form-label-custom {
       display: block;
       color: #94a3b8;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.25rem;
     }
 
     .form-input-custom, .form-select-custom {
       width: 100%;
-      padding: 0.5rem 0.75rem;
+      padding: 0.45rem 0.65rem;
       border-radius: 8px;
       border: 1px solid var(--border-accent);
       background: var(--bg-input);
       color: #f1f5f9;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       outline: none;
       transition: all 0.15s;
     }
@@ -214,18 +260,19 @@ $rates = getExchangeRates();
     .layout-toggle-group {
       display: inline-flex;
       border: 1px solid var(--border-accent);
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
     }
     .lt-btn {
-      padding: 0.45rem 0.95rem;
-      font-size: 0.76rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       border: none;
       cursor: pointer;
       background: var(--bg-surface);
       color: #94a3b8;
       transition: all 0.15s;
+      white-space: nowrap;
     }
     .lt-btn:hover { color: #fff; }
     .lt-btn.lt-active {
@@ -236,24 +283,24 @@ $rates = getExchangeRates();
     .casino-block {
       background: #10172b;
       border: 1px solid #25334d;
-      border-radius: 14px;
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
       position: relative;
     }
 
     .month-subcard {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      margin-bottom: 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.85rem;
       overflow: hidden;
     }
     .month-subcard-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1rem;
+      padding: 0.65rem 0.85rem;
       background: #090e1a;
       border-bottom: 1px solid var(--border-color);
     }
@@ -261,26 +308,30 @@ $rates = getExchangeRates();
     .provider-row-box {
       background: #090e1a;
       border: 1px solid var(--border-color);
-      border-radius: 9px;
-      padding: 0.75rem;
-      margin-bottom: 0.6rem;
+      border-radius: 8px;
+      padding: 0.65rem;
+      margin-bottom: 0.5rem;
     }
 
     .extra-item-row {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       align-items: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
+      flex-wrap: wrap;
     }
+    .extra-item-row input[name="ename"] { flex: 1 1 120px; }
+    .extra-item-row input[name="eamount"] { flex: 1 1 80px; }
+    .extra-item-row select { width: 75px; flex-shrink: 0; }
 
     .btn-quick-tag {
       background: #172033;
       border: 1px solid #293852;
       color: #cbd5e1;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
-      padding: 0.25rem 0.55rem;
-      border-radius: 6px;
+      padding: 0.2rem 0.45rem;
+      border-radius: 5px;
       cursor: pointer;
       transition: all 0.12s;
     }
@@ -296,7 +347,7 @@ $rates = getExchangeRates();
       color: #f43f5e;
       font-size: 1.1rem;
       cursor: pointer;
-      padding: 0 0.35rem;
+      padding: 0 0.25rem;
       line-height: 1;
       opacity: 0.75;
       transition: opacity 0.15s;
@@ -307,12 +358,51 @@ $rates = getExchangeRates();
     /* A4 CANLI ÖNİZLEME & BASKI ALANI                        */
     /* ══════════════════════════════════════════════════════ */
     #previewWrapper {
-      background: #475569;
-      padding: 2rem 1rem 5rem;
+      background: #334155;
+      padding: 1.5rem 0.5rem 5rem;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .preview-zoom-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: rgba(14, 20, 36, 0.9);
+      padding: 0.35rem 0.75rem;
+      border-radius: 99px;
+      border: 1px solid var(--border-accent);
+      z-index: 20;
+    }
+    .zoom-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .zoom-btn.active, .zoom-btn:hover {
+      background: var(--gold);
+      color: #0f172a;
+    }
+
+    #previewScaler {
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: top center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
 
     body.hide-brackets .bracket { display: none !important; }
@@ -320,7 +410,7 @@ $rates = getExchangeRates();
     .print-page {
       display: flex;
       justify-content: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       width: 100%;
     }
     .print-page:last-child { margin-bottom: 0; }
@@ -334,6 +424,7 @@ $rates = getExchangeRates();
       color: #1e293b;
       font-size: var(--font-size);
       line-height: var(--line-height);
+      flex-shrink: 0;
     }
 
     .bracket { position: absolute; width: 38px; height: 38px; }
@@ -350,16 +441,16 @@ $rates = getExchangeRates();
     
     .month-caption {
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-      color: #64748b; margin: 20px 0 8px;
+      color: #64748b; margin: 18px 0 8px;
     }
 
-    .title-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; }
+    .title-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; }
     .casino-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; margin-bottom: 4px; }
-    .main-title { font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; margin: 0; }
+    .main-title { font-size: 21px; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; margin: 0; }
     .title-right { text-align: right; }
-    .date-label { font-size: 11px; color: #64748b; font-weight: 600; margin-right: 6px; }
-    .date-value { font-size: 11px; color: #1e293b; font-weight: 700; }
-    .rate-info { font-size: 9px; color: #94a3b8; margin-top: 3px; font-weight: 600; }
+    .date-label { font-size: 10.5px; color: #64748b; font-weight: 600; margin-right: 5px; }
+    .date-value { font-size: 10.5px; color: #1e293b; font-weight: 700; }
+    .rate-info { font-size: 9px; color: #94a3b8; margin-top: 2px; font-weight: 600; }
     .page-index { font-size: 9px; color: #cbd5e1; margin-top: 2px; font-weight: 600; }
 
     .report-table {
@@ -416,34 +507,37 @@ $rates = getExchangeRates();
       @page { size: A4; margin: 0; }
       body { background: white !important; }
       .no-print { display: none !important; }
-      #previewWrapper { padding: 0 !important; background: white !important; }
+      #previewWrapper { padding: 0 !important; background: white !important; overflow: visible !important; }
+      #previewScaler { transform: none !important; }
+      .preview-zoom-toolbar { display: none !important; }
       .print-page { margin-bottom: 0 !important; break-after: page; }
       .print-page:last-child { break-after: auto; }
       .a4 { box-shadow: none !important; width: 100% !important; min-height: 100vh !important; }
     }
   </style>
 </head>
-<body>
+<body class="mobile-view-editor">
 
   <!-- ══════════════════════════════════════════════════════ -->
   <!-- NAVBAR & TOP TOOLBAR                                   -->
   <!-- ══════════════════════════════════════════════════════ -->
   <header class="sticky-top report-nav no-print">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div class="d-flex align-items-center justify-content-between gap-2">
       
       <!-- Left: Logo & Back Button -->
-      <div class="d-flex align-items-center gap-2.5">
+      <div class="d-flex align-items-center gap-2">
         <a href="index.php" class="btn-nav-back">
-          <i class="fa-solid fa-arrow-left"></i> <span>Ana Panel</span>
+          <i class="fa-solid fa-arrow-left"></i> <span class="d-none d-sm-inline">Panel</span>
         </a>
-        <div class="d-none d-sm-block">
-          <h6 class="text-white fw-bold m-0" style="font-size: 0.88rem;">📄 Fee Rapor Oluşturucu</h6>
-          <small class="text-secondary" style="font-size: 0.68rem;">Çoklu Ay & Çoklu İşletme Raporu</small>
+        <div class="d-flex align-items-center gap-1.5">
+          <span style="color: var(--gold); font-size: 1rem;">📄</span>
+          <span class="text-white fw-bold d-none d-md-inline" style="font-size: 0.85rem;">Fee Raporu Oluşturucu</span>
+          <span class="text-white fw-bold d-inline d-md-none" style="font-size: 0.82rem;">Rapor</span>
         </div>
       </div>
 
-      <!-- Center: Layout Mode Switcher -->
-      <div class="d-flex align-items-center gap-2">
+      <!-- Center: Layout Mode Switcher (Desktop Only) -->
+      <div class="d-none d-lg-flex align-items-center gap-2">
         <div class="layout-toggle-group">
           <button id="btnSeparate" class="lt-btn lt-active" onclick="setCombineMode('separate')">
             <i class="fa-solid fa-file me-1"></i> Ayrı Sayfalar
@@ -454,36 +548,86 @@ $rates = getExchangeRates();
         </div>
       </div>
 
-      <!-- Right: Action Buttons (Share, PDF, Excel) -->
-      <div class="d-flex align-items-center gap-2 flex-wrap">
-        <button class="btn-action-outline" onclick="openSystemCasinoModal()" title="Sistemdeki Casinodan Veri Çek">
-          <i class="fa-solid fa-cloud-arrow-down text-info"></i> <span class="d-none d-md-inline">Veri Çek</span>
-        </button>
+      <!-- Right: Action Buttons (Responsive on Mobile) -->
+      <div class="d-flex align-items-center gap-1.5">
+        
+        <!-- Desktop Quick Actions -->
+        <div class="d-none d-sm-flex align-items-center gap-1.5">
+          <button class="btn-action-outline" onclick="openSystemCasinoModal()" title="Sistemdeki Casinodan Veri Çek">
+            <i class="fa-solid fa-cloud-arrow-down text-info"></i> <span class="d-none d-md-inline">Veri Çek</span>
+          </button>
 
-        <button class="btn-action-whatsapp" onclick="openWhatsAppShare()" title="WhatsApp'ta Paylaş">
-          <i class="fa-brands fa-whatsapp fs-6"></i> <span>WhatsApp</span>
-        </button>
+          <button class="btn-action-whatsapp" onclick="openWhatsAppShare()" title="WhatsApp'ta Paylaş">
+            <i class="fa-brands fa-whatsapp fs-6"></i> <span class="d-none d-md-inline">WhatsApp</span>
+          </button>
 
-        <button class="btn-action-telegram" onclick="openTelegramShare()" title="Telegram'da Paylaş">
-          <i class="fa-brands fa-telegram fs-6"></i> <span>Telegram</span>
-        </button>
+          <button class="btn-action-telegram" onclick="openTelegramShare()" title="Telegram'da Paylaş">
+            <i class="fa-brands fa-telegram fs-6"></i> <span class="d-none d-md-inline">Telegram</span>
+          </button>
+        </div>
 
+        <!-- Direct PDF Download Button -->
         <button class="btn-action-gold" onclick="downloadPDF()" title="PDF Olarak İndir / Yazdır">
-          <i class="fa-solid fa-print"></i> <span>PDF İndir</span>
+          <i class="fa-solid fa-print"></i> <span class="d-none d-sm-inline">PDF İndir</span><span class="d-inline d-sm-none">PDF</span>
         </button>
+
+        <!-- Mobile More Actions Dropdown -->
+        <div class="dropdown d-inline-block d-sm-none">
+          <button class="btn-action-outline px-2.5" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" style="background: #0e1424; border-color: var(--border-accent); font-size: 0.82rem;">
+            <li>
+              <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="#" onclick="openSystemCasinoModal()">
+                <i class="fa-solid fa-cloud-arrow-down text-info"></i> Sistemden Veri Çek
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="#" onclick="openWhatsAppShare()">
+                <i class="fa-brands fa-whatsapp text-success"></i> WhatsApp Paylaş
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item py-2 d-flex align-items-center gap-2" href="#" onclick="openTelegramShare()">
+                <i class="fa-brands fa-telegram text-primary"></i> Telegram Paylaş
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" style="border-color: var(--border-color);"></li>
+            <li>
+              <a class="dropdown-item py-2 d-flex align-items-center gap-2 text-warning" href="#" onclick="toggleCombineModeMobile()">
+                <i class="fa-solid fa-arrows-split-up-and-left"></i> <span id="lblMobileCombine">Mod: Ayrı Sayfalar</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
       </div>
 
     </div>
   </header>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- MAIN LAYOUT: EDITOR (LEFT/TOP) & PREVIEW (RIGHT/BOTTOM)-->
+  <!-- MOBILE VIEW SWITCHER BAR (EDITÖR vs ÖNİZLEME)          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="mobile-view-switcher no-print">
+    <div class="d-flex w-100 gap-1 p-1 rounded-3" style="background: #070a12; border: 1px solid var(--border-accent);">
+      <button class="view-switch-btn active" id="btnTabEditor" onclick="switchMobileView('editor')">
+        <i class="fa-solid fa-pen-to-square me-1"></i> Rapor Editörü
+      </button>
+      <button class="view-switch-btn" id="btnTabPreview" onclick="switchMobileView('preview')">
+        <i class="fa-solid fa-eye me-1"></i> Canlı Önizleme (A4)
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- MAIN LAYOUT: EDITOR (LEFT) & PREVIEW (RIGHT)           -->
   <!-- ══════════════════════════════════════════════════════ -->
   <div class="container-fluid p-0 no-print">
     <div class="row g-0">
       
       <!-- ══ LEFT PANEL: EDITOR CONTROLS ══ -->
-      <div class="col-12 col-xl-5" style="border-right: 1px solid var(--border-color); background: var(--bg-base); max-height: calc(100vh - 60px); overflow-y: auto;">
+      <div class="col-12 col-xl-5 col-editor-wrapper" style="border-right: 1px solid var(--border-color); background: var(--bg-base); max-height: calc(100vh - 60px); overflow-y: auto;">
         <div class="editor-container">
           
           <!-- DÖVİZ KURLARI VE HIZLI AKSİYONLAR -->
@@ -523,9 +667,9 @@ $rates = getExchangeRates();
                 </select>
               </div>
               <div class="col-5 d-flex align-items-end pb-1">
-                <label class="form-check-label d-flex align-items-center gap-1.5 text-secondary" style="font-size: 0.74rem; cursor: pointer;">
+                <label class="form-check-label d-flex align-items-center gap-1.5 text-secondary" style="font-size: 0.72rem; cursor: pointer;">
                   <input type="checkbox" id="chkBrackets" checked onchange="toggleBrackets(this.checked)" class="form-check-input mt-0">
-                  Baskı Köşe Çizgileri
+                  Baskı Çizgileri
                 </label>
               </div>
             </div>
@@ -540,7 +684,7 @@ $rates = getExchangeRates();
                 <input type="range" class="form-range" id="slide-line-height" min="1.0" max="2.0" value="1.5" step="0.1" oninput="updateStyleVar('--line-height', this.value)">
               </div>
               <div class="col-4">
-                <label class="form-label-custom">Hücre Payı: <span id="val-table-padding-y" class="text-white">9px</span></label>
+                <label class="form-label-custom">Hücre: <span id="val-table-padding-y" class="text-white">9px</span></label>
                 <input type="range" class="form-range" id="slide-table-padding-y" min="2" max="16" value="9" oninput="updateStyleVar('--table-padding-y', this.value + 'px')">
               </div>
             </div>
@@ -566,10 +710,10 @@ $rates = getExchangeRates();
 
           <!-- ALT İŞLETME EKLE BUTONU -->
           <div class="d-flex align-items-center justify-content-between gap-2 mt-3 mb-5">
-            <button class="btn btn-outline-info w-100 py-2.5 rounded-3 fw-bold" onclick="addCasino()">
+            <button class="btn btn-outline-info w-100 py-2 rounded-3 fw-bold" onclick="addCasino()">
               <i class="fa-solid fa-plus me-1"></i> Yeni İşletme Ekle
             </button>
-            <button class="btn btn-outline-secondary py-2.5 px-3 rounded-3" onclick="resetAllData()" title="Taslağı Sıfırla">
+            <button class="btn btn-outline-secondary py-2 px-3 rounded-3" onclick="resetAllData()" title="Taslağı Sıfırla">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -578,17 +722,27 @@ $rates = getExchangeRates();
       </div>
 
       <!-- ══ RIGHT PANEL: LIVE A4 PREVIEW ══ -->
-      <div class="col-12 col-xl-7">
+      <div class="col-12 col-xl-7 col-preview-wrapper">
         <div id="previewWrapper">
-          <div id="previewContent"></div>
+          
+          <!-- Zoom / Fit Toolbar for Mobile & Desktop -->
+          <div class="preview-zoom-toolbar">
+            <span class="text-secondary" style="font-size: 0.7rem; font-weight: 600;">Ölçek:</span>
+            <button class="zoom-btn active" onclick="setPreviewZoom('fit')">Ekrana Sığdır</button>
+            <button class="zoom-btn" onclick="setPreviewZoom(1)">%100</button>
+            <button class="zoom-btn" onclick="setPreviewZoom(0.75)">%75</button>
+            <button class="zoom-btn" onclick="setPreviewZoom(0.5)">%50</button>
+          </div>
+
+          <div id="previewScaler">
+            <div id="previewContent"></div>
+          </div>
+
         </div>
       </div>
 
     </div>
   </div>
-
-  <!-- PRINT ONLY PREVIEW CONTAINER -->
-  <div id="printOnlyArea" class="d-none"></div>
 
   <!-- ══════════════════════════════════════════════════════ -->
   <!-- SISTEMDEN CASINO ÇEKME MODALI                          -->
@@ -719,6 +873,24 @@ $rates = getExchangeRates();
     };
 
     let state = INITIAL_STATE;
+    let currentZoomMode = 'fit';
+
+    // Mobile View Switcher
+    function switchMobileView(view) {
+      document.body.classList.remove('mobile-view-editor', 'mobile-view-preview');
+      document.body.classList.add(view === 'editor' ? 'mobile-view-editor' : 'mobile-view-preview');
+      document.getElementById('btnTabEditor').classList.toggle('active', view === 'editor');
+      document.getElementById('btnTabPreview').classList.toggle('active-preview', view === 'preview');
+      if (view === 'preview') {
+        setTimeout(applyResponsiveScale, 50);
+      }
+    }
+
+    function toggleCombineModeMobile() {
+      const newMode = state.combineMode === 'separate' ? 'combined' : 'separate';
+      setCombineMode(newMode);
+      document.getElementById('lblMobileCombine').innerText = 'Mod: ' + (newMode === 'separate' ? 'Ayrı Sayfalar' : 'Tek Sayfada');
+    }
 
     // LocalStorage Draft Management
     function loadSavedState() {
@@ -801,6 +973,55 @@ $rates = getExchangeRates();
       saveState();
       renderPreview();
     }
+
+    // Zoom & Responsive A4 Scaler
+    function setPreviewZoom(val) {
+      currentZoomMode = val;
+      document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('active'));
+      if (val === 'fit') {
+        document.querySelectorAll('.zoom-btn')[0].classList.add('active');
+        applyResponsiveScale();
+      } else {
+        const idx = val === 1 ? 1 : val === 0.75 ? 2 : 3;
+        if (document.querySelectorAll('.zoom-btn')[idx]) {
+          document.querySelectorAll('.zoom-btn')[idx].classList.add('active');
+        }
+        applyScale(val);
+      }
+    }
+
+    function applyScale(scale) {
+      const scaler = document.getElementById('previewScaler');
+      if (!scaler) return;
+      scaler.style.transform = `scale(${scale})`;
+      scaler.style.transformOrigin = 'top center';
+      
+      // Adjust parent container height to prevent excess scrollbar gap
+      const a4Elements = scaler.querySelectorAll('.a4');
+      if (a4Elements.length > 0) {
+        const totalHeight = Array.from(a4Elements).reduce((acc, el) => acc + el.offsetHeight + 24, 0);
+        scaler.style.height = (totalHeight * scale) + 'px';
+      }
+    }
+
+    function applyResponsiveScale() {
+      if (currentZoomMode !== 'fit') return;
+      const wrapper = document.getElementById('previewWrapper');
+      if (!wrapper) return;
+      const availableWidth = wrapper.clientWidth - 24;
+      const a4WidthPx = 794; // approx width of 210mm in standard dpi
+
+      if (availableWidth < a4WidthPx) {
+        const scale = Math.max(0.35, availableWidth / a4WidthPx);
+        applyScale(scale);
+      } else {
+        applyScale(1);
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (currentZoomMode === 'fit') applyResponsiveScale();
+    });
 
     // Casino & Month State Handlers
     function addCasino() {
@@ -970,18 +1191,18 @@ $rates = getExchangeRates();
 
       c.innerHTML = state.casinos.map((casino, cIdx) => `
         <div class="casino-block">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <span class="fw-bold text-info" style="font-size: 0.85rem;">
+          <div class="d-flex align-items-center justify-content-between mb-2.5">
+            <span class="fw-bold text-info" style="font-size: 0.82rem;">
               <i class="fa-solid fa-building me-1.5"></i> İŞLETME #${cIdx + 1}
             </span>
             ${state.casinos.length > 1 ? `
-              <button class="btn btn-outline-danger btn-sm py-0.5 px-2" style="font-size: 0.7rem;" onclick="removeCasino('${casino.id}')">
+              <button class="btn btn-outline-danger btn-sm py-0.5 px-2" style="font-size: 0.68rem;" onclick="removeCasino('${casino.id}')">
                 <i class="fa-solid fa-trash me-1"></i> İşletmeyi Sil
               </button>
             ` : ''}
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2.5">
             <label class="form-label-custom">İşletme / Casino Adı</label>
             <input type="text" class="form-input-custom fw-bold" value="${casino.name}" placeholder="Örn: 724-SLOT" oninput="updateCasinoName('${casino.id}', this.value)">
           </div>
@@ -991,16 +1212,16 @@ $rates = getExchangeRates();
             ${casino.months.map((m, i) => `
               <div class="month-subcard">
                 <div class="month-subcard-head">
-                  <span class="fw-bold" style="color: var(--gold); font-size: 0.82rem;">
+                  <span class="fw-bold" style="color: var(--gold); font-size: 0.78rem;">
                     📅 ${MONTHS[m.month]} ${m.year}
                   </span>
-                  <button class="btn btn-link text-danger p-0 text-decoration-none" style="font-size: 0.72rem;" onclick="removeMonth('${casino.id}', '${m.id}')">
+                  <button class="btn btn-link text-danger p-0 text-decoration-none" style="font-size: 0.7rem;" onclick="removeMonth('${casino.id}', '${m.id}')">
                     <i class="fa-solid fa-xmark"></i> Ayı Kaldır
                   </button>
                 </div>
-                <div class="p-3">
+                <div class="p-2.5">
                   
-                  <div class="row g-2 mb-3">
+                  <div class="row g-2 mb-2.5">
                     <div class="col-4">
                       <label class="form-label-custom">Yıl</label>
                       <input type="number" class="form-input-custom font-mono" value="${m.year}" onchange="updateMonthField('${casino.id}', '${m.id}','year',this.value)">
@@ -1015,30 +1236,30 @@ $rates = getExchangeRates();
                       <label class="form-label-custom">Komisyon Türü</label>
                       <select class="form-select-custom" onchange="updateMonthField('${casino.id}', '${m.id}','feeType',this.value)">
                         <option value="percent" ${m.feeType === 'percent' ? 'selected' : ''}>Yüzde (%)</option>
-                        <option value="fixed" ${m.feeType === 'fixed' ? 'selected' : ''}>Sabit Tutar</option>
+                        <option value="fixed" ${m.feeType === 'fixed' ? 'selected' : ''}>Sabit</option>
                         <option value="none" ${m.feeType === 'none' ? 'selected' : ''}>Yok</option>
                       </select>
                     </div>
                   </div>
 
                   ${m.feeType === 'percent' ? `
-                    <div class="mb-3">
+                    <div class="mb-2.5">
                       <label class="form-label-custom">Komisyon Oranı (%)</label>
                       <input type="text" inputmode="decimal" class="form-input-custom font-mono" value="${m.feeRate}" placeholder="6.0" oninput="updateMonthField('${casino.id}', '${m.id}','feeRate',this.value)">
                     </div>
                   ` : ''}
 
                   ${m.feeType === 'fixed' ? `
-                    <div class="mb-3">
+                    <div class="mb-2.5">
                       <label class="form-label-custom">Sabit Tutar (TRY)</label>
                       <input type="text" inputmode="decimal" class="form-input-custom font-mono" value="${m.feeFixed}" placeholder="0,00" oninput="updateMonthField('${casino.id}', '${m.id}','feeFixed',this.value)">
                     </div>
                   ` : ''}
 
                   <!-- Sağlayıcılar -->
-                  <div class="d-flex align-items-center justify-content-between mb-2">
+                  <div class="d-flex align-items-center justify-content-between mb-1.5">
                     <span class="form-label-custom m-0">Sağlayıcı Verileri (Bet / Win)</span>
-                    <button class="btn btn-sm btn-outline-info py-0.5 px-2" style="font-size: 0.68rem;" onclick="addRow('${casino.id}', '${m.id}')">
+                    <button class="btn btn-sm btn-outline-info py-0.5 px-2" style="font-size: 0.65rem;" onclick="addRow('${casino.id}', '${m.id}')">
                       + Satır Ekle
                     </button>
                   </div>
@@ -1052,18 +1273,18 @@ $rates = getExchangeRates();
 
                   ${m.rows.map((r, idx) => `
                     <div class="provider-row-box">
-                      <div class="d-flex align-items-center gap-2 mb-2">
+                      <div class="d-flex align-items-center gap-1.5 mb-1.5">
                         <input type="text" class="form-input-custom py-1" value="${r.kategori}" placeholder="Kategori" style="flex:1" oninput="updateRowField('${casino.id}', '${m.id}',${idx},'kategori',this.value)">
                         <input type="text" class="form-input-custom py-1 fw-bold" value="${r.saglayici}" placeholder="Sağlayıcı" style="flex:1" oninput="updateRowField('${casino.id}', '${m.id}',${idx},'saglayici',this.value)">
                         <button class="btn-remove-row" onclick="removeRow('${casino.id}', '${m.id}',${idx})">×</button>
                       </div>
-                      <div class="row g-2">
+                      <div class="row g-1.5">
                         <div class="col-6">
-                          <label class="form-label-custom" style="font-size: 0.65rem;">Toplam Bet (TRY)</label>
+                          <label class="form-label-custom" style="font-size: 0.62rem;">Toplam Bet (TRY)</label>
                           <input type="text" inputmode="decimal" class="form-input-custom font-mono py-1" value="${r.bet}" placeholder="0,00" oninput="updateRowField('${casino.id}', '${m.id}',${idx},'bet',this.value)">
                         </div>
                         <div class="col-6">
-                          <label class="form-label-custom" style="font-size: 0.65rem;">Toplam Win (TRY)</label>
+                          <label class="form-label-custom" style="font-size: 0.62rem;">Toplam Win (TRY)</label>
                           <input type="text" inputmode="decimal" class="form-input-custom font-mono py-1" value="${r.win}" placeholder="0,00" oninput="updateRowField('${casino.id}', '${m.id}',${idx},'win',this.value)">
                         </div>
                       </div>
@@ -1071,9 +1292,9 @@ $rates = getExchangeRates();
                   `).join('')}
 
                   <!-- Ekstra Kalemler -->
-                  <div class="d-flex align-items-center justify-content-between mt-3 mb-2">
+                  <div class="d-flex align-items-center justify-content-between mt-2.5 mb-1.5">
                     <span class="form-label-custom m-0">Ekstra Borç Kalemleri</span>
-                    <button class="btn btn-sm btn-outline-warning py-0.5 px-2" style="font-size: 0.68rem;" onclick="addExtra('${casino.id}', '${m.id}')">
+                    <button class="btn btn-sm btn-outline-warning py-0.5 px-2" style="font-size: 0.65rem;" onclick="addExtra('${casino.id}', '${m.id}')">
                       + Kalem Ekle
                     </button>
                   </div>
@@ -1087,9 +1308,9 @@ $rates = getExchangeRates();
 
                   ${m.extras.map((ex, idx) => `
                     <div class="extra-item-row">
-                      <input type="text" class="form-input-custom py-1" value="${ex.name}" placeholder="Kalem Adı" style="flex:2;" oninput="updateExtraField('${casino.id}', '${m.id}',${idx},'name',this.value)">
-                      <input type="text" inputmode="decimal" class="form-input-custom font-mono py-1" value="${ex.amount}" placeholder="Tutar" style="flex:1.2;" oninput="updateExtraField('${casino.id}', '${m.id}',${idx},'amount',this.value)">
-                      <select class="form-select-custom py-1 font-mono" style="width: 85px;" onchange="updateExtraField('${casino.id}', '${m.id}',${idx},'currency',this.value)">
+                      <input type="text" name="ename" class="form-input-custom py-1" value="${ex.name}" placeholder="Kalem Adı" oninput="updateExtraField('${casino.id}', '${m.id}',${idx},'name',this.value)">
+                      <input type="text" name="eamount" inputmode="decimal" class="form-input-custom font-mono py-1" value="${ex.amount}" placeholder="Tutar" oninput="updateExtraField('${casino.id}', '${m.id}',${idx},'amount',this.value)">
+                      <select class="form-select-custom py-1 font-mono" onchange="updateExtraField('${casino.id}', '${m.id}',${idx},'currency',this.value)">
                         <option ${ex.currency === 'TRY' ? 'selected' : ''}>TRY</option>
                         <option ${ex.currency === 'USD' ? 'selected' : ''}>USD</option>
                         <option ${ex.currency === 'EUR' ? 'selected' : ''}>EUR</option>
@@ -1104,7 +1325,7 @@ $rates = getExchangeRates();
           </div>
 
           <div class="text-center mt-2">
-            <button class="btn btn-sm btn-outline-warning py-1.5 px-3 rounded-2 fw-semibold" onclick="addMonth('${casino.id}')">
+            <button class="btn btn-sm btn-outline-warning py-1 px-2.5 rounded-2 fw-semibold" onclick="addMonth('${casino.id}')">
               <i class="fa-solid fa-calendar-plus me-1"></i> Yeni Ay Ekle
             </button>
           </div>
@@ -1337,6 +1558,8 @@ $rates = getExchangeRates();
         
         document.getElementById('previewContent').innerHTML = pagesHTML.join('');
       }
+
+      applyResponsiveScale();
     }
 
     // ══════════════════════════════════════════════════════
@@ -1384,7 +1607,6 @@ $rates = getExchangeRates();
         // Filtreye göre ayları oluştur
         const targetMonths = [];
         if (monthVal === 'all') {
-          // Dolu olan ayları veya 12 ayı yükle
           const activeRows = feeRows.filter(r => r.year === year && ((r.turnover || 0) > 0 || (r.debt_items && r.debt_items.length > 0)));
           if (activeRows.length > 0) {
             activeRows.forEach(r => {
@@ -1585,7 +1807,6 @@ $rates = getExchangeRates();
       html2pdf().set(opt).from(element).save().then(() => {
         Swal.close();
       }).catch(() => {
-        // Fallback to native print if html2pdf fails
         Swal.close();
         window.print();
       });
