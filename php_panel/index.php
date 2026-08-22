@@ -192,33 +192,43 @@ $rates = getExchangeRates();
 
     /* Badges & Buttons */
     .btn-badge-profil {
-      background: rgba(56, 189, 248, 0.08);
+      background: rgba(56, 189, 248, 0.1);
       color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      font-size: 0.68rem;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-size: 0.72rem;
       font-weight: 600;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
+      padding: 0.28rem 0.65rem;
+      border-radius: 7px;
       transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
     }
     .btn-badge-profil:hover {
       background: #38bdf8;
       color: #070a12;
+      border-color: #38bdf8;
     }
 
     .btn-badge-archive {
       background: rgba(148, 163, 184, 0.08);
       color: #94a3b8;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      font-size: 0.68rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      font-size: 0.72rem;
       font-weight: 600;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
+      padding: 0.28rem 0.65rem;
+      border-radius: 7px;
       transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
     }
     .btn-badge-archive:hover {
-      background: #334155;
-      color: #fff;
+      background: rgba(244, 63, 94, 0.15);
+      color: #f43f5e;
+      border-color: rgba(244, 63, 94, 0.4);
     }
 
     .btn-year-tab {
@@ -1284,14 +1294,16 @@ $rates = getExchangeRates();
         return `
           <tr onclick="goToCasinoDetail(${c.id})">
             <td>
-              <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                <span class="fw-semibold text-white">${c.name}</span>
-                <button class="btn-badge-profil" onclick="event.stopPropagation(); openProfileModal(${c.id})">
-                  👤 Profil
-                </button>
-                <button class="btn-badge-archive" onclick="event.stopPropagation(); archiveCasino(${c.id}, '${c.name.replace(/'/g, "\\'")}')">
-                  📦 Arşivle
-                </button>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="fw-semibold text-white me-1">${c.name}</span>
+                <div class="d-inline-flex align-items-center gap-2">
+                  <button class="btn-badge-profil" onclick="event.stopPropagation(); openProfileModal(${c.id})">
+                    👤 Profil
+                  </button>
+                  <button class="btn-badge-archive" onclick="event.stopPropagation(); archiveCasino(${c.id}, '${c.name.replace(/'/g, "\\'")}')">
+                    📦 Arşivle
+                  </button>
+                </div>
               </div>
             </td>
             <td class="text-center text-secondary font-mono">${row.months}</td>
@@ -1335,12 +1347,12 @@ $rates = getExchangeRates();
         return `
           <div class="casino-mobile-card" onclick="goToCasinoDetail(${c.id})">
             <!-- Header Row -->
-            <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="d-flex align-items-center justify-content-between mb-2.5 flex-wrap gap-1.5">
               <span class="fw-bold text-white fs-6">${c.name}</span>
-              <div class="d-flex align-items-center gap-1">
-                <span class="badge" style="background: rgba(148,163,184,0.1); color: #94a3b8; font-size: 0.68rem;">${row.months} ay</span>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge me-0.5" style="background: rgba(148,163,184,0.1); color: #94a3b8; font-size: 0.68rem;">${row.months} ay</span>
                 <button class="btn-badge-profil" onclick="event.stopPropagation(); openProfileModal(${c.id})">👤 Profil</button>
-                <button class="btn-badge-archive" onclick="event.stopPropagation(); archiveCasino(${c.id}, '${c.name.replace(/'/g, "\\'")}')">📦</button>
+                <button class="btn-badge-archive" onclick="event.stopPropagation(); archiveCasino(${c.id}, '${c.name.replace(/'/g, "\\'")}')">📦 Arşivle</button>
               </div>
             </div>
 
